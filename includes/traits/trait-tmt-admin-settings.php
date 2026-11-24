@@ -1,0 +1,1515 @@
+<?php
+/**
+ * TMT Admin Settings Trait methods.
+ *
+ * @package Tibetan_Multilingual_Typography
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+trait TMT_Admin_Settings_Trait {
+	/* ==========================================================================
+	   MODULE C: Backend Administration Dashboard & Customizer
+	   ========================================================================== */
+
+	/**
+	 * Lightweight Element Defaults (No translation calls to prevent early locale recursion)
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	public static function get_element_defaults(): array {
+		return [
+			'body'       => [ 'default_font' => 'monlam-bodtig-2', 'default_lh' => 2.3 ],
+			'h1_h2'      => [ 'default_font' => 'qomolang-title',   'default_lh' => 2.1 ],
+			'h3_h6'      => [ 'default_font' => 'monlam-bodtig-3', 'default_lh' => 2.2 ],
+			'nav'        => [ 'default_font' => 'myilam-boldface', 'default_lh' => 2.0 ],
+			'quotes'     => [ 'default_font' => 'qomolang-drutsa',  'default_lh' => 2.4 ],
+			'site_title' => [ 'default_font' => 'myilam-pearl-necklace', 'default_lh' => 2.0 ],
+		];
+	}
+
+	/**
+	 * Retrieve Plugin Settings Merged with Defaults
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function get_settings(): array {
+		if ( null !== $this->settings ) {
+			return $this->settings;
+		}
+
+		$elem_defs = self::get_element_defaults();
+
+		$defaults = [
+			'font_family'               => 'monlam-bodtig-2',
+			'line_height'               => 2.3,
+			'enable_element_typography' => 1,
+			'base_language'             => 'en',
+			'fallback_language'         => 'en',
+			'language_url_format'       => 'directory',
+			'additional_languages'      => [],
+			'hidden_languages'          => [],
+			'wylie_enabled'             => 1,
+			'syllable_wrap'             => 1,
+			'switcher_format'           => 'dropdown',
+			'switcher_display'          => 'both',
+			'switcher_flag_size'        => 'small',
+			'active_tab'                => 'tab-elements',
+		];
+
+		foreach ( $elem_defs as $elem_key => $elem_info ) {
+			$defaults[ "font_{$elem_key}" ] = $elem_info['default_font'];
+			$defaults[ "lh_{$elem_key}" ]   = $elem_info['default_lh'];
+		}
+
+		$saved          = get_option( 'tmt_settings', [] );
+		$this->settings = wp_parse_args( is_array( $saved ) ? $saved : [], $defaults );
+		return $this->settings;
+	}
+
+	/**
+	 * Summarize translation coverage for published base-language posts and pages.
+	 *
+	 * @param string $base_language Base language code.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	private function get_translation_coverage( string $base_language ): array|WP_Error {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- The aggregate requires custom joins; request-local recomputation keeps the settings report current without broad post-meta cache invalidation.
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT DISTINCT COALESCE(NULLIF(language_meta.meta_value, ''), %s) AS language_code,
+						COALESCE(NULLIF(group_meta.meta_value, ''), CONCAT('post_', p.ID)) AS translation_group,
+						p.post_status
+				 FROM {$wpdb->posts} AS p
+				 LEFT JOIN {$wpdb->postmeta} AS language_meta
+					ON language_meta.post_id = p.ID AND language_meta.meta_key = '_tb_lang_code'
+				 LEFT JOIN {$wpdb->postmeta} AS group_meta
+					ON group_meta.post_id = p.ID AND group_meta.meta_key = '_tb_lang_group_id'
+				 WHERE p.post_type IN ('post', 'page')
+				   AND p.post_status NOT IN ('trash', 'auto-draft')",
+				$base_language
+			)
+		);
+
+		if ( ! is_array( $results ) ) {
+			return new WP_Error(
+				'tmt_coverage_query_failed',
+				__( 'Translation coverage could not be loaded. Please try again later.', 'tibetpress' )
+			);
+		}
+
+		$base_groups               = [];
+		$unpublished_base_groups  = [];
+		$translation_groups       = [];
+		$supported_languages      = $this->get_enabled_languages();
+
+		foreach ( $results as $result ) {
+			$language_code = (string) $result->language_code;
+			$group_id      = (string) $result->translation_group;
+			$is_published  = 'publish' === $result->post_status;
+
+			if ( $base_language === $language_code ) {
+				if ( $is_published ) {
+					$base_groups[ $group_id ] = true;
+				} else {
+					$unpublished_base_groups[ $group_id ] = true;
+				}
+				continue;
+			}
+
+			if ( isset( $supported_languages[ $language_code ] ) ) {
+				$translation_groups[ $group_id ][ $language_code ][ $is_published ? 'published' : 'unpublished' ] = true;
+			}
+		}
+
+		$coverage = [];
+		$total    = count( $base_groups );
+		foreach ( $supported_languages as $language_code => $language ) {
+			if ( $base_language === $language_code ) {
+				continue;
+			}
+
+			$published   = 0;
+			$unpublished = 0;
+			foreach ( $base_groups as $group_id => $_exists ) {
+				$translation = $translation_groups[ $group_id ][ $language_code ] ?? [];
+				if ( ! empty( $translation['published'] ) ) {
+					++$published;
+				} elseif ( ! empty( $translation['unpublished'] ) ) {
+					++$unpublished;
+				}
+			}
+
+			$coverage[ $language_code ] = [
+				'name'        => $language['name'],
+				'published'   => $published,
+				'unpublished' => $unpublished,
+				'missing'     => max( 0, $total - $published - $unpublished ),
+			];
+		}
+
+		return [
+			'base_published'   => $total,
+			'base_unpublished' => count( array_diff_key( $unpublished_base_groups, $base_groups ) ),
+			'languages'         => $coverage,
+		];
+	}
+
+	/**
+	 * Register Admin Options Page
+	 */
+	public function register_admin_menu(): void {
+		add_options_page(
+			__( 'TibetPress Settings', 'tibetpress' ),
+			__( 'TibetPress Settings', 'tibetpress' ),
+			'manage_options',
+			'tibetan-settings',
+			[ $this, 'render_admin_settings_page' ]
+		);
+	}
+
+	/**
+	 * Register Settings API Group
+	 */
+	public function register_settings(): void {
+		register_setting(
+			'tmt_settings_group',
+			'tmt_settings',
+			[
+				'type'              => 'array',
+				'sanitize_callback' => [ $this, 'sanitize_settings' ],
+				'default'           => [],
+			]
+		);
+	}
+
+	/**
+	 * Sanitize Settings on Save
+	 *
+	 * @param mixed $input Raw input.
+	 * @return array<string, mixed>
+	 */
+	public function sanitize_settings( $input ): array {
+		$sanitized = [];
+		if ( ! is_array( $input ) ) {
+			return $sanitized;
+		}
+
+		$registry        = $this->get_font_registry();
+		$valid_font_keys = array_keys( $registry );
+		$elem_defs       = self::get_element_defaults();
+
+		// Global Fallback Font
+		$sanitized['font_family'] = in_array( $input['font_family'] ?? '', $valid_font_keys, true )
+			? $input['font_family']
+			: 'monlam-bodtig-2';
+
+		// Global Line-Height
+		$lh = isset( $input['line_height'] ) ? floatval( $input['line_height'] ) : 2.3;
+		$sanitized['line_height'] = round( min( max( $lh, 1.5 ), 4.0 ), 2 );
+
+		// Enable Element-Specific Typography
+		$sanitized['enable_element_typography'] = ! empty( $input['enable_element_typography'] ) ? 1 : 0;
+
+		// Granular Element Typography Fields
+		foreach ( $elem_defs as $elem_key => $elem_info ) {
+			$font_field = "font_{$elem_key}";
+			$sanitized[ $font_field ] = in_array( $input[ $font_field ] ?? '', $valid_font_keys, true )
+				? $input[ $font_field ]
+				: $elem_info['default_font'];
+
+			$lh_field = "lh_{$elem_key}";
+			$elem_lh  = isset( $input[ $lh_field ] ) ? floatval( $input[ $lh_field ] ) : $elem_info['default_lh'];
+			$sanitized[ $lh_field ] = round( min( max( $elem_lh, 1.5 ), 4.0 ), 2 );
+		}
+
+		// Multilingual Fallback Language
+		$catalog = $this->get_available_languages();
+		$additional_languages = [];
+		$requested_languages = is_array( $input['additional_languages'] ?? null ) ? $input['additional_languages'] : [];
+		foreach ( $requested_languages as $code ) {
+			if ( ! is_string( $code ) ) {
+				continue;
+			}
+			$code = sanitize_key( (string) $code );
+			if ( isset( $catalog[ $code ] ) ) {
+				$additional_languages[] = $code;
+			}
+		}
+		$sanitized['additional_languages'] = array_values( array_unique( $additional_languages ) );
+
+		$active_languages = array_merge( array_keys( $this->supported_languages ), $sanitized['additional_languages'] );
+		$hidden_languages = [];
+		$requested_hidden = is_array( $input['hidden_languages'] ?? null ) ? $input['hidden_languages'] : [];
+		foreach ( $requested_hidden as $code ) {
+			if ( ! is_string( $code ) ) {
+				continue;
+			}
+			$code = sanitize_key( (string) $code );
+			if ( in_array( $code, $active_languages, true ) ) {
+				$hidden_languages[] = $code;
+			}
+		}
+		$sanitized['hidden_languages'] = array_values( array_unique( $hidden_languages ) );
+
+		$valid_langs = $active_languages;
+		$base_language = isset( $input['base_language'] ) && is_string( $input['base_language'] )
+			? sanitize_key( $input['base_language'] )
+			: 'en';
+		$sanitized['base_language'] = in_array( $base_language, $valid_langs, true ) ? $base_language : 'en';
+		$sanitized['fallback_language'] = in_array( $input['fallback_language'] ?? '', $valid_langs, true )
+			? $input['fallback_language']
+			: $sanitized['base_language'];
+		$valid_url_formats = [ 'directory', 'parameter', 'subdomain' ];
+		$sanitized['language_url_format'] = in_array( $input['language_url_format'] ?? '', $valid_url_formats, true )
+			? $input['language_url_format']
+			: 'directory';
+
+		// Wylie Input & Syllable Wrap Toggles
+		$sanitized['wylie_enabled'] = ! empty( $input['wylie_enabled'] ) ? 1 : 0;
+		$sanitized['syllable_wrap'] = ! empty( $input['syllable_wrap'] ) ? 1 : 0;
+
+		// Switcher Settings
+		$valid_formats = [ 'dropdown', 'toggle', 'radio', 'list', 'inline' ];
+		$sanitized['switcher_format'] = in_array( $input['switcher_format'] ?? '', $valid_formats, true )
+			? $input['switcher_format']
+			: 'dropdown';
+
+		$valid_displays = [ 'both', 'icon_only', 'text_only' ];
+		$sanitized['switcher_display'] = in_array( $input['switcher_display'] ?? '', $valid_displays, true )
+			? $input['switcher_display']
+			: 'both';
+
+		$valid_sizes = [ 'small', 'medium', 'large' ];
+		$sanitized['switcher_flag_size'] = in_array( $input['switcher_flag_size'] ?? '', $valid_sizes, true )
+			? $input['switcher_flag_size']
+			: 'small';
+
+		// Active tab for persistence
+		$valid_tabs = [ 'tab-elements', 'tab-switcher', 'tab-general', 'tab-multilingual', 'tab-wylie' ];
+		$sanitized['active_tab'] = in_array( $input['active_tab'] ?? '', $valid_tabs, true )
+			? $input['active_tab']
+			: 'tab-elements';
+
+		return $sanitized;
+	}
+
+	/**
+	 * Enqueue Admin Assets
+	 *
+	 * @param string $hook_suffix Current admin page hook.
+	 */
+	public function enqueue_admin_assets( string $hook_suffix ): void {
+		$settings = $this->get_settings();
+
+		wp_enqueue_style( 'tmt-admin-css', TMT_PLUGIN_URL . 'assets/css/tibetan-admin.css', [], TMT_VERSION );
+
+		if ( 'settings_page_tibetan-settings' === $hook_suffix ) {
+			wp_enqueue_style( 'tmt-frontend-css', TMT_PLUGIN_URL . 'assets/css/tibetan-frontend.css', [], TMT_VERSION );
+			wp_enqueue_script( 'tmt-switcher-js', TMT_PLUGIN_URL . 'assets/js/tibetan-switcher.js', [], TMT_VERSION, true );
+			wp_enqueue_style(
+				'tmt-admin-google-fonts',
+				'https://fonts.googleapis.com/css2?family=Noto+Sans+Tibetan:wght@400;700&family=Noto+Serif+Tibetan:wght@400;700&display=swap',
+				[],
+				null
+			);
+		}
+
+		if ( ! empty( $settings['wylie_enabled'] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && ( 'post' === $screen->base || 'settings_page_tibetan-settings' === $hook_suffix ) ) {
+				wp_enqueue_script(
+					'tmt-wylie-converter',
+					TMT_PLUGIN_URL . 'assets/js/wylie-converter.js',
+					[],
+					TMT_VERSION,
+					true
+				);
+			}
+		}
+	}
+
+	/**
+	 * Render Administration Settings Page
+	 */
+	public function render_admin_settings_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'tibetpress' ) );
+		}
+
+		if ( isset( $_GET['section'] ) && is_string( $_GET['section'] ) && 'multilingual-tools' === sanitize_key( wp_unslash( $_GET['section'] ) ) ) {
+			$this->render_translation_tools_page();
+			return;
+		}
+
+		$settings                      = $this->get_settings();
+		$registry                      = $this->get_font_registry();
+		$supported_languages           = $this->get_enabled_languages();
+		$available_languages           = $this->get_available_languages();
+		$selected_additional_languages = is_array( $settings['additional_languages'] ?? null ) ? $settings['additional_languages'] : [];
+		$selected_hidden_languages     = is_array( $settings['hidden_languages'] ?? null ) ? $settings['hidden_languages'] : [];
+		$base_language                 = $this->get_base_language();
+		$coverage                      = $this->get_translation_coverage( $base_language );
+		$base_posts_url                = add_query_arg( 'tmt_lang_filter', $base_language, admin_url( 'edit.php' ) );
+		$base_pages_url                = add_query_arg(
+			[
+				'post_type'       => 'page',
+				'tmt_lang_filter' => $base_language,
+			],
+			admin_url( 'edit.php' )
+		);
+		$preview_languages             = [];
+		$preview_active_language       = ! in_array( $base_language, $selected_hidden_languages, true ) ? $base_language : '';
+		foreach ( $supported_languages as $code => $language ) {
+			if ( in_array( $code, $selected_hidden_languages, true ) ) {
+				continue;
+			}
+			if ( '' === $preview_active_language ) {
+				$preview_active_language = $code;
+			}
+			$preview_languages[] = [
+				'code'   => $code,
+				'native' => $language['native'],
+				'active' => ( $code === $preview_active_language ),
+			];
+		}
+		$elements           = $this->get_configurable_elements();
+		$use_elem           = ! empty( $settings['enable_element_typography'] );
+		$global_font        = $settings['font_family'] ?? 'monlam-bodtig-2';
+		$global_lh          = $settings['line_height'] ?? 2.3;
+		$fallback           = $settings['fallback_language'] ?? $base_language;
+		$wylie              = ! empty( $settings['wylie_enabled'] );
+		$wrap               = ! empty( $settings['syllable_wrap'] );
+		$active_tab         = $settings['active_tab'] ?? 'tab-elements';
+		$switcher_format    = $settings['switcher_format'] ?? 'dropdown';
+		$switcher_display   = $settings['switcher_display'] ?? 'both';
+		$switcher_flag_size = $settings['switcher_flag_size'] ?? 'small';
+		$language_url_format = $settings['language_url_format'] ?? 'directory';
+		?>
+		<div class="wrap tmt-admin-wrap">
+			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'tibetpress' ); ?>">
+				<a class="nav-tab nav-tab-active" href="<?php echo esc_url( admin_url( 'options-general.php?page=tibetan-settings' ) ); ?>">
+					<?php esc_html_e( 'TibetPress Settings', 'tibetpress' ); ?>
+				</a>
+				<a class="nav-tab" href="<?php echo esc_url( add_query_arg( [ 'page' => 'tibetan-settings', 'section' => 'multilingual-tools' ], admin_url( 'options-general.php' ) ) ); ?>">
+					<?php esc_html_e( 'Multilingual Tools', 'tibetpress' ); ?>
+				</a>
+			</nav>
+			<div class="tmt-admin-header">
+				<div class="tmt-admin-brand">
+					<div class="tmt-admin-brand-mark">
+						<img
+							src="<?php echo esc_url( TMT_PLUGIN_URL . 'assets/images/tibet-press.svg' ); ?>"
+							alt="<?php esc_attr_e( 'TibetPress logo', 'tibetpress' ); ?>"
+							class="tmt-admin-brand-logo"
+						/>
+					</div>
+					<div class="tmt-admin-brand-copy">
+						<div class="tmt-admin-brand-kicker">
+							<span><?php esc_html_e( 'TibetPress', 'tibetpress' ); ?></span>
+						</div>
+						<h1><?php esc_html_e( 'TibetPress Settings', 'tibetpress' ); ?></h1>
+						<p>
+							<?php esc_html_e( 'A Tibetan-first toolkit for beautiful typography and multilingual publishing. Configure fonts, manage translated content, and help visitors switch languages.', 'tibetpress' ); ?>
+						</p>
+						<ul class="tmt-admin-brand-features" aria-label="<?php esc_attr_e( 'Plugin features', 'tibetpress' ); ?>">
+							<li><span class="dashicons dashicons-editor-textcolor" aria-hidden="true"></span><?php esc_html_e( 'Tibetan typography', 'tibetpress' ); ?></li>
+							<li><span class="dashicons dashicons-translation" aria-hidden="true"></span><?php esc_html_e( 'Multilingual content', 'tibetpress' ); ?></li>
+							<li><span class="dashicons dashicons-edit" aria-hidden="true"></span><?php esc_html_e( 'Wylie input', 'tibetpress' ); ?></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tmt-admin-brand-version"><?php
+					printf(
+						/* translators: %s: plugin version number. */
+						esc_html__( 'Version %s', 'tibetpress' ),
+						esc_html( TMT_VERSION )
+					);
+					?></div>
+			</div>
+
+			<form method="post" action="options.php" id="tmt-settings-form">
+				<?php settings_fields( 'tmt_settings_group' ); ?>
+				<input type="hidden" name="tmt_settings[active_tab]" id="tmt_active_tab" value="<?php echo esc_attr( $active_tab ); ?>" />
+
+				<!-- Tab Navigation Bar -->
+				<nav class="nav-tab-wrapper tmt-nav-tabs" role="tablist">
+					<a href="#tab-elements" class="nav-tab <?php echo 'tab-elements' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-elements" role="tab">
+						<span class="dashicons dashicons-layout"></span>
+						<?php esc_html_e( 'HTML Element Typography', 'tibetpress' ); ?>
+					</a>
+					<a href="#tab-switcher" class="nav-tab <?php echo 'tab-switcher' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-switcher" role="tab">
+						<span class="dashicons dashicons-translation"></span>
+						<?php esc_html_e( 'Language Switcher', 'tibetpress' ); ?>
+					</a>
+					<a href="#tab-general" class="nav-tab <?php echo 'tab-general' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-general" role="tab">
+						<span class="dashicons dashicons-admin-generic"></span>
+						<?php esc_html_e( 'Global Fallback Typography', 'tibetpress' ); ?>
+					</a>
+					<a href="#tab-multilingual" class="nav-tab <?php echo 'tab-multilingual' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-multilingual" role="tab">
+						<span class="dashicons dashicons-admin-site-alt3"></span>
+						<?php esc_html_e( 'Multilingual & Routing', 'tibetpress' ); ?>
+					</a>
+					<a href="#tab-wylie" class="nav-tab <?php echo 'tab-wylie' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-wylie" role="tab">
+						<span class="dashicons dashicons-keyboard"></span>
+						<?php esc_html_e( 'Wylie Input Engine', 'tibetpress' ); ?>
+					</a>
+				</nav>
+
+				<div class="tmt-admin-container">
+					<div class="tmt-admin-main">
+
+						<!-- ==========================================
+						     TAB 1: HTML Element Typography Customizer
+						     ========================================== -->
+						<div id="tab-elements" class="tmt-tab-pane <?php echo 'tab-elements' === $active_tab ? 'active' : ''; ?>" role="tabpanel">
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-layout"></span>
+									<?php esc_html_e( 'HTML Element Typography Customizer', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Assign distinct Tibetan fonts and line-heights to individual HTML elements across your website (e.g. Calligraphic title for headings, clear Uchen for body, modern boldface for menus).', 'tibetpress' ); ?>
+								</p>
+
+								<div class="tmt-form-row" style="margin-top:15px;padding-bottom:15px;border-bottom:1px solid #f1f5f9;">
+									<label class="tmt-toggle-switch">
+										<input type="checkbox" name="tmt_settings[enable_element_typography]" id="tmt_enable_element_typography" value="1" <?php checked( $use_elem ); ?> />
+										<span><strong><?php esc_html_e( 'Enable Element-Specific Typography (Body, Headings, Navigation, Quotes, Branding)', 'tibetpress' ); ?></strong></span>
+									</label>
+									<p class="description" style="margin-left:56px;">
+										<?php esc_html_e( 'When active, the element-level rules below take precedence over the global fallback font.', 'tibetpress' ); ?>
+									</p>
+								</div>
+
+								<!-- Configurable Elements Table -->
+								<table class="tmt-elements-table <?php echo $use_elem ? '' : 'tmt-disabled'; ?>" id="tmt-elements-table">
+									<thead>
+										<tr>
+											<th style="width:32%;"><?php esc_html_e( 'HTML Element & Role', 'tibetpress' ); ?></th>
+											<th style="width:48%;"><?php esc_html_e( 'Assigned Tibetan Font Stack', 'tibetpress' ); ?></th>
+											<th style="width:20%;"><?php esc_html_e( 'Line-Height', 'tibetpress' ); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ( $elements as $elem_key => $elem_info ) :
+											$selected_font = $settings[ "font_{$elem_key}" ] ?? $elem_info['default_font'];
+											$elem_lh       = $settings[ "lh_{$elem_key}" ] ?? $elem_info['default_lh'];
+										?>
+											<tr data-elem="<?php echo esc_attr( $elem_key ); ?>">
+												<td>
+													<div class="tmt-elem-header">
+														<span class="tmt-elem-icon dashicons <?php echo esc_attr( $elem_info['icon'] ); ?>"></span>
+														<div>
+															<div class="tmt-elem-name"><?php echo esc_html( $elem_info['label'] ); ?></div>
+															<div class="tmt-elem-desc"><?php echo esc_html( $elem_info['desc'] ); ?></div>
+															<div style="margin-top:4px;">
+																<?php foreach ( $elem_info['tags'] as $tag ) : ?>
+																	<span class="tmt-tag-badge">&lt;<?php echo esc_html( $tag ); ?>&gt;</span>
+																<?php endforeach; ?>
+															</div>
+														</div>
+													</div>
+												</td>
+												<td>
+													<select name="tmt_settings[font_<?php echo esc_attr( $elem_key ); ?>]" id="tmt_font_<?php echo esc_attr( $elem_key ); ?>" class="tmt-font-select" data-elem="<?php echo esc_attr( $elem_key ); ?>">
+														<?php echo $this->render_font_options_html( $selected_font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+													</select>
+												</td>
+												<td>
+													<input type="number" step="0.1" min="1.5" max="4.0" name="tmt_settings[lh_<?php echo esc_attr( $elem_key ); ?>]" id="tmt_lh_<?php echo esc_attr( $elem_key ); ?>" value="<?php echo esc_attr( (string) $elem_lh ); ?>" class="tmt-lh-input" data-elem="<?php echo esc_attr( $elem_key ); ?>" />
+													<div style="font-size:11px;color:#94a3b8;margin-top:4px;">Def: <?php echo esc_html( (string) $elem_info['default_lh'] ); ?></div>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+
+								<!-- Live Multi-Element Typography Browser Mockup -->
+								<div class="tmt-multi-preview-card" id="tmt-multi-preview-card">
+									<div class="tmt-browser-bar">
+										<div class="tmt-browser-dots">
+											<span class="tmt-browser-dot red"></span>
+											<span class="tmt-browser-dot yellow"></span>
+											<span class="tmt-browser-dot green"></span>
+										</div>
+										<span class="tmt-browser-url">https://your-site.com/bo/preview</span>
+										<span style="font-size:11px;color:#94a3b8;margin-left:auto;font-weight:600;"><?php esc_html_e( 'LIVE MULTI-ELEMENT PREVIEW', 'tibetpress' ); ?></span>
+									</div>
+									<div class="tmt-preview-content">
+										<!-- Navbar Mockup: Site Title & Navigation -->
+										<div class="tmt-preview-navbar">
+											<div class="tmt-preview-site-title" id="tmt-prev-site_title">
+												<?php echo esc_html( $elements['site_title']['preview_text'] ); ?>
+											</div>
+											<div class="tmt-preview-nav-links" id="tmt-prev-nav">
+												<?php echo esc_html( $elements['nav']['preview_text'] ); ?>
+											</div>
+										</div>
+
+										<!-- Article Mockup: H1, H3, Body, Blockquote -->
+										<div class="tmt-preview-article">
+											<h1 class="tmt-preview-h1" id="tmt-prev-h1_h2">
+												<?php echo esc_html( $elements['h1_h2']['preview_text'] ); ?>
+											</h1>
+											<h3 class="tmt-preview-h3" id="tmt-prev-h3_h6">
+												<?php echo esc_html( $elements['h3_h6']['preview_text'] ); ?>
+											</h3>
+											<p class="tmt-preview-body-text" id="tmt-prev-body">
+												<?php echo esc_html( $elements['body']['preview_text'] ); ?>
+											</p>
+											<blockquote class="tmt-preview-blockquote" id="tmt-prev-quotes">
+												<?php echo esc_html( $elements['quotes']['preview_text'] ); ?>
+											</blockquote>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- ==========================================
+						     TAB 2: Language Switcher Customizer
+						     ========================================== -->
+						<div id="tab-switcher" class="tmt-tab-pane <?php echo 'tab-switcher' === $active_tab ? 'active' : ''; ?>" role="tabpanel">
+							<!-- Card 1: Switcher Design & Format -->
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-art"></span>
+									<?php esc_html_e( 'Language Switcher Design & Layout', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Customize how the language switcher displays on your site: choose between dropdowns, toggle buttons, radio inputs, vertical lists, or inline links, and configure display content.', 'tibetpress' ); ?>
+								</p>
+
+								<!-- Switcher Format Selection -->
+								<div class="tmt-form-row" style="margin-top:20px;">
+									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
+										<?php esc_html_e( '1. Switcher Format / Style:', 'tibetpress' ); ?>
+									</label>
+									<div class="tmt-radio-cards-grid" id="tmt-format-grid">
+										<?php
+										$formats = [
+											'dropdown' => [
+												'title' => __( 'Dropdown Menu', 'tibetpress' ),
+												'desc'  => __( 'Compact popover menu with current language and arrow', 'tibetpress' ),
+												'icon'  => 'dashicons-arrow-down-alt2',
+											],
+											'toggle' => [
+												'title' => __( 'Toggle Pills', 'tibetpress' ),
+												'desc'  => __( 'Horizontal pill buttons with active highlighted state', 'tibetpress' ),
+												'icon'  => 'dashicons-button',
+											],
+											'radio' => [
+												'title' => __( 'Radio Buttons', 'tibetpress' ),
+												'desc'  => __( 'Interactive radio selector with instant redirection', 'tibetpress' ),
+												'icon'  => 'dashicons-marker',
+											],
+											'list' => [
+												'title' => __( 'Vertical List', 'tibetpress' ),
+												'desc'  => __( 'Clean vertical list item rows ideal for sidebars & footers', 'tibetpress' ),
+												'icon'  => 'dashicons-editor-ul',
+											],
+											'inline' => [
+												'title' => __( 'Inline Links', 'tibetpress' ),
+												'desc'  => __( 'Minimalist text links separated by sleek vertical dividers', 'tibetpress' ),
+												'icon'  => 'dashicons-ellipsis',
+											],
+										];
+										foreach ( $formats as $f_key => $f_info ) :
+											$is_sel = ( $switcher_format === $f_key );
+										?>
+											<label class="tmt-card-option <?php echo $is_sel ? 'selected' : ''; ?>" data-format="<?php echo esc_attr( $f_key ); ?>">
+												<input type="radio" name="tmt_settings[switcher_format]" value="<?php echo esc_attr( $f_key ); ?>" <?php checked( $is_sel ); ?> />
+												<span class="dashicons <?php echo esc_attr( $f_info['icon'] ); ?> tmt-card-option-icon"></span>
+												<div class="tmt-card-option-title"><?php echo esc_html( $f_info['title'] ); ?></div>
+												<div class="tmt-card-option-desc"><?php echo esc_html( $f_info['desc'] ); ?></div>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+
+								<!-- Display Mode Selection -->
+								<div class="tmt-form-row" style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
+										<?php esc_html_e( '2. Display Content (Flag Icon vs. Native Name):', 'tibetpress' ); ?>
+									</label>
+									<div class="tmt-radio-cards-grid" id="tmt-display-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+										<?php
+										$displays = [
+											'both' => [
+												'title' => __( 'Flag & Native Name (Both)', 'tibetpress' ),
+												'desc'  => __( 'Shows flag graphic accompanied by native script (e.g. བོད་ཡིག)', 'tibetpress' ),
+												'icon'  => 'dashicons-visibility',
+											],
+											'icon_only' => [
+												'title' => __( 'Flag Icon Only', 'tibetpress' ),
+												'desc'  => __( 'Ultra-compact display showing flag graphics without text labels', 'tibetpress' ),
+												'icon'  => 'dashicons-format-image',
+											],
+											'text_only' => [
+												'title' => __( 'Native Name Only', 'tibetpress' ),
+												'desc'  => __( 'Clean typographic text display without flag graphics', 'tibetpress' ),
+												'icon'  => 'dashicons-editor-textcolor',
+											],
+										];
+										foreach ( $displays as $d_key => $d_info ) :
+											$is_sel = ( $switcher_display === $d_key );
+										?>
+											<label class="tmt-card-option <?php echo $is_sel ? 'selected' : ''; ?>" data-display="<?php echo esc_attr( $d_key ); ?>">
+												<input type="radio" name="tmt_settings[switcher_display]" value="<?php echo esc_attr( $d_key ); ?>" <?php checked( $is_sel ); ?> />
+												<span class="dashicons <?php echo esc_attr( $d_info['icon'] ); ?> tmt-card-option-icon"></span>
+												<div class="tmt-card-option-title"><?php echo esc_html( $d_info['title'] ); ?></div>
+												<div class="tmt-card-option-desc"><?php echo esc_html( $d_info['desc'] ); ?></div>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+
+								<!-- Flag Size Selection -->
+								<div class="tmt-form-row" style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
+										<?php esc_html_e( '3. Flag Icon Dimension:', 'tibetpress' ); ?>
+									</label>
+									<div class="tmt-flag-size-options" id="tmt-size-group">
+										<label class="tmt-size-pill <?php echo 'small' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="small">
+											<input type="radio" name="tmt_settings[switcher_flag_size]" value="small" <?php checked( 'small' === $switcher_flag_size ); ?> />
+											<span><strong><?php esc_html_e( 'Small', 'tibetpress' ); ?></strong> (16 &times; 11 px) &mdash; <?php esc_html_e( 'Ideal for navbar and tight headers', 'tibetpress' ); ?></span>
+										</label>
+										<label class="tmt-size-pill <?php echo 'medium' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="medium">
+											<input type="radio" name="tmt_settings[switcher_flag_size]" value="medium" <?php checked( 'medium' === $switcher_flag_size ); ?> />
+											<span><strong><?php esc_html_e( 'Medium', 'tibetpress' ); ?></strong> (22 &times; 15 px) &mdash; <?php esc_html_e( 'Standard comfortable button size', 'tibetpress' ); ?></span>
+										</label>
+										<label class="tmt-size-pill <?php echo 'large' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="large">
+											<input type="radio" name="tmt_settings[switcher_flag_size]" value="large" <?php checked( 'large' === $switcher_flag_size ); ?> />
+											<span><strong><?php esc_html_e( 'Large', 'tibetpress' ); ?></strong> (28 &times; 19 px) &mdash; <?php esc_html_e( 'Bold high-visibility display', 'tibetpress' ); ?></span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<!-- Card 2: Live Interactive Switcher Preview -->
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-visibility"></span>
+									<?php esc_html_e( 'Live Interactive Switcher Preview', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Preview updates in real time as you select formats, display modes, or flag dimensions above.', 'tibetpress' ); ?>
+								</p>
+
+								<div class="tmt-switcher-preview-box" id="tmt-switcher-preview-container">
+									<?php echo $this->get_language_switcher_html( [ 'format' => $switcher_format, 'display' => $switcher_display, 'flag_size' => $switcher_flag_size ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</div>
+							</div>
+
+							<!-- Card 3: Shortcode & Template Tag Integration -->
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-shortcode"></span>
+									<?php esc_html_e( 'Shortcode & Template Tag Integration', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Place this switcher anywhere on your website. When attributes are omitted, it automatically uses your saved settings above.', 'tibetpress' ); ?>
+								</p>
+
+								<div style="margin-top:14px;">
+									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'Standard Shortcode (Block Editor, Widgets, Elementor):', 'tibetpress' ); ?></label>
+									<div class="tmt-code-box">
+										<code id="tmt-shortcode-display">[tibetan_lang_switcher]</code>
+										<button type="button" class="tmt-btn-copy" id="tmt-copy-shortcode"><?php esc_html_e( 'Copy Shortcode', 'tibetpress' ); ?></button>
+									</div>
+								</div>
+
+								<div style="margin-top:14px;">
+									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'PHP Template Tag (header.php, navigation templates):', 'tibetpress' ); ?></label>
+									<div class="tmt-code-box">
+										<code id="tmt-php-display">&lt;?php tibetan_language_switcher(); ?&gt;</code>
+										<button type="button" class="tmt-btn-copy" id="tmt-copy-php"><?php esc_html_e( 'Copy PHP Code', 'tibetpress' ); ?></button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- ==========================================
+						     TAB 3: Global Fallback Typography
+						     ========================================== -->
+						<div id="tab-general" class="tmt-tab-pane <?php echo 'tab-general' === $active_tab ? 'active' : ''; ?>" role="tabpanel">
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-admin-generic"></span>
+									<?php esc_html_e( 'Global Fallback Typography', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Default typography applied if the element-specific customizer is toggled off, or as a base fallback across your entire theme.', 'tibetpress' ); ?>
+								</p>
+
+								<div class="tmt-form-row">
+									<label for="tmt_font_family" class="tmt-label">
+										<?php esc_html_e( 'Global Font Family Selection:', 'tibetpress' ); ?>
+									</label>
+									<select name="tmt_settings[font_family]" id="tmt_font_family" class="widefat">
+										<?php echo $this->render_font_options_html( $global_font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									</select>
+								</div>
+
+								<div class="tmt-form-row">
+									<label for="tmt_line_height" class="tmt-label">
+										<?php esc_html_e( 'Global Line-Height Overwrite:', 'tibetpress' ); ?>
+									</label>
+									<input type="number" step="0.1" min="1.5" max="4.0" name="tmt_settings[line_height]" id="tmt_line_height" value="<?php echo esc_attr( (string) $global_lh ); ?>" style="width:120px;" />
+									<span style="margin-left:8px;color:#64748b;"><?php esc_html_e( '(Default: 2.3 - Recommended range: 2.1 to 2.5)', 'tibetpress' ); ?></span>
+								</div>
+
+								<div class="tmt-form-row" style="margin-top:20px;">
+									<label class="tmt-label" style="font-weight:600;margin-bottom:8px;display:block;">
+										<?php esc_html_e( 'Global Typography Preview:', 'tibetpress' ); ?>
+									</label>
+									<div class="tmt-global-preview-box" id="tmt-global-preview">
+										༄༅། །འཛམ་གླིང་ཞི་བདེ་དང་མཐུན་སྒྲིལ་གོང་འཕེལ་དུ་གཏོང་བར་བོད་ཀྱི་རིག་གཞུང་ནི་རྩ་ཆེའི་ནོར་བུ་ཞིག་ཡིན། འདིར་བོད་ཡིག་གི་ཡིག་གཟུགས་དང་ཚིག་གི་བར་ཐག་སོགས་བཀོད་སྒྲིག་བྱེད་ཐུབ།
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- ==========================================
+						     TAB 4: Multilingual Mapping & Routing
+						     ========================================== -->
+						<div id="tab-multilingual" class="tmt-tab-pane <?php echo 'tab-multilingual' === $active_tab ? 'active' : ''; ?>" role="tabpanel">
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-admin-site-alt3"></span>
+									<?php esc_html_e( 'Multilingual Mapping & Syllable Wrap Engine', 'tibetpress' ); ?>
+								</h2>
+
+								<div class="tmt-form-row">
+									<label for="tmt_base_language" class="tmt-label">
+										<?php esc_html_e( 'Base Language:', 'tibetpress' ); ?>
+									</label>
+									<select name="tmt_settings[base_language]" id="tmt_base_language">
+										<?php foreach ( $supported_languages as $code => $language ) : ?>
+											<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $base_language, $code ); ?>>
+												<?php echo esc_html( $language['name'] . ' (' . $language['native'] . ')' ); ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+									<p class="description">
+										<?php esc_html_e( 'Posts and pages without an assigned language are treated as this language. Changing this does not rewrite language codes already saved on posts.', 'tibetpress' ); ?>
+									</p>
+								</div>
+
+								<div class="tmt-form-row">
+									<label for="tmt_fallback_lang" class="tmt-label">
+										<?php esc_html_e( 'Fallback Language Allocation:', 'tibetpress' ); ?>
+									</label>
+									<select name="tmt_settings[fallback_language]" id="tmt_fallback_lang">
+										<?php foreach ( $supported_languages as $code => $language ) : ?>
+											<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $fallback, $code ); ?>>
+												<?php echo esc_html( $language['name'] . ( $base_language === $code ? ' (Base language)' : '' ) ); ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+									<p class="description">
+										<?php esc_html_e( 'Determines the content language to use when a requested translation is unavailable.', 'tibetpress' ); ?>
+									</p>
+								</div>
+
+								<fieldset class="tmt-form-row">
+									<legend class="tmt-label"><?php esc_html_e( 'Language URL Format', 'tibetpress' ); ?></legend>
+									<label style="display:block;margin:8px 0;">
+										<input type="radio" name="tmt_settings[language_url_format]" value="directory" <?php checked( $language_url_format, 'directory' ); ?> />
+										<strong><?php esc_html_e( 'Language directories', 'tibetpress' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Place the language code in the URL path, for example /bo/.', 'tibetpress' ); ?></span>
+									</label>
+									<label style="display:block;margin:8px 0;">
+										<input type="radio" name="tmt_settings[language_url_format]" value="parameter" <?php checked( $language_url_format, 'parameter' ); ?> />
+										<strong><?php esc_html_e( 'Language query parameter', 'tibetpress' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Add the language code as a URL parameter, for example ?lang=bo.', 'tibetpress' ); ?></span>
+									</label>
+									<label style="display:block;margin:8px 0;">
+										<input type="radio" name="tmt_settings[language_url_format]" value="subdomain" <?php checked( $language_url_format, 'subdomain' ); ?> />
+										<strong><?php esc_html_e( 'Language subdomains', 'tibetpress' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Use the language code as a subdomain. The base language stays on the main domain.', 'tibetpress' ); ?></span>
+									</label>
+									<p class="description">
+										<?php esc_html_e( 'Subdomain mode requires DNS, hosting, and HTTPS to be configured for each enabled language subdomain and routed to this WordPress site.', 'tibetpress' ); ?>
+									</p>
+								</fieldset>
+
+								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
+									<strong class="tmt-label"><?php esc_html_e( 'Available Languages', 'tibetpress' ); ?></strong>
+									<p class="description"><?php esc_html_e( 'English and Tibetan are built in. Chinese and other optional languages are unchecked by default; check one to add it to translation tools and the language switcher. Uncheck it to remove it; existing translated posts and metadata are preserved.', 'tibetpress' ); ?></p>
+									<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px;">
+										<?php foreach ( $available_languages as $code => $language ) : ?>
+											<label style="display:flex;align-items:center;gap:7px;">
+												<input type="checkbox" name="tmt_settings[additional_languages][]" value="<?php echo esc_attr( $code ); ?>" <?php checked( in_array( $code, $selected_additional_languages, true ) ); ?> />
+												<span><?php echo esc_html( $language['name'] . ' (' . $language['native'] . ')' ); ?></span>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+
+								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
+									<strong class="tmt-label"><?php esc_html_e( 'Hide Languages from Frontend Switchers', 'tibetpress' ); ?></strong>
+									<p class="description"><?php esc_html_e( 'Hidden languages remain enabled for routing and translation management; they are only omitted from frontend language switchers.', 'tibetpress' ); ?></p>
+									<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px;">
+										<?php foreach ( $supported_languages as $code => $language ) : ?>
+											<label style="display:flex;align-items:center;gap:7px;">
+												<input type="checkbox" name="tmt_settings[hidden_languages][]" value="<?php echo esc_attr( $code ); ?>" <?php checked( in_array( $code, $selected_hidden_languages, true ) ); ?> />
+												<span><?php echo esc_html( $language['name'] . ' (' . $language['native'] . ')' ); ?></span>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+
+								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
+									<label class="tmt-toggle-switch">
+										<input type="checkbox" name="tmt_settings[syllable_wrap]" value="1" <?php checked( $wrap ); ?> />
+										<span><strong><?php esc_html_e( 'Enable Syllable Wrap Engine (Zero-Width Space &#8203; after Tsheg ་ and Shad །)', 'tibetpress' ); ?></strong></span>
+									</label>
+									<p class="description" style="margin-left:56px;">
+										<?php esc_html_e( 'Prevents mobile layout breaks and glyph clipping by automatically injecting zero-width spaces after each Tibetan tsheg dot delimiter and shad stroke.', 'tibetpress' ); ?>
+									</p>
+								</div>
+							</div>
+
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-chart-bar"></span>
+									<?php esc_html_e( 'Translation Coverage', 'tibetpress' ); ?>
+								</h2>
+								<?php if ( is_wp_error( $coverage ) ) : ?>
+									<div class="notice notice-error inline">
+										<p><?php echo esc_html( $coverage->get_error_message() ); ?></p>
+									</div>
+								<?php else : ?>
+									<p class="description">
+										<?php
+										printf(
+											/* translators: 1: base language, 2: published post/page groups, 3: unpublished post/page groups. */
+											esc_html__( 'Base language: %1$s. Published source groups: %2$s; unpublished source groups: %3$s.', 'tibetpress' ),
+											esc_html( $supported_languages[ $base_language ]['name'] ),
+											esc_html( number_format_i18n( $coverage['base_published'] ) ),
+											esc_html( number_format_i18n( $coverage['base_unpublished'] ) )
+										);
+										?>
+									</p>
+									<?php if ( ! empty( $coverage['languages'] ) ) : ?>
+										<table class="widefat striped" style="margin-top:12px;">
+											<thead>
+												<tr>
+													<th><?php esc_html_e( 'Language', 'tibetpress' ); ?></th>
+													<th><?php esc_html_e( 'Published', 'tibetpress' ); ?></th>
+													<th><?php esc_html_e( 'Unpublished', 'tibetpress' ); ?></th>
+													<th><?php esc_html_e( 'Missing', 'tibetpress' ); ?></th>
+													<th><?php esc_html_e( 'Review Base Content', 'tibetpress' ); ?></th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php foreach ( $coverage['languages'] as $language_code => $language_coverage ) : ?>
+													<tr>
+														<td><?php echo esc_html( $language_coverage['name'] ); ?></td>
+														<td><?php echo esc_html( number_format_i18n( $language_coverage['published'] ) ); ?></td>
+														<td><?php echo esc_html( number_format_i18n( $language_coverage['unpublished'] ) ); ?></td>
+														<td><?php echo esc_html( number_format_i18n( $language_coverage['missing'] ) ); ?></td>
+														<td>
+															<a href="<?php echo esc_url( $base_posts_url ); ?>"><?php esc_html_e( 'Posts', 'tibetpress' ); ?></a>
+															&middot;
+															<a href="<?php echo esc_url( $base_pages_url ); ?>"><?php esc_html_e( 'Pages', 'tibetpress' ); ?></a>
+														</td>
+													</tr>
+												<?php endforeach; ?>
+											</tbody>
+										</table>
+										<p class="description">
+											<?php esc_html_e( 'Open the base-language list and use the target language column to create or edit translations.', 'tibetpress' ); ?>
+										</p>
+									<?php else : ?>
+										<p class="description"><?php esc_html_e( 'Enable another language to see its translation coverage here.', 'tibetpress' ); ?></p>
+									<?php endif; ?>
+								<?php endif; ?>
+							</div>
+
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-category"></span>
+									<?php esc_html_e( 'Category & Tag Translations', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Assign a language to categories and tags, mark language-neutral terms as shared, or link equivalent terms across languages. Duplicated posts use a linked target-language term when available and keep the original term when no translation is linked.', 'tibetpress' ); ?>
+								</p>
+								<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+									<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=category&post_type=post' ) ); ?>">
+										<?php esc_html_e( 'Manage Categories', 'tibetpress' ); ?>
+									</a>
+									<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=post_tag&post_type=post' ) ); ?>">
+										<?php esc_html_e( 'Manage Tags', 'tibetpress' ); ?>
+									</a>
+								</div>
+							</div>
+
+							<!-- Card: Post & Page Translation Management -->
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-admin-post"></span>
+									<?php esc_html_e( 'Post & Page Translation Management', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Easily translate or duplicate your posts and pages into any enabled language from your WordPress post tables.', 'tibetpress' ); ?>
+								</p>
+								<div style="margin-top:15px;display:flex;gap:12px;flex-wrap:wrap;">
+									<a href="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>" class="button button-secondary">
+										<span class="dashicons dashicons-admin-post" style="vertical-align:middle;margin-right:4px;"></span>
+										<?php esc_html_e( 'Go to All Posts Table', 'tibetpress' ); ?>
+									</a>
+									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>" class="button button-secondary">
+										<span class="dashicons dashicons-admin-page" style="vertical-align:middle;margin-right:4px;"></span>
+										<?php esc_html_e( 'Go to All Pages Table', 'tibetpress' ); ?>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- ==========================================
+						     TAB 5: Wylie Input Engine
+						     ========================================== -->
+						<div id="tab-wylie" class="tmt-tab-pane <?php echo 'tab-wylie' === $active_tab ? 'active' : ''; ?>" role="tabpanel">
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-keyboard"></span>
+									<?php esc_html_e( 'Extended Wylie Transliteration Input Engine', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Convert standard Extended Wylie Latin keystrokes into native Tibetan Unicode characters in real time as you type.', 'tibetpress' ); ?>
+								</p>
+
+								<div class="tmt-form-row" style="margin-top:15px;">
+									<label class="tmt-toggle-switch">
+										<input type="checkbox" name="tmt_settings[wylie_enabled]" id="tmt_wylie_enabled" value="1" <?php checked( $wylie ); ?> />
+										<span><strong><?php esc_html_e( 'Enable Real-Time Wylie Input in Post Editor', 'tibetpress' ); ?></strong></span>
+									</label>
+									<p class="description" style="margin-left:56px;">
+										<?php esc_html_e( 'When active, typing in Gutenberg or Classic Editor automatically converts Wylie phonetics to Tibetan. Press Alt+W to toggle conversion on/off while typing.', 'tibetpress' ); ?>
+									</p>
+								</div>
+							</div>
+
+							<!-- Card: Interactive Wylie Live Sandbox -->
+							<div class="tmt-card">
+								<h2 class="tmt-card-title">
+									<span class="dashicons dashicons-edit"></span>
+									<?php esc_html_e( 'Interactive Wylie Live Typing Sandbox', 'tibetpress' ); ?>
+								</h2>
+								<p class="description">
+									<?php esc_html_e( 'Test the real-time transliteration engine directly in this box! Make sure Wylie input is enabled above, then type below (e.g. type "bkra shis bde legs" or "sangs rgyas"):', 'tibetpress' ); ?>
+								</p>
+
+								<div class="tmt-wylie-sandbox-wrap">
+									<textarea id="tmt-wylie-sandbox" class="tmt-wylie-sandbox-textarea" placeholder="<?php esc_attr_e( 'Type Wylie here (e.g. bkra shis bde legs / bod yig / sangs rgyas)...', 'tibetpress' ); ?>" rows="4"></textarea>
+									<div style="margin-top:8px;font-size:12px;color:#64748b;display:flex;justify-content:space-between;align-items:center;">
+										<span><?php esc_html_e( 'Shortcut:', 'tibetpress' ); ?> <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">Alt</kbd> + <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">W</kbd> <?php esc_html_e( 'to toggle Wylie engine', 'tibetpress' ); ?></span>
+										<button type="button" class="button button-small" onclick="document.getElementById('tmt-wylie-sandbox').value='';document.getElementById('tmt-wylie-sandbox').focus();"><?php esc_html_e( 'Clear Sandbox', 'tibetpress' ); ?></button>
+									</div>
+								</div>
+
+								<!-- Wylie Cheat Table -->
+								<h3 style="margin-top:24px;font-size:14px;color:#1e293b;"><?php esc_html_e( 'Quick Extended Wylie Cheat Sheet:', 'tibetpress' ); ?></h3>
+								<table class="tmt-wylie-cheat-table">
+									<thead>
+										<tr>
+											<th><?php esc_html_e( 'Wylie Input', 'tibetpress' ); ?></th>
+											<th><?php esc_html_e( 'Tibetan Output', 'tibetpress' ); ?></th>
+											<th><?php esc_html_e( 'Description / Category', 'tibetpress' ); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><code>ka, kha, ga, nga</code></td>
+											<td style="font-size:16px;">ཀ་ ཁ་ ག་ ང༌</td>
+											<td><?php esc_html_e( 'First Consonant Row (Guttrals)', 'tibetpress' ); ?></td>
+										</tr>
+										<tr>
+											<td><code>bkra shis bde legs</code></td>
+											<td style="font-size:16px;">བཀྲ་ཤིས་བདེ་ལེགས</td>
+											<td><?php esc_html_e( 'Tashi Delek (Greeting with stacked subjoined ra "kra")', 'tibetpress' ); ?></td>
+										</tr>
+										<tr>
+											<td><code>sangs rgyas</code></td>
+											<td style="font-size:16px;">སངས་རྒྱས</td>
+											<td><?php esc_html_e( 'Sangye (Buddha with superscribed and subjoined ya "rgya")', 'tibetpress' ); ?></td>
+										</tr>
+										<tr>
+											<td><code>spyan ras gzigs</code></td>
+											<td style="font-size:16px;">སྤྱན་རས་གཟིགས</td>
+											<td><?php esc_html_e( 'Chenrezig (Avalokiteshvara with complex stacking)', 'tibetpress' ); ?></td>
+										</tr>
+										<tr>
+											<td><code>space</code> / <code>/</code> / <code>//</code></td>
+											<td style="font-size:16px;">་ / ། / ༎</td>
+											<td><?php esc_html_e( 'Tsheg (syllable dot), Shad (single verse line), Nyis Shad (double line)', 'tibetpress' ); ?></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div style="margin-top:24px;">
+							<?php submit_button( __( 'Save TibetPress Settings', 'tibetpress' ), 'primary large' ); ?>
+						</div>
+
+					</div>
+
+					<!-- Sidebar Info Column -->
+					<div class="tmt-admin-sidebar">
+						<div class="tmt-card">
+							<h3 class="tmt-card-title">
+								<span class="dashicons dashicons-category"></span>
+								<?php esc_html_e( 'Font Design Categories', 'tibetpress' ); ?>
+							</h3>
+							<p style="margin:0 0 10px 0;font-size:13px;color:#475569;">
+								<?php esc_html_e( '36 professional Tibetan font designs bundled inside the plugin:', 'tibetpress' ); ?>
+							</p>
+							<div style="margin-bottom:8px;">
+								<span class="tmt-cat-pill tmt-cat-monlam">Monlam Bodtig (4)</span>
+								<span class="tmt-cat-pill tmt-cat-qomolang">Qomolangma (17)</span>
+								<span class="tmt-cat-pill tmt-cat-myilam">Myilam (11)</span>
+								<span class="tmt-cat-pill tmt-cat-web">Google & Web (4)</span>
+							</div>
+							<p style="font-size:12px;color:#64748b;margin:0;">
+								<?php esc_html_e( 'Self-hosted woff2 files ensure instant rendering on all phones, tablets, and desktop computers without user installs.', 'tibetpress' ); ?>
+							</p>
+						</div>
+
+						<div class="tmt-card">
+							<h3 class="tmt-card-title">
+								<span class="dashicons dashicons-translation"></span>
+								<?php esc_html_e( 'Customizable Switcher', 'tibetpress' ); ?>
+							</h3>
+							<p style="font-size:13px;color:#475569;margin-bottom:8px;">
+								<?php esc_html_e( 'Choose from 5 styles (Dropdown, Toggle, Radio, List, Inline) and customize display content (Flag & Text, Flag Only, Text Only).', 'tibetpress' ); ?>
+							</p>
+							<p style="font-size:12px;color:#64748b;margin:0;">
+								<?php esc_html_e( 'All styles adapt cleanly to light and dark theme backgrounds.', 'tibetpress' ); ?>
+							</p>
+						</div>
+
+						<div class="tmt-card">
+							<h3 class="tmt-card-title">
+								<span class="dashicons dashicons-keyboard"></span>
+								<?php esc_html_e( 'Keyboard Shortcut', 'tibetpress' ); ?>
+							</h3>
+							<p><?php esc_html_e( 'In Gutenberg or Classic editor, press:', 'tibetpress' ); ?></p>
+							<p><kbd style="background:#e2e8f0;padding:3px 8px;border-radius:4px;font-weight:bold;">Alt</kbd> + <kbd style="background:#e2e8f0;padding:3px 8px;border-radius:4px;font-weight:bold;">W</kbd></p>
+							<p style="font-size:12px;color:#64748b;">
+								<?php esc_html_e( 'Instantly toggles Wylie phonetic typing mode without touching the mouse.', 'tibetpress' ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<script>
+		function initTmtSettings() {
+			var fontRegistry     = <?php echo wp_json_encode( $registry ); ?>;
+			var pluginUrl        = <?php echo wp_json_encode( TMT_PLUGIN_URL ); ?>;
+			var previewLanguages = <?php echo wp_json_encode( $preview_languages ); ?>;
+			var elemToggle       = document.getElementById('tmt_enable_element_typography');
+			var elemTable        = document.getElementById('tmt-elements-table');
+			var globalFontSelect = document.getElementById('tmt_font_family');
+			var globalLhInput    = document.getElementById('tmt_line_height');
+			var globalPreview    = document.getElementById('tmt-global-preview');
+			var activeTabInput   = document.getElementById('tmt_active_tab');
+
+			/* --- Tab Switching Logic --- */
+			var navTabs = document.querySelectorAll('.tmt-nav-tabs .nav-tab');
+			var tabPanes = document.querySelectorAll('.tmt-tab-pane');
+
+			function activateTab(tabId) {
+				if (!tabId) return;
+				var cleanId = tabId.replace(/^#/, '');
+				var targetPane = document.getElementById(cleanId);
+				if (!targetPane) return;
+
+				navTabs.forEach(function(tab) {
+					var tId = tab.getAttribute('data-tab');
+					if (tId === cleanId) {
+						tab.classList.add('nav-tab-active');
+						tab.setAttribute('aria-selected', 'true');
+					} else {
+						tab.classList.remove('nav-tab-active');
+						tab.setAttribute('aria-selected', 'false');
+					}
+				});
+
+				tabPanes.forEach(function(pane) {
+					if (pane.id === cleanId) {
+						pane.classList.add('active');
+					} else {
+						pane.classList.remove('active');
+					}
+				});
+
+				if (activeTabInput) {
+					activeTabInput.value = cleanId;
+				}
+
+				if (window.history && window.history.replaceState) {
+					window.history.replaceState(null, '', '#' + cleanId);
+				}
+			}
+
+			navTabs.forEach(function(tab) {
+				tab.addEventListener('click', function(e) {
+					e.preventDefault();
+					var tabId = this.getAttribute('data-tab');
+					activateTab(tabId);
+				});
+			});
+
+			// If URL hash or saved tab is present, activate that tab
+			var initialTab = '';
+			if (window.location.hash) {
+				var hashId = window.location.hash.substring(1);
+				if (document.getElementById(hashId)) {
+					initialTab = hashId;
+				}
+			}
+			if (!initialTab && activeTabInput && activeTabInput.value) {
+				if (document.getElementById(activeTabInput.value)) {
+					initialTab = activeTabInput.value;
+				}
+			}
+			if (initialTab) {
+				activateTab(initialTab);
+			}
+
+			/* --- Multi-Element Typography Preview --- */
+			function updateSingleElementPreview(elemKey) {
+				var fontSelect = document.getElementById('tmt_font_' + elemKey);
+				var lhInput    = document.getElementById('tmt_lh_' + elemKey);
+				var prevElem   = document.getElementById('tmt-prev-' + elemKey);
+
+				if (!prevElem) return;
+
+				var fontKey = 'monlam-bodtig-2';
+				var lhVal   = '2.3';
+
+				if (elemToggle && elemToggle.checked && fontSelect) {
+					fontKey = fontSelect.value;
+					lhVal   = lhInput ? lhInput.value : '2.3';
+				} else if (globalFontSelect) {
+					fontKey = globalFontSelect.value;
+					lhVal   = globalLhInput ? globalLhInput.value : '2.3';
+				}
+
+				if (fontRegistry[fontKey]) {
+					prevElem.style.fontFamily = fontRegistry[fontKey].stack;
+				}
+				prevElem.style.lineHeight = lhVal;
+			}
+
+			function updateAllPreviews() {
+				var elements = ['body', 'h1_h2', 'h3_h6', 'nav', 'quotes', 'site_title'];
+				elements.forEach(updateSingleElementPreview);
+			}
+
+			function updateGlobalPreview() {
+				if (!globalPreview || !globalFontSelect) return;
+				var fKey = globalFontSelect.value;
+				var lhVal = globalLhInput ? globalLhInput.value : '2.3';
+
+				if (fontRegistry[fKey]) {
+					globalPreview.style.fontFamily = fontRegistry[fKey].stack;
+				}
+				globalPreview.style.lineHeight = lhVal;
+			}
+
+			// Element table active/disabled toggle
+			if (elemToggle && elemTable) {
+				elemToggle.addEventListener('change', function() {
+					if (elemToggle.checked) {
+						elemTable.classList.remove('tmt-disabled');
+					} else {
+						elemTable.classList.add('tmt-disabled');
+					}
+					updateAllPreviews();
+				});
+			}
+
+			document.querySelectorAll('.tmt-font-select, .tmt-lh-input').forEach(function(input) {
+				var elemKey = input.getAttribute('data-elem');
+				input.addEventListener('change', function() {
+					updateSingleElementPreview(elemKey);
+				});
+				input.addEventListener('input', function() {
+					updateSingleElementPreview(elemKey);
+				});
+			});
+
+			if (globalFontSelect) {
+				globalFontSelect.addEventListener('change', function() {
+					if (elemToggle && !elemToggle.checked) {
+						updateAllPreviews();
+					}
+					updateGlobalPreview();
+				});
+			}
+
+			if (globalLhInput) {
+				globalLhInput.addEventListener('input', function() {
+					if (elemToggle && !elemToggle.checked) {
+						updateAllPreviews();
+					}
+					updateGlobalPreview();
+				});
+			}
+
+			/* --- Switcher Live Preview & Shortcode Generator --- */
+			function getFlagImg(code, size) {
+				var w = 16, h = 11;
+				if (size === 'medium') { w = 22; h = 15; }
+				else if (size === 'large') { w = 28; h = 19; }
+
+				var src = code === 'bo' ? pluginUrl + 'assets/images/tibetan-flag.svg'
+				        : ( code === 'zh' ? pluginUrl + 'assets/images/chinese-flag.svg' : ( code === 'en' ? pluginUrl + 'assets/images/english-flag.svg' : '' ) );
+				if (!src) {
+					return '<span class="tmt-flag tmt-flag-code" aria-label="' + code.toUpperCase() + '" style="display:inline-flex;align-items:center;justify-content:center;width:' + w + 'px;height:' + h + 'px;font-size:9px;font-weight:700;line-height:1;background:#e2e8f0;color:#334155;border-radius:2px;">' + code.toUpperCase() + '</span>';
+				}
+
+				return '<img src="' + src + '" alt="' + code + '" width="' + w + '" height="' + h + '" class="tmt-flag tmt-flag-' + code + '" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);object-fit:cover;display:inline-block;" />';
+			}
+
+			function updateSwitcherLivePreview() {
+				var formatInput  = document.querySelector('input[name="tmt_settings[switcher_format]"]:checked');
+				var displayInput = document.querySelector('input[name="tmt_settings[switcher_display]"]:checked');
+				var sizeInput    = document.querySelector('input[name="tmt_settings[switcher_flag_size]"]:checked');
+
+				var format  = formatInput ? formatInput.value : 'dropdown';
+				var display = displayInput ? displayInput.value : 'both';
+				var size    = sizeInput ? sizeInput.value : 'small';
+
+				var container = document.getElementById('tmt-switcher-preview-container');
+				if (!container) return;
+
+				var langs = previewLanguages;
+				var noPreviewLanguages = !langs.length;
+
+				var wrapperClasses = 'tmt-language-switcher tmt-' + format + ' tmt-disp-' + display + ' tmt-size-' + size;
+				var html = '';
+
+				if (format === 'toggle') {
+					html = '<div class="' + wrapperClasses + '" role="navigation">';
+					langs.forEach(function(item) {
+						html += '<a href="javascript:void(0)" class="tmt-toggle-btn ' + (item.active ? 'active' : '') + '">';
+						if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg(item.code, size) + '</span>';
+						if (display !== 'icon_only') html += '<span class="tmt-toggle-label">' + item.native + '</span>';
+						html += '</a>';
+					});
+					html += '</div>';
+				} else if (format === 'radio') {
+					html = '<div class="' + wrapperClasses + '" role="radiogroup">';
+					langs.forEach(function(item) {
+						html += '<label class="tmt-radio-label ' + (item.active ? 'active' : '') + '">';
+						html += '<input type="radio" name="tmt_preview_radio" ' + (item.active ? 'checked' : '') + ' />';
+						if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg(item.code, size) + '</span>';
+						if (display !== 'icon_only') html += '<span class="tmt-radio-text">' + item.native + '</span>';
+						html += '</label>';
+					});
+					html += '</div>';
+				} else if (format === 'list') {
+					html = '<ul class="' + wrapperClasses + '" role="navigation">';
+					langs.forEach(function(item) {
+						html += '<li class="tmt-list-item ' + (item.active ? 'active' : '') + '">';
+						html += '<a href="javascript:void(0)" class="tmt-list-link">';
+						html += '<span class="tmt-item-inner">';
+						if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg(item.code, size) + '</span>';
+						if (display !== 'icon_only') html += '<span class="tmt-list-text">' + item.native + '</span>';
+						html += '</span>';
+						if (item.active) html += '<span class="tmt-list-badge">&#10003;</span>';
+						html += '</a></li>';
+					});
+					html += '</ul>';
+				} else if (format === 'inline') {
+					html = '<div class="' + wrapperClasses + '" role="navigation">';
+					langs.forEach(function(item, idx) {
+						html += '<a href="javascript:void(0)" class="tmt-inline-link ' + (item.active ? 'active' : '') + '">';
+						if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg(item.code, size) + '</span>';
+						if (display !== 'icon_only') html += '<span class="tmt-inline-text">' + item.native + '</span>';
+						html += '</a>';
+						if (idx < langs.length - 1) html += '<span class="tmt-inline-divider">|</span>';
+					});
+					html += '</div>';
+				} else {
+					// Dropdown Menu
+					html = '<div class="' + wrapperClasses + '" data-tmt-switcher role="navigation">';
+					html += '<button class="tmt-switcher-current" type="button" aria-haspopup="true" aria-expanded="false">';
+					if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg('bo', size) + '</span>';
+					if (display !== 'icon_only') html += '<span class="tmt-lang-label" style="margin-left:5px;">བོད་ཡིག</span>';
+					html += '<span class="tmt-arrow" aria-hidden="true">&#9662;</span>';
+					html += '</button>';
+					html += '<ul class="tmt-switcher-menu" role="menu">';
+					langs.forEach(function(item) {
+						html += '<li role="none"><a role="menuitem" href="javascript:void(0)" class="tmt-item ' + (item.active ? 'active' : '') + '">';
+						html += '<span class="tmt-item-inner">';
+						if (display !== 'text_only') html += '<span class="tmt-flag-wrap">' + getFlagImg(item.code, size) + '</span>';
+						if (display !== 'icon_only') html += '<span class="tmt-item-name">' + item.native + '</span>';
+						html += '</span>';
+						if (item.active) html += '<span class="tmt-check">&#10003;</span>';
+						html += '</a></li>';
+					});
+					html += '</ul></div>';
+				}
+
+				container.innerHTML = noPreviewLanguages ? '' : html;
+
+				// Attach dropdown toggle event if dropdown
+				if (format === 'dropdown') {
+					var btn = container.querySelector('.tmt-switcher-current');
+					var sw  = container.querySelector('.tmt-language-switcher');
+					if (btn && sw) {
+						btn.addEventListener('click', function(e) {
+							e.preventDefault();
+							e.stopPropagation();
+							sw.classList.toggle('tmt-open');
+							btn.setAttribute('aria-expanded', sw.classList.contains('tmt-open') ? 'true' : 'false');
+						});
+					}
+				}
+
+				// Update Code Snippets
+				var shortcodeElem = document.getElementById('tmt-shortcode-display');
+				var phpElem       = document.getElementById('tmt-php-display');
+
+				if (shortcodeElem) {
+					var sc = '[tibetan_lang_switcher';
+					if (format !== 'dropdown') sc += ' format="' + format + '"';
+					if (display !== 'both') sc += ' display="' + display + '"';
+					if (size !== 'small') sc += ' flag_size="' + size + '"';
+					sc += ']';
+					shortcodeElem.textContent = sc;
+				}
+
+				if (phpElem) {
+					var phpPrefix = String.fromCharCode(60) + '?php tibetan_language_switcher';
+					var phpArgs = [];
+					if (format !== 'dropdown') phpArgs.push("'format' => '" + format + "'");
+					if (display !== 'both') phpArgs.push("'display' => '" + display + "'");
+					if (size !== 'small') phpArgs.push("'flag_size' => '" + size + "'");
+
+					if (phpArgs.length > 0) {
+						phpElem.textContent = phpPrefix + '( [ ' + phpArgs.join(', ') + ' ] ); ?>';
+					} else {
+						phpElem.textContent = phpPrefix + '(); ?>';
+					}
+				}
+			}
+
+			// Format option cards click & sync
+			document.querySelectorAll('#tmt-format-grid .tmt-card-option').forEach(function(card) {
+				card.addEventListener('click', function() {
+					document.querySelectorAll('#tmt-format-grid .tmt-card-option').forEach(function(c) {
+						c.classList.remove('selected');
+					});
+					this.classList.add('selected');
+					var radio = this.querySelector('input[type="radio"]');
+					if (radio) {
+						radio.checked = true;
+						updateSwitcherLivePreview();
+					}
+				});
+			});
+
+			// Display option cards click & sync
+			document.querySelectorAll('#tmt-display-grid .tmt-card-option').forEach(function(card) {
+				card.addEventListener('click', function() {
+					document.querySelectorAll('#tmt-display-grid .tmt-card-option').forEach(function(c) {
+						c.classList.remove('selected');
+					});
+					this.classList.add('selected');
+					var radio = this.querySelector('input[type="radio"]');
+					if (radio) {
+						radio.checked = true;
+						updateSwitcherLivePreview();
+					}
+				});
+			});
+
+			// Size option pills click & sync
+			document.querySelectorAll('#tmt-size-group .tmt-size-pill').forEach(function(pill) {
+				pill.addEventListener('click', function() {
+					document.querySelectorAll('#tmt-size-group .tmt-size-pill').forEach(function(p) {
+						p.classList.remove('selected');
+					});
+					this.classList.add('selected');
+					var radio = this.querySelector('input[type="radio"]');
+					if (radio) {
+						radio.checked = true;
+						updateSwitcherLivePreview();
+					}
+				});
+			});
+
+			// Copy to Clipboard buttons
+			function setupCopyBtn(btnId, targetElemId) {
+				var btn = document.getElementById(btnId);
+				var target = document.getElementById(targetElemId);
+				if (!btn || !target) return;
+
+				btn.addEventListener('click', function() {
+					var text = target.textContent;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(text).then(function() {
+							showCopied(btn);
+						});
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = text;
+						document.body.appendChild(ta);
+						ta.select();
+						document.execCommand('copy');
+						document.body.removeChild(ta);
+						showCopied(btn);
+					}
+				});
+			}
+
+			function showCopied(btn) {
+				var origText = btn.textContent;
+				btn.textContent = '<?php esc_attr_e( 'Copied!', 'tibetpress' ); ?>';
+				btn.classList.add('copied');
+				setTimeout(function() {
+					btn.textContent = origText;
+					btn.classList.remove('copied');
+				}, 2000);
+			}
+
+			setupCopyBtn('tmt-copy-shortcode', 'tmt-shortcode-display');
+			setupCopyBtn('tmt-copy-php', 'tmt-php-display');
+
+			// Close dropdown in preview when clicking outside
+			document.addEventListener('click', function(e) {
+				var sw = document.querySelector('#tmt-switcher-preview-container .tmt-language-switcher.tmt-open');
+				if (sw && !e.target.closest('#tmt-switcher-preview-container')) {
+					sw.classList.remove('tmt-open');
+					var btn = sw.querySelector('.tmt-switcher-current');
+					if (btn) btn.setAttribute('aria-expanded', 'false');
+				}
+			});
+
+			// Initial preview render
+			updateAllPreviews();
+			updateGlobalPreview();
+			updateSwitcherLivePreview();
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initTmtSettings);
+		} else {
+			initTmtSettings();
+		}
+		</script>
+		<?php
+	}
+}

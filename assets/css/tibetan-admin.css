@@ -1,0 +1,1189 @@
+/**
+ * TibetPress
+ * Admin Stylesheet
+ *
+ * @package Tibetan_Multilingual_Typography
+ * @version 1.0.1
+ */
+
+/* ==========================================================================
+   Admin Settings Dashboard
+   ========================================================================== */
+
+#menu-settings .wp-submenu a[href*="page=tibetan-settings"]::before {
+  content: "\f326";
+  display: inline-block;
+  width: 18px;
+  font-family: dashicons;
+  font-size: 16px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.tmt-admin-wrap {
+  max-width: 1180px;
+  margin: 25px 20px 0 2px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.tmt-admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: #ffffff;
+  padding: 24px 30px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tmt-admin-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-width: 0;
+}
+
+.tmt-admin-brand-mark {
+  display: flex;
+  flex: 0 0 220px;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 123px;
+}
+
+.tmt-admin-brand-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tmt-admin-brand-copy {
+  min-width: 0;
+}
+
+.tmt-admin-brand-kicker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 7px;
+  color: #dbeafe;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tmt-admin-header h1 {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.tmt-admin-header p {
+  color: #e0e7ff;
+  font-size: 14px;
+  margin: 0;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+.tmt-admin-brand-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tmt-admin-brand-features li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 6px 9px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.tmt-admin-brand-features .dashicons {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.tmt-admin-brand-version {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  color: #eff6ff;
+  background: rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tmt-admin-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .tmt-admin-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 782px) {
+  .tmt-admin-header {
+    flex-direction: column;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tmt-admin-brand {
+    gap: 12px;
+  }
+
+  .tmt-admin-brand-mark {
+    flex-basis: 150px;
+    width: 150px;
+    height: 84px;
+  }
+
+  .tmt-admin-header h1 {
+    font-size: 20px;
+  }
+}
+
+#wpadminbar .tmt-flag {
+  width: 16px !important;
+  height: 11px !important;
+  max-width: none;
+}
+
+.tmt-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tmt-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tmt-card p.description {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Form Controls */
+.tmt-form-row {
+  margin-bottom: 20px;
+}
+
+.tmt-form-row:last-child {
+  margin-bottom: 0;
+}
+
+.tmt-form-row label.tmt-label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.tmt-form-row select,
+.tmt-form-row input[type="text"],
+.tmt-form-row input[type="number"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tmt-form-row select:focus,
+.tmt-form-row input[type="text"]:focus,
+.tmt-form-row input[type="number"]:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Switcher Checkbox Toggle */
+.tmt-toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.tmt-toggle-switch input[type="checkbox"] {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  -webkit-appearance: none;
+  background: #cbd5e1;
+  outline: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  border: none;
+}
+
+.tmt-toggle-switch input[type="checkbox"]:checked {
+  background: #2563eb;
+}
+
+.tmt-toggle-switch input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.tmt-toggle-switch input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
+
+/* Live Typography Preview */
+.tmt-preview-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 15px;
+}
+
+.tmt-preview-heading {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #1e293b;
+}
+
+.tmt-preview-body {
+  font-size: 15px;
+  color: #334155;
+  margin: 0;
+  text-align: justify;
+}
+
+/* ==========================================================================
+   Wylie Floating Toggle Badge
+   ========================================================================== */
+
+.tmt-wylie-badge {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+.tmt-wylie-badge.active {
+  background: #0f766e;
+  color: #ffffff;
+  border: 1px solid #14b8a6;
+}
+
+.tmt-wylie-badge.inactive {
+  background: #475569;
+  color: #f1f5f9;
+  border: 1px solid #64748b;
+  opacity: 0.85;
+}
+
+.tmt-wylie-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+.tmt-wylie-badge .tmt-badge-icon {
+  font-size: 15px;
+}
+
+.tmt-wylie-badge .tmt-badge-hotkey {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Post & Page List Table Language Columns (Image 1)
+   ========================================================================== */
+
+.manage-column.column-tmt_lang_zh,
+.manage-column.column-tmt_lang_bo,
+.manage-column.column-tmt_lang_en {
+  width: 48px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px 4px;
+}
+
+td.column-tmt_lang_zh,
+td.column-tmt_lang_bo,
+td.column-tmt_lang_en {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.manage-column[class*="column-tmt_term_lang_"],
+td[class*="column-tmt_term_lang_"] {
+  width: 48px;
+  padding-right: 4px;
+  padding-left: 4px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tmt-col-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.tmt-col-action {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tmt-col-plus {
+  color: #2271b1;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.tmt-col-plus:hover {
+  color: #135e96;
+  transform: scale(1.3);
+}
+
+.tmt-col-edit {
+  color: #135e96;
+}
+
+.tmt-col-edit .dashicons {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.tmt-col-dup {
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.tmt-col-dup .dashicons {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+}
+
+.tmt-col-dup:hover {
+  color: #1e293b;
+}
+
+.tmt-col-current {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.tmt-col-error {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Post Editor "Translate this Document" Card (Image 2)
+   ========================================================================== */
+
+.tmt-editor-box {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+}
+
+.tmt-connect-header {
+  margin-bottom: 8px;
+}
+
+.tmt-connect-link {
+  color: #2271b1;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tmt-connect-link:hover {
+  text-decoration: underline;
+}
+
+.tmt-connect-panel {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.tmt-section-title {
+  font-size: 13px;
+  color: #1e293b;
+  margin: 14px 0 8px 0;
+}
+
+.tmt-wpml-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tmt-card-tabs {
+  display: flex;
+  background: #ffffff;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.tmt-tab-icon {
+  flex: 1;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  border-right: 1px solid #e2e8f0;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: all 0.15s ease;
+}
+
+.tmt-tab-icon:last-child {
+  border-right: none;
+}
+
+.tmt-tab-icon.active {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.tmt-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tmt-doc-table th {
+  padding: 8px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.tmt-doc-table td {
+  padding: 10px 8px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tmt-doc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.tmt-lang-label-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.tmt-center-cell {
+  text-align: center;
+}
+
+.tmt-table-plus {
+  color: #2271b1;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.tmt-table-plus:hover {
+  color: #135e96;
+  transform: scale(1.3);
+}
+
+.tmt-btn-edit {
+  color: #135e96;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.tmt-btn-edit .dashicons {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.tmt-check-done {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.tmt-dup-checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0 !important;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.tmt-quick-dup-link {
+  color: #94a3b8;
+  margin-left: 5px;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  transition: color 0.15s ease;
+}
+
+.tmt-quick-dup-link .dashicons {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.tmt-quick-dup-link:hover {
+  color: #1e293b;
+}
+
+/* ==========================================================================
+   Element-Specific Typography Customizer & Live Multi-Preview
+   ========================================================================== */
+
+.tmt-elements-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 15px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tmt-elements-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.tmt-elements-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.tmt-elements-table tr:last-child td {
+  border-bottom: none;
+}
+
+.tmt-elements-table tr:hover td {
+  background-color: #fcfdfe;
+}
+
+.tmt-elem-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tmt-elem-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tmt-elem-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.tmt-elem-desc {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.tmt-tag-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  margin-right: 4px;
+  margin-top: 3px;
+}
+
+.tmt-elements-table select {
+  width: 100%;
+  min-width: 220px;
+  max-width: 300px;
+  padding: 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #ffffff;
+}
+
+.tmt-elements-table input[type="number"] {
+  width: 80px;
+  padding: 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.tmt-elements-table.tmt-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+/* Multi-Element Live Typography Browser Preview Card */
+.tmt-multi-preview-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  margin-top: 20px;
+}
+
+.tmt-browser-bar {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tmt-browser-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.tmt-browser-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tmt-browser-dot.red { background: #ef4444; }
+.tmt-browser-dot.yellow { background: #f59e0b; }
+.tmt-browser-dot.green { background: #10b981; }
+
+.tmt-browser-url {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 3px 12px;
+  font-size: 12px;
+  color: #64748b;
+  flex: 1;
+  max-width: 320px;
+  font-family: monospace;
+}
+
+.tmt-preview-content {
+  padding: 24px;
+  background: #f8fafc;
+}
+
+.tmt-preview-navbar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.tmt-preview-site-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.tmt-preview-nav-links {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.tmt-preview-nav-links span {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.tmt-preview-nav-links span:hover {
+  background: #eff6ff;
+}
+
+.tmt-preview-article {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.tmt-preview-h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #3b82f6;
+}
+
+.tmt-preview-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #334155;
+  margin: 16px 0 10px 0;
+}
+
+.tmt-preview-body-text {
+  font-size: 15px;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+  text-align: justify;
+}
+
+.tmt-preview-blockquote {
+  margin: 16px 0 0 0;
+  padding: 14px 20px;
+  background: #f8fafc;
+  border-left: 4px solid #3b82f6;
+  border-radius: 0 6px 6px 0;
+  font-size: 15px;
+  color: #475569;
+  font-style: normal;
+}
+
+/* Category Pill Badges */
+.tmt-cat-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+
+.tmt-cat-monlam { background: #fee2e2; color: #991b1b; }
+.tmt-cat-qomolang { background: #dbeafe; color: #1e40af; }
+.tmt-cat-myilam { background: #dcfce7; color: #166534; }
+.tmt-cat-web { background: #fef3c7; color: #92400e; }
+
+/* ==========================================================================
+   Admin Settings Tabbed Navigation
+   ========================================================================== */
+
+.tmt-nav-tabs {
+  margin: 0 0 22px 0 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  gap: 4px;
+  background: transparent;
+  padding: 0 0 0 0 !important;
+  scrollbar-width: thin;
+}
+
+.tmt-nav-tabs .nav-tab {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-bottom: none !important;
+  border-radius: 6px 6px 0 0 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  margin: 0 !important;
+  cursor: pointer;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
+
+.tmt-nav-tabs .nav-tab:hover {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.tmt-nav-tabs .nav-tab-active,
+.tmt-nav-tabs .nav-tab-active:hover {
+  background: #ffffff !important;
+  color: #2563eb !important;
+  border-color: #cbd5e1 !important;
+  border-bottom: 2px solid #ffffff !important;
+  margin-bottom: -2px !important;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.tmt-nav-tabs .nav-tab .dashicons {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+  line-height: 1;
+}
+
+.tmt-tab-pane {
+  display: none !important;
+}
+
+.tmt-tab-pane.active {
+  display: block !important;
+  animation: tmtFadeIn 0.2s ease-in-out;
+}
+
+@keyframes tmtFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Switcher Customizer Radio Cards Grid
+   ========================================================================== */
+
+.tmt-radio-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.tmt-card-option {
+  position: relative;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  background: #ffffff;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tmt-card-option:hover {
+  border-color: #93c5fd;
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.tmt-card-option.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.tmt-card-option input[type="radio"] {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin: 0 !important;
+  accent-color: #2563eb;
+}
+
+.tmt-card-option-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  margin: 0 auto 8px auto;
+  color: #3b82f6;
+  display: block;
+}
+
+.tmt-card-option-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.tmt-card-option-desc {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* Live Switcher Preview Box */
+.tmt-switcher-preview-box {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 24px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+/* Code Snippet Box */
+.tmt-code-box {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  word-break: break-all;
+}
+
+.tmt-code-box code {
+  color: #38bdf8 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  font-size: 13px;
+}
+
+.tmt-btn-copy {
+  background: #334155;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.tmt-btn-copy:hover {
+  background: #475569;
+}
+
+.tmt-btn-copy.copied {
+  background: #16a34a;
+}
+
+/* ==========================================================================
+   Flag Size Options, Global Typography Preview & Wylie Sandbox
+   ========================================================================== */
+
+.tmt-flag-size-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tmt-size-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #334155;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tmt-size-pill:hover {
+  border-color: #93c5fd;
+  background: #f8fafc;
+}
+
+.tmt-size-pill.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.tmt-size-pill input[type="radio"] {
+  margin: 0;
+  accent-color: #2563eb;
+}
+
+/* Global Typography Live Preview Box */
+.tmt-global-preview-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 18px;
+  color: #1e293b;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  line-height: 2.3;
+}
+
+/* Wylie Live Sandbox */
+.tmt-wylie-sandbox-wrap {
+  margin-top: 15px;
+}
+
+.tmt-wylie-sandbox-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  font-size: 18px;
+  line-height: 2.3 !important;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: "Monlam Uni Ochan2", "Noto Serif Tibetan", sans-serif;
+  color: #0f172a;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tmt-wylie-sandbox-textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.tmt-wylie-cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.tmt-wylie-cheat-table th,
+.tmt-wylie-cheat-table td {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.tmt-wylie-cheat-table th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+
+.tmt-wylie-cheat-table td code {
+  background: #e2e8f0;
+  color: #0f172a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
