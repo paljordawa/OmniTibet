@@ -1,6 +1,6 @@
 # Tibetan Open-Source & Bundled Fonts Directory
 
-This directory hosts web-optimized Tibetan Unicode fonts (`.woff2` and `.ttf` formats) for the **TibetPress** WordPress plugin.
+This directory hosts web-optimized Tibetan Unicode fonts (`.woff2` and `.ttf` formats) for the **OmniTibet** WordPress plugin.
 
 All font files are packaged directly with the plugin so visitors and administrators see flawless Tibetan typography on every device without requiring external downloads or operating system font installations.
 

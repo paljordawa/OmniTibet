@@ -1,5 +1,5 @@
 /**
- * TibetPress
+ * OmniTibet
  * Real-time Extended Wylie to Tibetan Unicode Converter
  *
  * @package Tibetan_Multilingual_Typography

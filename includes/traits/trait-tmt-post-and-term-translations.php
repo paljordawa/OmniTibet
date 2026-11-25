@@ -89,14 +89,14 @@ trait TMT_Translation_Admin_Trait {
 			);
 		}
 		$language_control .= '</select>';
-		$this->render_taxonomy_term_field( 'tmt_term_language', __( 'Term language', 'tibetpress' ), $language_control, $is_edit );
+		$this->render_taxonomy_term_field( 'tmt_term_language', __( 'Term language', 'omnitibet' ), $language_control, $is_edit );
 
 		$shared_control = sprintf(
 			'<label><input type="checkbox" name="tmt_term_shared" value="1" %s /> %s</label>',
 			checked( $is_shared, true, false ),
-			esc_html__( 'Reuse this term as-is in every language', 'tibetpress' )
+			esc_html__( 'Reuse this term as-is in every language', 'omnitibet' )
 		);
-		$this->render_taxonomy_term_field( 'tmt_term_shared', __( 'Language behavior', 'tibetpress' ), $shared_control, $is_edit );
+		$this->render_taxonomy_term_field( 'tmt_term_shared', __( 'Language behavior', 'omnitibet' ), $shared_control, $is_edit );
 
 		$terms = get_terms(
 			[
@@ -112,16 +112,16 @@ trait TMT_Translation_Admin_Trait {
 			$link_control = '<p class="description">' . esc_html( $terms->get_error_message() ) . '</p>';
 		} else {
 			if ( $prefill_source_term ) {
-				$link_label = __( 'Link to source translation', 'tibetpress' );
+				$link_label = __( 'Link to source translation', 'omnitibet' );
 			} elseif ( $is_edit && ! empty( $current_group ) ) {
-				$link_label = __( 'Keep current translation group', 'tibetpress' );
+				$link_label = __( 'Keep current translation group', 'omnitibet' );
 			} else {
-				$link_label = __( 'Start a new translation group', 'tibetpress' );
+				$link_label = __( 'Start a new translation group', 'omnitibet' );
 			}
 			$link_control = '<select name="tmt_term_translation_id" id="tmt_term_translation_id">';
 			$link_control .= '<option value="0">' . esc_html( $link_label ) . '</option>';
 			if ( $is_edit && ! empty( $current_group ) ) {
-				$link_control .= '<option value="-1">' . esc_html__( 'Unlink and start a new group', 'tibetpress' ) . '</option>';
+				$link_control .= '<option value="-1">' . esc_html__( 'Unlink and start a new group', 'omnitibet' ) . '</option>';
 			}
 
 			foreach ( $terms as $related_term ) {
@@ -143,9 +143,9 @@ trait TMT_Translation_Admin_Trait {
 				);
 			}
 			$link_control .= '</select>';
-			$link_control .= '<p class="description">' . esc_html__( 'Choose an existing equivalent term to link translations. Shared terms do not need a translation link.', 'tibetpress' ) . '</p>';
+			$link_control .= '<p class="description">' . esc_html__( 'Choose an existing equivalent term to link translations. Shared terms do not need a translation link.', 'omnitibet' ) . '</p>';
 		}
-		$this->render_taxonomy_term_field( 'tmt_term_translation_id', __( 'Link translated term', 'tibetpress' ), $link_control, $is_edit );
+		$this->render_taxonomy_term_field( 'tmt_term_translation_id', __( 'Link translated term', 'omnitibet' ), $link_control, $is_edit );
 	}
 
 	/**
@@ -218,10 +218,10 @@ trait TMT_Translation_Admin_Trait {
 		if ( $selected_term_id ) {
 			$selected_term = get_term( $selected_term_id );
 			if ( ! $selected_term || is_wp_error( $selected_term ) || $selected_term->taxonomy !== $term->taxonomy ) {
-				wp_die( esc_html__( 'The selected translated term is invalid for this taxonomy.', 'tibetpress' ) );
+				wp_die( esc_html__( 'The selected translated term is invalid for this taxonomy.', 'omnitibet' ) );
 			}
 			if ( '1' === get_term_meta( $selected_term_id, '_tmt_term_shared', true ) ) {
-				wp_die( esc_html__( 'Shared terms cannot be linked as translated terms.', 'tibetpress' ) );
+				wp_die( esc_html__( 'Shared terms cannot be linked as translated terms.', 'omnitibet' ) );
 			}
 		}
 
@@ -251,7 +251,7 @@ trait TMT_Translation_Admin_Trait {
 				]
 			);
 			if ( is_wp_error( $members ) ) {
-				wp_die( esc_html__( 'Existing term translations could not be loaded.', 'tibetpress' ) );
+				wp_die( esc_html__( 'Existing term translations could not be loaded.', 'omnitibet' ) );
 			}
 			$member_ids = array_merge( $member_ids, array_map( 'absint', $members ) );
 		}
@@ -262,7 +262,7 @@ trait TMT_Translation_Admin_Trait {
 	}
 
 	public function add_taxonomy_language_column( array $columns ): array {
-		$columns['tmt_term_language'] = __( 'Language', 'tibetpress' );
+		$columns['tmt_term_language'] = __( 'Language', 'omnitibet' );
 		foreach ( $this->get_enabled_languages() as $code => $language ) {
 			$columns[ 'tmt_term_lang_' . $code ] = sprintf(
 				'<span title="%s">%s</span>',
@@ -276,7 +276,7 @@ trait TMT_Translation_Admin_Trait {
 	public function render_taxonomy_language_column( string $content, string $column_name, int $term_id ): string {
 		if ( 'tmt_term_language' === $column_name ) {
 			if ( '1' === get_term_meta( $term_id, '_tmt_term_shared', true ) ) {
-				return esc_html__( 'Shared', 'tibetpress' );
+				return esc_html__( 'Shared', 'omnitibet' );
 			}
 
 			$language_code = get_term_meta( $term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
@@ -301,7 +301,7 @@ trait TMT_Translation_Admin_Trait {
 		$is_shared = '1' === get_term_meta( $term_id, '_tmt_term_shared', true );
 		$term_lang = get_term_meta( $term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
 		if ( $is_shared || $term_lang === $target_language ) {
-			return '<span class="tmt-col-current" title="' . esc_attr__( 'Current or shared term language', 'tibetpress' ) . '">&#10003;</span>';
+			return '<span class="tmt-col-current" title="' . esc_attr__( 'Current or shared term language', 'omnitibet' ) . '">&#10003;</span>';
 		}
 
 		$translation_id = $this->get_translated_taxonomy_term_id( $term_id, $term->taxonomy, $target_language );
@@ -317,7 +317,7 @@ trait TMT_Translation_Admin_Trait {
 					esc_attr(
 						sprintf(
 							/* translators: %s: target language name. */
-							__( 'Edit %s term translation', 'tibetpress' ),
+							__( 'Edit %s term translation', 'omnitibet' ),
 							$this->get_enabled_languages()[ $target_language ]['name']
 						)
 					)
@@ -341,7 +341,7 @@ trait TMT_Translation_Admin_Trait {
 			esc_attr(
 				sprintf(
 					/* translators: %s: target language name. */
-					__( 'Add %s term translation', 'tibetpress' ),
+					__( 'Add %s term translation', 'omnitibet' ),
 					$this->get_enabled_languages()[ $target_language ]['name']
 				)
 			)
@@ -397,7 +397,7 @@ trait TMT_Translation_Admin_Trait {
 
 		// If this post itself is in this target language
 		if ( $post_lang === $target_lang ) {
-			echo '<span class="tmt-col-current" title="' . esc_attr__( 'Current language of this post', 'tibetpress' ) . '">&#10003;</span>';
+			echo '<span class="tmt-col-current" title="' . esc_attr__( 'Current language of this post', 'omnitibet' ) . '">&#10003;</span>';
 			return;
 		}
 
@@ -407,14 +407,14 @@ trait TMT_Translation_Admin_Trait {
 		if ( $trans_id && $trans_id !== $post_id ) {
 			// Translation exists: Render pencil edit icon
 			$edit_url    = get_edit_post_link( $trans_id );
-			$trans_title = get_the_title( $trans_id ) ?: __( '(no title)', 'tibetpress' );
+			$trans_title = get_the_title( $trans_id ) ?: __( '(no title)', 'omnitibet' );
 			printf(
 				'<a href="%s" class="tmt-col-action tmt-col-edit" title="%s"><span class="dashicons dashicons-edit"></span></a>',
 				esc_url( $edit_url ),
 				esc_attr(
 					sprintf(
 						/* translators: 1: target language name, 2: translated post title. */
-						__( 'Edit %1$s translation: "%2$s"', 'tibetpress' ),
+						__( 'Edit %1$s translation: "%2$s"', 'omnitibet' ),
 						$supported_languages[ $target_lang ]['name'],
 						$trans_title
 					)
@@ -453,7 +453,7 @@ trait TMT_Translation_Admin_Trait {
 				esc_attr(
 					sprintf(
 						/* translators: %s: target language name. */
-						__( 'Add translation in %s', 'tibetpress' ),
+						__( 'Add translation in %s', 'omnitibet' ),
 						$supported_languages[ $target_lang ]['name']
 					)
 				),
@@ -461,7 +461,7 @@ trait TMT_Translation_Admin_Trait {
 				esc_attr(
 					sprintf(
 						/* translators: %s: target language name. */
-						__( 'Duplicate content to %s', 'tibetpress' ),
+						__( 'Duplicate content to %s', 'omnitibet' ),
 						$supported_languages[ $target_lang ]['name']
 					)
 				)
@@ -501,7 +501,7 @@ trait TMT_Translation_Admin_Trait {
 				$actions[ 'tmt_dup_' . $lang_code ] = sprintf(
 					'<a href="%s" style="color:#0f766e;">%s %s</a>',
 					esc_url( $dup_url ),
-					esc_html__( 'Duplicate to', 'tibetpress' ),
+					esc_html__( 'Duplicate to', 'omnitibet' ),
 					esc_html( $lang_label )
 				);
 			}
@@ -527,7 +527,7 @@ trait TMT_Translation_Admin_Trait {
 		}
 		?>
 		<select name="tmt_lang_filter" id="tmt_lang_filter">
-			<option value=""><?php esc_html_e( 'All languages', 'tibetpress' ); ?></option>
+			<option value=""><?php esc_html_e( 'All languages', 'omnitibet' ); ?></option>
 			<?php foreach ( $this->get_enabled_languages() as $code => $info ) : ?>
 				<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $selected, $code ); ?>>
 					<?php echo esc_html( $info['name'] . ' (' . $info['native'] . ')' ); ?>
@@ -560,7 +560,7 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		$current_label = 'all' === $current_language
-			? __( 'All languages', 'tibetpress' )
+			? __( 'All languages', 'omnitibet' )
 			: ( $languages[ $current_language ]['native'] ?? $languages[ $current_language ]['name'] );
 		$current_flag = 'all' === $current_language ? '' : $this->get_flag_html( $current_language, 16, 11 );
 
@@ -569,7 +569,7 @@ trait TMT_Translation_Admin_Trait {
 				'id'    => 'tmt-admin-language-switcher',
 				'title' => $current_flag . '<span class="ab-label">' . sprintf(
 					/* translators: %s: current language name */
-					esc_html__( 'Language: %s', 'tibetpress' ),
+					esc_html__( 'Language: %s', 'omnitibet' ),
 					esc_html( $current_label )
 				) . '</span>',
 				'href'  => $this->get_language_toolbar_url( $current_language ),
@@ -581,7 +581,7 @@ trait TMT_Translation_Admin_Trait {
 				[
 					'id'     => 'tmt-admin-language-all',
 					'parent' => 'tmt-admin-language-switcher',
-					'title'  => esc_html__( 'All languages', 'tibetpress' ),
+					'title'  => esc_html__( 'All languages', 'omnitibet' ),
 					'href'   => $this->get_language_toolbar_url( 'all' ),
 					'meta'   => [
 						'class' => 'all' === $current_language ? 'tmt-current-admin-language' : '',
@@ -833,7 +833,7 @@ trait TMT_Translation_Admin_Trait {
 		foreach ( $post_types as $pt ) {
 			add_meta_box(
 				'tmt_post_translation_box',
-				__( 'Language & Translations', 'tibetpress' ),
+				__( 'Language & Translations', 'omnitibet' ),
 				[ $this, 'render_translation_metabox' ],
 				$pt,
 				'side',
@@ -864,7 +864,7 @@ trait TMT_Translation_Admin_Trait {
 			<!-- Connect with translations link -->
 			<div class="tmt-connect-header">
 				<a href="#" class="tmt-connect-link" id="tmt-toggle-connect">
-					<?php esc_html_e( 'Connect with translations', 'tibetpress' ); ?>
+					<?php esc_html_e( 'Connect with translations', 'omnitibet' ); ?>
 				</a>
 			</div>
 
@@ -872,17 +872,17 @@ trait TMT_Translation_Admin_Trait {
 			<div class="tmt-connect-panel" id="tmt-connect-drawer" style="display:none;">
 				<div class="tmt-connect-inner">
 					<label for="tmt_link_existing_post">
-						<strong><?php esc_html_e( 'Link an existing post to this translation group:', 'tibetpress' ); ?></strong>
+						<strong><?php esc_html_e( 'Link an existing post to this translation group:', 'omnitibet' ); ?></strong>
 					</label>
-					<input type="number" id="tmt_link_existing_post" name="tmt_link_existing_post" placeholder="<?php esc_attr_e( 'Enter Post ID to link', 'tibetpress' ); ?>" class="widefat" style="margin:5px 0 8px 0;" />
+					<input type="number" id="tmt_link_existing_post" name="tmt_link_existing_post" placeholder="<?php esc_attr_e( 'Enter Post ID to link', 'omnitibet' ); ?>" class="widefat" style="margin:5px 0 8px 0;" />
 					
 					<div style="display:flex;gap:6px;">
 						<button type="submit" name="tmt_meta_action" value="connect_post" class="button button-secondary button-small">
-							<?php esc_html_e( 'Connect Post', 'tibetpress' ); ?>
+							<?php esc_html_e( 'Connect Post', 'omnitibet' ); ?>
 						</button>
 						<?php if ( ! empty( $group_id ) ) : ?>
-							<a href="<?php echo esc_url( add_query_arg( [ 'action' => 'tmt_action', 'tmt_task' => 'unlink', 'source_id' => $post->ID, '_wpnonce' => $nonce ], admin_url( 'admin.php' ) ) ); ?>" class="button button-link-delete button-small" onclick="return confirm('<?php echo esc_js( __( 'Are you sure you want to unlink this post from its translations?', 'tibetpress' ) ); ?>');">
-								<?php esc_html_e( 'Unlink', 'tibetpress' ); ?>
+							<a href="<?php echo esc_url( add_query_arg( [ 'action' => 'tmt_action', 'tmt_task' => 'unlink', 'source_id' => $post->ID, '_wpnonce' => $nonce ], admin_url( 'admin.php' ) ) ); ?>" class="button button-link-delete button-small" onclick="return confirm('<?php echo esc_js( __( 'Are you sure you want to unlink this post from its translations?', 'omnitibet' ) ); ?>');">
+								<?php esc_html_e( 'Unlink', 'omnitibet' ); ?>
 							</a>
 						<?php endif; ?>
 					</div>
@@ -893,7 +893,7 @@ trait TMT_Translation_Admin_Trait {
 			<!-- Post Language Selector -->
 			<div class="tmt-doc-lang-row" style="margin: 10px 0 14px 0;">
 				<label for="tb_lang_code" style="font-weight:600;font-size:12px;color:#475569;display:block;margin-bottom:4px;">
-					<?php esc_html_e( 'This document language:', 'tibetpress' ); ?>
+					<?php esc_html_e( 'This document language:', 'omnitibet' ); ?>
 				</label>
 				<select name="tb_lang_code" id="tb_lang_code" class="widefat" style="font-size:13px;">
 					<?php foreach ( $supported_languages as $code => $info ) : ?>
@@ -906,19 +906,19 @@ trait TMT_Translation_Admin_Trait {
 
 			<!-- Translate this Document Section (Image 2) -->
 			<div class="tmt-section-title">
-				<strong><?php esc_html_e( 'Translate this Document', 'tibetpress' ); ?></strong>
+				<strong><?php esc_html_e( 'Translate this Document', 'omnitibet' ); ?></strong>
 			</div>
 
 			<div class="tmt-wpml-card">
 				<!-- Card Tabs Header -->
 				<div class="tmt-card-tabs">
-					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'Overview', 'tibetpress' ); ?>">
+					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'Overview', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-grid-view"></span>
 					</span>
-					<span class="tmt-tab-icon active" title="<?php esc_attr_e( 'Translate & Duplicate', 'tibetpress' ); ?>">
+					<span class="tmt-tab-icon active" title="<?php esc_attr_e( 'Translate & Duplicate', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-edit"></span>
 					</span>
-					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'WordPress Core', 'tibetpress' ); ?>">
+					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'WordPress Core', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-wordpress"></span>
 					</span>
 				</div>
@@ -927,9 +927,9 @@ trait TMT_Translation_Admin_Trait {
 				<table class="tmt-doc-table">
 					<thead>
 						<tr>
-							<th style="text-align:left;padding-left:12px;"><?php esc_html_e( 'Language', 'tibetpress' ); ?></th>
-							<th style="width:70px;text-align:center;"><?php esc_html_e( 'Translate', 'tibetpress' ); ?></th>
-							<th style="width:70px;text-align:center;"><?php esc_html_e( 'Duplicate', 'tibetpress' ); ?></th>
+							<th style="text-align:left;padding-left:12px;"><?php esc_html_e( 'Language', 'omnitibet' ); ?></th>
+							<th style="width:70px;text-align:center;"><?php esc_html_e( 'Translate', 'omnitibet' ); ?></th>
+							<th style="width:70px;text-align:center;"><?php esc_html_e( 'Duplicate', 'omnitibet' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -971,21 +971,21 @@ trait TMT_Translation_Admin_Trait {
 								<!-- Translate Column -->
 								<td class="tmt-center-cell">
 									<?php if ( $trans_id && $trans_id !== $post->ID ) : ?>
-										<a href="<?php echo esc_url( get_edit_post_link( $trans_id ) ); ?>" class="tmt-btn-edit" title="<?php esc_attr_e( 'Edit Translation', 'tibetpress' ); ?>">
+										<a href="<?php echo esc_url( get_edit_post_link( $trans_id ) ); ?>" class="tmt-btn-edit" title="<?php esc_attr_e( 'Edit Translation', 'omnitibet' ); ?>">
 											<span class="dashicons dashicons-edit"></span>
 										</a>
 									<?php else : ?>
-										<a href="<?php echo esc_url( $translate_url ); ?>" class="tmt-table-plus" title="<?php esc_attr_e( 'Add Translation', 'tibetpress' ); ?>">+</a>
+										<a href="<?php echo esc_url( $translate_url ); ?>" class="tmt-table-plus" title="<?php esc_attr_e( 'Add Translation', 'omnitibet' ); ?>">+</a>
 									<?php endif; ?>
 								</td>
 
 								<!-- Duplicate Column -->
 								<td class="tmt-center-cell">
 									<?php if ( $trans_id && $trans_id !== $post->ID ) : ?>
-										<span class="tmt-check-done" title="<?php esc_attr_e( 'Already translated', 'tibetpress' ); ?>">&#10003;</span>
+										<span class="tmt-check-done" title="<?php esc_attr_e( 'Already translated', 'omnitibet' ); ?>">&#10003;</span>
 									<?php else : ?>
-										<input type="checkbox" name="tmt_duplicate_langs[]" value="<?php echo esc_attr( $code ); ?>" class="tmt-dup-checkbox" title="<?php esc_attr_e( 'Duplicate this document', 'tibetpress' ); ?>" />
-										<a href="<?php echo esc_url( $duplicate_url ); ?>" class="tmt-quick-dup-link" title="<?php esc_attr_e( 'Instant Duplicate', 'tibetpress' ); ?>">
+										<input type="checkbox" name="tmt_duplicate_langs[]" value="<?php echo esc_attr( $code ); ?>" class="tmt-dup-checkbox" title="<?php esc_attr_e( 'Duplicate this document', 'omnitibet' ); ?>" />
+										<a href="<?php echo esc_url( $duplicate_url ); ?>" class="tmt-quick-dup-link" title="<?php esc_attr_e( 'Instant Duplicate', 'omnitibet' ); ?>">
 											<span class="dashicons dashicons-admin-page"></span>
 										</a>
 									<?php endif; ?>
@@ -998,13 +998,16 @@ trait TMT_Translation_Admin_Trait {
 				<!-- Action button that appears when duplicate checkbox is checked -->
 				<div class="tmt-dup-action-bar" id="tmt-dup-action-bar" style="display:none;padding:10px;background:#f8fafc;border-top:1px solid #e2e8f0;">
 					<button type="submit" name="tmt_meta_action" value="duplicate_checked" class="button button-primary button-small" style="width:100%;font-weight:600;">
-						<?php esc_html_e( 'Duplicate Selected Document', 'tibetpress' ); ?>
+						<?php esc_html_e( 'Duplicate Selected Document', 'omnitibet' ); ?>
 					</button>
 				</div>
 			</div>
 		</div>
 
-		<script>
+		<?php
+		wp_enqueue_script( 'tmt-admin-metabox-js', TMT_PLUGIN_URL . 'assets/js/admin-metabox.js', [], TMT_VERSION, true );
+		ob_start();
+		?>
 		document.addEventListener('DOMContentLoaded', function() {
 			const toggleBtn = document.getElementById('tmt-toggle-connect');
 			const drawer = document.getElementById('tmt-connect-drawer');
@@ -1030,7 +1033,10 @@ trait TMT_Translation_Admin_Trait {
 				cb.addEventListener('change', checkDupes);
 			});
 		});
-		</script>
+		<?php
+		$inline_js = ob_get_clean();
+		wp_add_inline_script( 'tmt-admin-metabox-js', (string) $inline_js, 'after' );
+		?>
 		<?php
 	}
 
@@ -1112,7 +1118,7 @@ trait TMT_Translation_Admin_Trait {
 	 */
 	public function handle_admin_actions(): void {
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'tmt_action_nonce' ) ) {
-			wp_die( esc_html__( 'Security check failed. Please refresh and try again.', 'tibetpress' ) );
+			wp_die( esc_html__( 'Security check failed. Please refresh and try again.', 'omnitibet' ) );
 		}
 
 		$task        = isset( $_GET['tmt_task'] ) ? sanitize_key( wp_unslash( $_GET['tmt_task'] ) ) : '';
@@ -1120,7 +1126,7 @@ trait TMT_Translation_Admin_Trait {
 		$target_lang = isset( $_GET['target_lang'] ) ? sanitize_key( wp_unslash( $_GET['target_lang'] ) ) : '';
 
 		if ( ! $source_id || ! current_user_can( 'edit_post', $source_id ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'tibetpress' ) );
+			wp_die( esc_html__( 'Permission denied.', 'omnitibet' ) );
 		}
 
 		if ( 'duplicate' === $task ) {
@@ -1160,12 +1166,12 @@ trait TMT_Translation_Admin_Trait {
 	 */
 	public function duplicate_post_to_language( int $source_post_id, string $target_lang ): int|WP_Error {
 		if ( ! isset( $this->get_enabled_languages()[ $target_lang ] ) ) {
-			return new WP_Error( 'invalid_language', __( 'The requested language is not enabled.', 'tibetpress' ) );
+			return new WP_Error( 'invalid_language', __( 'The requested language is not enabled.', 'omnitibet' ) );
 		}
 
 		$source_post = get_post( $source_post_id );
 		if ( ! $source_post ) {
-			return new WP_Error( 'not_found', __( 'Source post not found.', 'tibetpress' ) );
+			return new WP_Error( 'not_found', __( 'Source post not found.', 'omnitibet' ) );
 		}
 
 		// Ensure group ID on source post
@@ -1287,7 +1293,7 @@ trait TMT_Translation_Admin_Trait {
 	private function get_translated_taxonomy_term_id( int $term_id, string $taxonomy, string $target_lang ): int|WP_Error {
 		$term = get_term( $term_id, $taxonomy );
 		if ( ! $term || is_wp_error( $term ) ) {
-			return new WP_Error( 'tmt_term_not_found', __( 'A source taxonomy term could not be loaded.', 'tibetpress' ) );
+			return new WP_Error( 'tmt_term_not_found', __( 'A source taxonomy term could not be loaded.', 'omnitibet' ) );
 		}
 
 		if ( '1' === get_term_meta( $term_id, '_tmt_term_shared', true ) ) {
@@ -1339,7 +1345,7 @@ trait TMT_Translation_Admin_Trait {
 			]
 		);
 		if ( is_wp_error( $translated_terms ) ) {
-			return new WP_Error( 'tmt_term_translation_lookup_failed', __( 'A translated taxonomy term could not be loaded.', 'tibetpress' ) );
+			return new WP_Error( 'tmt_term_translation_lookup_failed', __( 'A translated taxonomy term could not be loaded.', 'omnitibet' ) );
 		}
 
 		return ! empty( $translated_terms ) ? absint( $translated_terms[0] ) : $term_id;
@@ -1354,12 +1360,12 @@ trait TMT_Translation_Admin_Trait {
 	 */
 	public function create_blank_translation( int $source_post_id, string $target_lang ): int|WP_Error {
 		if ( ! isset( $this->get_enabled_languages()[ $target_lang ] ) ) {
-			return new WP_Error( 'invalid_language', __( 'The requested language is not enabled.', 'tibetpress' ) );
+			return new WP_Error( 'invalid_language', __( 'The requested language is not enabled.', 'omnitibet' ) );
 		}
 
 		$source_post = get_post( $source_post_id );
 		if ( ! $source_post ) {
-			return new WP_Error( 'not_found', __( 'Source post not found.', 'tibetpress' ) );
+			return new WP_Error( 'not_found', __( 'Source post not found.', 'omnitibet' ) );
 		}
 
 		$group_id = get_post_meta( $source_post_id, '_tb_lang_group_id', true );
@@ -1412,10 +1418,10 @@ trait TMT_Translation_Admin_Trait {
 		if ( ! empty( $_GET['tmt_msg'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$msg = sanitize_key( wp_unslash( $_GET['tmt_msg'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$text = match ( $msg ) {
-				'duplicated' => __( 'Document successfully duplicated for translation. You can now edit the translation below.', 'tibetpress' ),
-				'translated' => __( 'New translation draft created and linked.', 'tibetpress' ),
-				'unlinked'   => __( 'Post successfully unlinked from translation group.', 'tibetpress' ),
-				'connected'  => __( 'Post successfully connected to translation group.', 'tibetpress' ),
+				'duplicated' => __( 'Document successfully duplicated for translation. You can now edit the translation below.', 'omnitibet' ),
+				'translated' => __( 'New translation draft created and linked.', 'omnitibet' ),
+				'unlinked'   => __( 'Post successfully unlinked from translation group.', 'omnitibet' ),
+				'connected'  => __( 'Post successfully connected to translation group.', 'omnitibet' ),
 				default      => '',
 			};
 			if ( ! empty( $text ) ) {

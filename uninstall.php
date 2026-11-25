@@ -1,6 +1,6 @@
 <?php
 /**
- * TibetPress
+ * OmniTibet
  * Uninstallation Script
  *
  * @package Tibetan_Multilingual_Typography

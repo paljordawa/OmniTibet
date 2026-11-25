@@ -1,5 +1,5 @@
 /**
- * TibetPress
+ * OmniTibet
  * Frontend Language Switcher Script
  *
  * @package Tibetan_Multilingual_Typography

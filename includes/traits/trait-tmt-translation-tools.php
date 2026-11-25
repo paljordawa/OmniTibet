@@ -82,34 +82,34 @@ trait TMT_Translation_Tools_Trait {
 
 	public function render_translation_tools_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'tibetpress' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'omnitibet' ) );
 		}
 
 		$tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] )
 			? sanitize_key( wp_unslash( $_GET['tab'] ) )
 			: 'queue';
 		$tabs = [
-			'queue'   => __( 'Translation Queue', 'tibetpress' ),
-			'menus'   => __( 'Language Menus', 'tibetpress' ),
-			'strings' => __( 'String Translations', 'tibetpress' ),
-			'health'  => __( 'Translation Health', 'tibetpress' ),
+			'queue'   => __( 'Translation Queue', 'omnitibet' ),
+			'menus'   => __( 'Language Menus', 'omnitibet' ),
+			'strings' => __( 'String Translations', 'omnitibet' ),
+			'health'  => __( 'Translation Health', 'omnitibet' ),
 		];
 		if ( ! isset( $tabs[ $tab ] ) ) {
 			$tab = 'queue';
 		}
 		?>
 		<div class="wrap">
-			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'tibetpress' ); ?>">
+			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'omnitibet' ); ?>">
 				<a class="nav-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=tibetan-settings' ) ); ?>">
-					<?php esc_html_e( 'TibetPress Settings', 'tibetpress' ); ?>
+					<?php esc_html_e( 'OmniTibet Settings', 'omnitibet' ); ?>
 				</a>
 				<a class="nav-tab nav-tab-active" href="<?php echo esc_url( add_query_arg( [ 'page' => 'tibetan-settings', 'section' => 'multilingual-tools' ], admin_url( 'options-general.php' ) ) ); ?>">
-					<?php esc_html_e( 'Multilingual Tools', 'tibetpress' ); ?>
+					<?php esc_html_e( 'Multilingual Tools', 'omnitibet' ); ?>
 				</a>
 			</nav>
-			<h1><?php esc_html_e( 'Multilingual Tools', 'tibetpress' ); ?></h1>
+			<h1><?php esc_html_e( 'Multilingual Tools', 'omnitibet' ); ?></h1>
 			<?php if ( isset( $_GET['updated'] ) ) : ?>
-				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'tibetpress' ); ?></p></div>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'omnitibet' ); ?></p></div>
 			<?php endif; ?>
 			<nav class="nav-tab-wrapper">
 				<?php foreach ( $tabs as $tab_id => $label ) : ?>
@@ -390,7 +390,7 @@ trait TMT_Translation_Tools_Trait {
 		foreach ( get_post_types( [ 'public' => true ], 'names' ) as $post_type ) {
 			add_meta_box(
 				'tmt_translation_seo',
-				__( 'Translated SEO Metadata', 'tibetpress' ),
+				__( 'Translated SEO Metadata', 'omnitibet' ),
 				[ $this, 'render_translation_seo_metabox' ],
 				$post_type,
 				'normal',
@@ -405,14 +405,14 @@ trait TMT_Translation_Tools_Trait {
 		$description = get_post_meta( $post->ID, '_tmt_seo_description', true );
 		?>
 		<p>
-			<label for="tmt_seo_title"><strong><?php esc_html_e( 'SEO title', 'tibetpress' ); ?></strong></label>
+			<label for="tmt_seo_title"><strong><?php esc_html_e( 'SEO title', 'omnitibet' ); ?></strong></label>
 			<input type="text" class="widefat" id="tmt_seo_title" name="tmt_seo_title" value="<?php echo esc_attr( is_string( $title ) ? $title : '' ); ?>" />
 		</p>
 		<p>
-			<label for="tmt_seo_description"><strong><?php esc_html_e( 'SEO description', 'tibetpress' ); ?></strong></label>
+			<label for="tmt_seo_description"><strong><?php esc_html_e( 'SEO description', 'omnitibet' ); ?></strong></label>
 			<textarea class="widefat" rows="3" id="tmt_seo_description" name="tmt_seo_description"><?php echo esc_textarea( is_string( $description ) ? $description : '' ); ?></textarea>
 		</p>
-		<p class="description"><?php esc_html_e( 'These values are used when no SEO plugin overrides the corresponding metadata.', 'tibetpress' ); ?></p>
+		<p class="description"><?php esc_html_e( 'These values are used when no SEO plugin overrides the corresponding metadata.', 'omnitibet' ); ?></p>
 		<?php
 	}
 
@@ -540,12 +540,12 @@ trait TMT_Translation_Tools_Trait {
 			]
 		);
 		$statuses = [
-			'all'         => __( 'All statuses', 'tibetpress' ),
-			'missing'     => __( 'Missing', 'tibetpress' ),
-			'draft'       => __( 'Draft', 'tibetpress' ),
-			'unpublished' => __( 'Unpublished', 'tibetpress' ),
-			'published'   => __( 'Published', 'tibetpress' ),
-			'outdated'    => __( 'Outdated', 'tibetpress' ),
+			'all'         => __( 'All statuses', 'omnitibet' ),
+			'missing'     => __( 'Missing', 'omnitibet' ),
+			'draft'       => __( 'Draft', 'omnitibet' ),
+			'unpublished' => __( 'Unpublished', 'omnitibet' ),
+			'published'   => __( 'Published', 'omnitibet' ),
+			'outdated'    => __( 'Outdated', 'omnitibet' ),
 		];
 		if ( ! isset( $statuses[ $status_filter ] ) ) {
 			$status_filter = 'all';
@@ -556,7 +556,7 @@ trait TMT_Translation_Tools_Trait {
 			<input type="hidden" name="section" value="multilingual-tools" />
 			<input type="hidden" name="tab" value="queue" />
 			<select name="language">
-				<option value="all"><?php esc_html_e( 'All target languages', 'tibetpress' ); ?></option>
+				<option value="all"><?php esc_html_e( 'All target languages', 'omnitibet' ); ?></option>
 				<?php foreach ( $languages as $code => $language ) :
 					if ( $code === $base ) {
 						continue;
@@ -570,14 +570,14 @@ trait TMT_Translation_Tools_Trait {
 					<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $status_filter, $code ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<?php submit_button( __( 'Filter', 'tibetpress' ), 'secondary', '', false ); ?>
+			<?php submit_button( __( 'Filter', 'omnitibet' ), 'secondary', '', false ); ?>
 		</form>
 		<table class="widefat striped">
 			<thead><tr>
-				<th><?php esc_html_e( 'Source content', 'tibetpress' ); ?></th>
-				<th><?php esc_html_e( 'Target language', 'tibetpress' ); ?></th>
-				<th><?php esc_html_e( 'Status', 'tibetpress' ); ?></th>
-				<th><?php esc_html_e( 'Action', 'tibetpress' ); ?></th>
+				<th><?php esc_html_e( 'Source content', 'omnitibet' ); ?></th>
+				<th><?php esc_html_e( 'Target language', 'omnitibet' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'omnitibet' ); ?></th>
+				<th><?php esc_html_e( 'Action', 'omnitibet' ); ?></th>
 			</tr></thead>
 			<tbody>
 				<?php
@@ -594,7 +594,7 @@ trait TMT_Translation_Tools_Trait {
 						$row_count++;
 						?>
 						<tr>
-							<td><a href="<?php echo esc_url( get_edit_post_link( $source->ID ) ); ?>"><?php echo esc_html( get_the_title( $source ) ?: __( '(no title)', 'tibetpress' ) ); ?></a></td>
+							<td><a href="<?php echo esc_url( get_edit_post_link( $source->ID ) ); ?>"><?php echo esc_html( get_the_title( $source ) ?: __( '(no title)', 'omnitibet' ) ); ?></a></td>
 							<td><?php echo esc_html( $language['name'] . ' (' . $language['native'] . ')' ); ?></td>
 							<td><?php echo esc_html( $statuses[ $state['status'] ] ?? $state['status'] ); ?></td>
 							<td><?php $this->render_translation_queue_action( $source, $code, $state ); ?></td>
@@ -602,7 +602,7 @@ trait TMT_Translation_Tools_Trait {
 					<?php endforeach; ?>
 				<?php endforeach; ?>
 				<?php if ( 0 === $row_count ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'No translation tasks match these filters.', 'tibetpress' ); ?></td></tr>
+					<tr><td colspan="4"><?php esc_html_e( 'No translation tasks match these filters.', 'omnitibet' ); ?></td></tr>
 				<?php endif; ?>
 			</tbody>
 		</table>
@@ -626,7 +626,7 @@ trait TMT_Translation_Tools_Trait {
 		if ( ! empty( $state['post_id'] ) ) {
 			$edit_url = get_edit_post_link( (int) $state['post_id'] );
 			if ( $edit_url ) {
-				printf( '<a class="button button-small" href="%s">%s</a>', esc_url( $edit_url ), esc_html__( 'Edit translation', 'tibetpress' ) );
+				printf( '<a class="button button-small" href="%s">%s</a>', esc_url( $edit_url ), esc_html__( 'Edit translation', 'omnitibet' ) );
 				return;
 			}
 		}
@@ -640,7 +640,7 @@ trait TMT_Translation_Tools_Trait {
 			],
 			admin_url( 'admin.php' )
 		);
-		printf( '<a class="button button-primary button-small" href="%s">%s</a>', esc_url( $url ), esc_html__( 'Add translation', 'tibetpress' ) );
+		printf( '<a class="button button-primary button-small" href="%s">%s</a>', esc_url( $url ), esc_html__( 'Add translation', 'omnitibet' ) );
 	}
 
 	private function render_language_menu_settings(): void {
@@ -652,9 +652,9 @@ trait TMT_Translation_Tools_Trait {
 		$assignments = is_array( $assignments ) ? $assignments : [];
 		$assigned_locations = get_nav_menu_locations();
 		?>
-		<p><?php esc_html_e( 'Assign a separate WordPress menu to each theme location and language. Unassigned languages fall back to the base-language menu.', 'tibetpress' ); ?></p>
+		<p><?php esc_html_e( 'Assign a separate WordPress menu to each theme location and language. Unassigned languages fall back to the base-language menu.', 'omnitibet' ); ?></p>
 		<?php if ( empty( $locations ) || empty( $menus ) ) : ?>
-			<p><?php esc_html_e( 'Register a theme menu location and create menus under Appearance → Menus before assigning language menus.', 'tibetpress' ); ?></p>
+			<p><?php esc_html_e( 'Register a theme menu location and create menus under Appearance → Menus before assigning language menus.', 'omnitibet' ); ?></p>
 			<?php return; ?>
 		<?php endif; ?>
 		<form method="post">
@@ -662,7 +662,7 @@ trait TMT_Translation_Tools_Trait {
 			<input type="hidden" name="tmt_tools_action" value="menus" />
 			<table class="widefat striped" style="margin-top:16px;">
 				<thead><tr>
-					<th><?php esc_html_e( 'Theme location', 'tibetpress' ); ?></th>
+					<th><?php esc_html_e( 'Theme location', 'omnitibet' ); ?></th>
 					<?php foreach ( $languages as $language ) : ?><th><?php echo esc_html( $language['name'] ); ?></th><?php endforeach; ?>
 				</tr></thead>
 				<tbody>
@@ -674,7 +674,7 @@ trait TMT_Translation_Tools_Trait {
 								?>
 								<td>
 									<select name="tmt_language_menus[<?php echo esc_attr( $location ); ?>][<?php echo esc_attr( $code ); ?>]">
-										<option value="0"><?php echo esc_html( $code === $base ? __( 'Use theme default', 'tibetpress' ) : __( 'Use base menu', 'tibetpress' ) ); ?></option>
+										<option value="0"><?php echo esc_html( $code === $base ? __( 'Use theme default', 'omnitibet' ) : __( 'Use base menu', 'omnitibet' ) ); ?></option>
 										<?php foreach ( $menus as $menu ) : ?>
 											<option value="<?php echo esc_attr( (string) $menu->term_id ); ?>" <?php selected( $selected_menu, (int) $menu->term_id ); ?>><?php echo esc_html( $menu->name ); ?></option>
 										<?php endforeach; ?>
@@ -685,7 +685,7 @@ trait TMT_Translation_Tools_Trait {
 					<?php endforeach; ?>
 				</tbody>
 			</table>
-			<?php submit_button( __( 'Save language menus', 'tibetpress' ) ); ?>
+			<?php submit_button( __( 'Save language menus', 'omnitibet' ) ); ?>
 		</form>
 		<?php
 	}
@@ -696,9 +696,9 @@ trait TMT_Translation_Tools_Trait {
 		$languages = $this->get_enabled_languages();
 		$base      = $this->get_base_language();
 		?>
-		<p><?php esc_html_e( 'Register stable string IDs with tmt_register_string(), then retrieve the active language value with tmt_translate_string().', 'tibetpress' ); ?></p>
+		<p><?php esc_html_e( 'Register stable string IDs with tmt_register_string(), then retrieve the active language value with tmt_translate_string().', 'omnitibet' ); ?></p>
 		<?php if ( empty( $strings ) ) : ?>
-			<p><?php esc_html_e( 'No strings have been registered yet.', 'tibetpress' ); ?></p>
+			<p><?php esc_html_e( 'No strings have been registered yet.', 'omnitibet' ); ?></p>
 			<?php return; ?>
 		<?php endif; ?>
 		<form method="post">
@@ -706,8 +706,8 @@ trait TMT_Translation_Tools_Trait {
 			<input type="hidden" name="tmt_tools_action" value="strings" />
 			<table class="widefat striped" style="margin-top:16px;">
 				<thead><tr>
-					<th><?php esc_html_e( 'String ID / domain', 'tibetpress' ); ?></th>
-					<th><?php esc_html_e( 'Source text', 'tibetpress' ); ?></th>
+					<th><?php esc_html_e( 'String ID / domain', 'omnitibet' ); ?></th>
+					<th><?php esc_html_e( 'Source text', 'omnitibet' ); ?></th>
 					<?php foreach ( $languages as $code => $language ) :
 						if ( $code !== $base ) :
 							?>
@@ -736,7 +736,7 @@ trait TMT_Translation_Tools_Trait {
 					<?php endforeach; ?>
 				</tbody>
 			</table>
-			<?php submit_button( __( 'Save string translations', 'tibetpress' ) ); ?>
+			<?php submit_button( __( 'Save string translations', 'omnitibet' ) ); ?>
 		</form>
 		<?php
 	}
@@ -751,7 +751,7 @@ trait TMT_Translation_Tools_Trait {
 		}
 		$post_types = array_values( $post_types );
 		if ( empty( $post_types ) ) {
-			esc_html_e( 'No public content types were found.', 'tibetpress' );
+			esc_html_e( 'No public content types were found.', 'omnitibet' );
 			return;
 		}
 		$placeholders = implode( ', ', array_fill( 0, count( $post_types ), '%s' ) );
@@ -776,7 +776,7 @@ trait TMT_Translation_Tools_Trait {
 				esc_html(
 					sprintf(
 						/* translators: %s: database error message */
-						__( 'The translation health check could not run: %s', 'tibetpress' ),
+						__( 'The translation health check could not run: %s', 'omnitibet' ),
 						$wpdb->last_error
 					)
 				)
@@ -791,14 +791,14 @@ trait TMT_Translation_Tools_Trait {
 		$issues = [];
 		foreach ( $groups as $group_id => $languages ) {
 			if ( empty( $languages[ $base ] ) ) {
-				$issues[] = [ 'type' => __( 'Translation group has no base-language post', 'tibetpress' ), 'group' => $group_id, 'items' => array_merge( ...array_values( $languages ) ) ];
+				$issues[] = [ 'type' => __( 'Translation group has no base-language post', 'omnitibet' ), 'group' => $group_id, 'items' => array_merge( ...array_values( $languages ) ) ];
 			}
 			foreach ( $languages as $code => $items ) {
 				if ( count( $items ) > 1 ) {
 					$issues[] = [
 						'type'  => sprintf(
 							/* translators: %s: language name. */
-							__( 'Multiple posts assigned to %s in one group', 'tibetpress' ),
+							__( 'Multiple posts assigned to %s in one group', 'omnitibet' ),
 							$this->get_enabled_languages()[ $code ]['name'] ?? $code
 						),
 						'group' => $group_id,
@@ -831,7 +831,7 @@ trait TMT_Translation_Tools_Trait {
 				esc_html(
 					sprintf(
 						/* translators: %s: database error message */
-						__( 'The unlinked-translation check could not run: %s', 'tibetpress' ),
+						__( 'The unlinked-translation check could not run: %s', 'omnitibet' ),
 						$wpdb->last_error
 					)
 				)
@@ -840,27 +840,27 @@ trait TMT_Translation_Tools_Trait {
 		}
 		foreach ( $orphan_posts as $orphan_post ) {
 			$issues[] = [
-				'type'  => __( 'Non-base post is not linked to a translation group', 'tibetpress' ),
-				'group' => __( '(none)', 'tibetpress' ),
+				'type'  => __( 'Non-base post is not linked to a translation group', 'omnitibet' ),
+				'group' => __( '(none)', 'omnitibet' ),
 				'items' => [ $orphan_post ],
 			];
 		}
 
 		if ( empty( $issues ) ) {
-			echo '<div class="notice notice-success inline"><p>' . esc_html__( 'No duplicate-language, missing-base, or unlinked-post issues were found.', 'tibetpress' ) . '</p></div>';
+			echo '<div class="notice notice-success inline"><p>' . esc_html__( 'No duplicate-language, missing-base, or unlinked-post issues were found.', 'omnitibet' ) . '</p></div>';
 			return;
 		}
 		?>
-		<p><?php esc_html_e( 'These checks are read-only. Edit or reconnect the listed posts to repair a group.', 'tibetpress' ); ?></p>
+		<p><?php esc_html_e( 'These checks are read-only. Edit or reconnect the listed posts to repair a group.', 'omnitibet' ); ?></p>
 		<table class="widefat striped">
-			<thead><tr><th><?php esc_html_e( 'Issue', 'tibetpress' ); ?></th><th><?php esc_html_e( 'Group', 'tibetpress' ); ?></th><th><?php esc_html_e( 'Posts', 'tibetpress' ); ?></th></tr></thead>
+			<thead><tr><th><?php esc_html_e( 'Issue', 'omnitibet' ); ?></th><th><?php esc_html_e( 'Group', 'omnitibet' ); ?></th><th><?php esc_html_e( 'Posts', 'omnitibet' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $issues as $issue ) : ?>
 					<tr>
 						<td><?php echo esc_html( $issue['type'] ); ?></td>
 						<td><code><?php echo esc_html( $issue['group'] ); ?></code></td>
 						<td><?php foreach ( $issue['items'] as $item ) : ?>
-							<a href="<?php echo esc_url( get_edit_post_link( (int) $item->ID ) ); ?>"><?php echo esc_html( $item->post_title ?: __( '(no title)', 'tibetpress' ) ); ?></a>
+							<a href="<?php echo esc_url( get_edit_post_link( (int) $item->ID ) ); ?>"><?php echo esc_html( $item->post_title ?: __( '(no title)', 'omnitibet' ) ); ?></a>
 							(<?php echo esc_html( $item->language_code ?: $base ); ?>)<br />
 						<?php endforeach; ?></td>
 					</tr>

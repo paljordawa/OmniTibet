@@ -96,7 +96,7 @@ trait TMT_Admin_Settings_Trait {
 		if ( ! is_array( $results ) ) {
 			return new WP_Error(
 				'tmt_coverage_query_failed',
-				__( 'Translation coverage could not be loaded. Please try again later.', 'tibetpress' )
+				__( 'Translation coverage could not be loaded. Please try again later.', 'omnitibet' )
 			);
 		}
 
@@ -162,8 +162,8 @@ trait TMT_Admin_Settings_Trait {
 	 */
 	public function register_admin_menu(): void {
 		add_options_page(
-			__( 'TibetPress Settings', 'tibetpress' ),
-			__( 'TibetPress Settings', 'tibetpress' ),
+			__( 'OmniTibet Settings', 'omnitibet' ),
+			__( 'OmniTibet Settings', 'omnitibet' ),
 			'manage_options',
 			'tibetan-settings',
 			[ $this, 'render_admin_settings_page' ]
@@ -336,7 +336,7 @@ trait TMT_Admin_Settings_Trait {
 	 */
 	public function render_admin_settings_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'tibetpress' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'omnitibet' ) );
 		}
 
 		if ( isset( $_GET['section'] ) && is_string( $_GET['section'] ) && 'multilingual-tools' === sanitize_key( wp_unslash( $_GET['section'] ) ) ) {
@@ -389,42 +389,42 @@ trait TMT_Admin_Settings_Trait {
 		$language_url_format = $settings['language_url_format'] ?? 'directory';
 		?>
 		<div class="wrap tmt-admin-wrap">
-			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'tibetpress' ); ?>">
+			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'omnitibet' ); ?>">
 				<a class="nav-tab nav-tab-active" href="<?php echo esc_url( admin_url( 'options-general.php?page=tibetan-settings' ) ); ?>">
-					<?php esc_html_e( 'TibetPress Settings', 'tibetpress' ); ?>
+					<?php esc_html_e( 'OmniTibet Settings', 'omnitibet' ); ?>
 				</a>
 				<a class="nav-tab" href="<?php echo esc_url( add_query_arg( [ 'page' => 'tibetan-settings', 'section' => 'multilingual-tools' ], admin_url( 'options-general.php' ) ) ); ?>">
-					<?php esc_html_e( 'Multilingual Tools', 'tibetpress' ); ?>
+					<?php esc_html_e( 'Multilingual Tools', 'omnitibet' ); ?>
 				</a>
 			</nav>
 			<div class="tmt-admin-header">
 				<div class="tmt-admin-brand">
 					<div class="tmt-admin-brand-mark">
 						<img
-							src="<?php echo esc_url( TMT_PLUGIN_URL . 'assets/images/tibet-press.svg' ); ?>"
-							alt="<?php esc_attr_e( 'TibetPress logo', 'tibetpress' ); ?>"
+							src="<?php echo esc_url( TMT_PLUGIN_URL . 'assets/images/omnitibet.svg' ); ?>"
+							alt="<?php esc_attr_e( 'OmniTibet logo', 'omnitibet' ); ?>"
 							class="tmt-admin-brand-logo"
 						/>
 					</div>
 					<div class="tmt-admin-brand-copy">
 						<div class="tmt-admin-brand-kicker">
-							<span><?php esc_html_e( 'TibetPress', 'tibetpress' ); ?></span>
+							<span><?php esc_html_e( 'OmniTibet', 'omnitibet' ); ?></span>
 						</div>
-						<h1><?php esc_html_e( 'TibetPress Settings', 'tibetpress' ); ?></h1>
+						<h1><?php esc_html_e( 'OmniTibet Settings', 'omnitibet' ); ?></h1>
 						<p>
-							<?php esc_html_e( 'A Tibetan-first toolkit for beautiful typography and multilingual publishing. Configure fonts, manage translated content, and help visitors switch languages.', 'tibetpress' ); ?>
+							<?php esc_html_e( 'A Tibetan-first toolkit for beautiful typography and multilingual publishing. Configure fonts, manage translated content, and help visitors switch languages.', 'omnitibet' ); ?>
 						</p>
-						<ul class="tmt-admin-brand-features" aria-label="<?php esc_attr_e( 'Plugin features', 'tibetpress' ); ?>">
-							<li><span class="dashicons dashicons-editor-textcolor" aria-hidden="true"></span><?php esc_html_e( 'Tibetan typography', 'tibetpress' ); ?></li>
-							<li><span class="dashicons dashicons-translation" aria-hidden="true"></span><?php esc_html_e( 'Multilingual content', 'tibetpress' ); ?></li>
-							<li><span class="dashicons dashicons-edit" aria-hidden="true"></span><?php esc_html_e( 'Wylie input', 'tibetpress' ); ?></li>
+						<ul class="tmt-admin-brand-features" aria-label="<?php esc_attr_e( 'Plugin features', 'omnitibet' ); ?>">
+							<li><span class="dashicons dashicons-editor-textcolor" aria-hidden="true"></span><?php esc_html_e( 'Tibetan typography', 'omnitibet' ); ?></li>
+							<li><span class="dashicons dashicons-translation" aria-hidden="true"></span><?php esc_html_e( 'Multilingual content', 'omnitibet' ); ?></li>
+							<li><span class="dashicons dashicons-edit" aria-hidden="true"></span><?php esc_html_e( 'Wylie input', 'omnitibet' ); ?></li>
 						</ul>
 					</div>
 				</div>
 				<div class="tmt-admin-brand-version"><?php
 					printf(
 						/* translators: %s: plugin version number. */
-						esc_html__( 'Version %s', 'tibetpress' ),
+						esc_html__( 'Version %s', 'omnitibet' ),
 						esc_html( TMT_VERSION )
 					);
 					?></div>
@@ -438,23 +438,23 @@ trait TMT_Admin_Settings_Trait {
 				<nav class="nav-tab-wrapper tmt-nav-tabs" role="tablist">
 					<a href="#tab-elements" class="nav-tab <?php echo 'tab-elements' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-elements" role="tab">
 						<span class="dashicons dashicons-layout"></span>
-						<?php esc_html_e( 'HTML Element Typography', 'tibetpress' ); ?>
+						<?php esc_html_e( 'HTML Element Typography', 'omnitibet' ); ?>
 					</a>
 					<a href="#tab-switcher" class="nav-tab <?php echo 'tab-switcher' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-switcher" role="tab">
 						<span class="dashicons dashicons-translation"></span>
-						<?php esc_html_e( 'Language Switcher', 'tibetpress' ); ?>
+						<?php esc_html_e( 'Language Switcher', 'omnitibet' ); ?>
 					</a>
 					<a href="#tab-general" class="nav-tab <?php echo 'tab-general' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-general" role="tab">
 						<span class="dashicons dashicons-admin-generic"></span>
-						<?php esc_html_e( 'Global Fallback Typography', 'tibetpress' ); ?>
+						<?php esc_html_e( 'Global Fallback Typography', 'omnitibet' ); ?>
 					</a>
 					<a href="#tab-multilingual" class="nav-tab <?php echo 'tab-multilingual' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-multilingual" role="tab">
 						<span class="dashicons dashicons-admin-site-alt3"></span>
-						<?php esc_html_e( 'Multilingual & Routing', 'tibetpress' ); ?>
+						<?php esc_html_e( 'Multilingual & Routing', 'omnitibet' ); ?>
 					</a>
 					<a href="#tab-wylie" class="nav-tab <?php echo 'tab-wylie' === $active_tab ? 'nav-tab-active' : ''; ?>" data-tab="tab-wylie" role="tab">
 						<span class="dashicons dashicons-keyboard"></span>
-						<?php esc_html_e( 'Wylie Input Engine', 'tibetpress' ); ?>
+						<?php esc_html_e( 'Wylie Input Engine', 'omnitibet' ); ?>
 					</a>
 				</nav>
 
@@ -468,19 +468,19 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-layout"></span>
-									<?php esc_html_e( 'HTML Element Typography Customizer', 'tibetpress' ); ?>
+									<?php esc_html_e( 'HTML Element Typography Customizer', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Assign distinct Tibetan fonts and line-heights to individual HTML elements across your website (e.g. Calligraphic title for headings, clear Uchen for body, modern boldface for menus).', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Assign distinct Tibetan fonts and line-heights to individual HTML elements across your website (e.g. Calligraphic title for headings, clear Uchen for body, modern boldface for menus).', 'omnitibet' ); ?>
 								</p>
 
 								<div class="tmt-form-row" style="margin-top:15px;padding-bottom:15px;border-bottom:1px solid #f1f5f9;">
 									<label class="tmt-toggle-switch">
 										<input type="checkbox" name="tmt_settings[enable_element_typography]" id="tmt_enable_element_typography" value="1" <?php checked( $use_elem ); ?> />
-										<span><strong><?php esc_html_e( 'Enable Element-Specific Typography (Body, Headings, Navigation, Quotes, Branding)', 'tibetpress' ); ?></strong></span>
+										<span><strong><?php esc_html_e( 'Enable Element-Specific Typography (Body, Headings, Navigation, Quotes, Branding)', 'omnitibet' ); ?></strong></span>
 									</label>
 									<p class="description" style="margin-left:56px;">
-										<?php esc_html_e( 'When active, the element-level rules below take precedence over the global fallback font.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'When active, the element-level rules below take precedence over the global fallback font.', 'omnitibet' ); ?>
 									</p>
 								</div>
 
@@ -488,9 +488,9 @@ trait TMT_Admin_Settings_Trait {
 								<table class="tmt-elements-table <?php echo $use_elem ? '' : 'tmt-disabled'; ?>" id="tmt-elements-table">
 									<thead>
 										<tr>
-											<th style="width:32%;"><?php esc_html_e( 'HTML Element & Role', 'tibetpress' ); ?></th>
-											<th style="width:48%;"><?php esc_html_e( 'Assigned Tibetan Font Stack', 'tibetpress' ); ?></th>
-											<th style="width:20%;"><?php esc_html_e( 'Line-Height', 'tibetpress' ); ?></th>
+											<th style="width:32%;"><?php esc_html_e( 'HTML Element & Role', 'omnitibet' ); ?></th>
+											<th style="width:48%;"><?php esc_html_e( 'Assigned Tibetan Font Stack', 'omnitibet' ); ?></th>
+											<th style="width:20%;"><?php esc_html_e( 'Line-Height', 'omnitibet' ); ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -536,7 +536,7 @@ trait TMT_Admin_Settings_Trait {
 											<span class="tmt-browser-dot green"></span>
 										</div>
 										<span class="tmt-browser-url">https://your-site.com/bo/preview</span>
-										<span style="font-size:11px;color:#94a3b8;margin-left:auto;font-weight:600;"><?php esc_html_e( 'LIVE MULTI-ELEMENT PREVIEW', 'tibetpress' ); ?></span>
+										<span style="font-size:11px;color:#94a3b8;margin-left:auto;font-weight:600;"><?php esc_html_e( 'LIVE MULTI-ELEMENT PREVIEW', 'omnitibet' ); ?></span>
 									</div>
 									<div class="tmt-preview-content">
 										<!-- Navbar Mockup: Site Title & Navigation -->
@@ -577,43 +577,43 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-art"></span>
-									<?php esc_html_e( 'Language Switcher Design & Layout', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Language Switcher Design & Layout', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Customize how the language switcher displays on your site: choose between dropdowns, toggle buttons, radio inputs, vertical lists, or inline links, and configure display content.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Customize how the language switcher displays on your site: choose between dropdowns, toggle buttons, radio inputs, vertical lists, or inline links, and configure display content.', 'omnitibet' ); ?>
 								</p>
 
 								<!-- Switcher Format Selection -->
 								<div class="tmt-form-row" style="margin-top:20px;">
 									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
-										<?php esc_html_e( '1. Switcher Format / Style:', 'tibetpress' ); ?>
+										<?php esc_html_e( '1. Switcher Format / Style:', 'omnitibet' ); ?>
 									</label>
 									<div class="tmt-radio-cards-grid" id="tmt-format-grid">
 										<?php
 										$formats = [
 											'dropdown' => [
-												'title' => __( 'Dropdown Menu', 'tibetpress' ),
-												'desc'  => __( 'Compact popover menu with current language and arrow', 'tibetpress' ),
+												'title' => __( 'Dropdown Menu', 'omnitibet' ),
+												'desc'  => __( 'Compact popover menu with current language and arrow', 'omnitibet' ),
 												'icon'  => 'dashicons-arrow-down-alt2',
 											],
 											'toggle' => [
-												'title' => __( 'Toggle Pills', 'tibetpress' ),
-												'desc'  => __( 'Horizontal pill buttons with active highlighted state', 'tibetpress' ),
+												'title' => __( 'Toggle Pills', 'omnitibet' ),
+												'desc'  => __( 'Horizontal pill buttons with active highlighted state', 'omnitibet' ),
 												'icon'  => 'dashicons-button',
 											],
 											'radio' => [
-												'title' => __( 'Radio Buttons', 'tibetpress' ),
-												'desc'  => __( 'Interactive radio selector with instant redirection', 'tibetpress' ),
+												'title' => __( 'Radio Buttons', 'omnitibet' ),
+												'desc'  => __( 'Interactive radio selector with instant redirection', 'omnitibet' ),
 												'icon'  => 'dashicons-marker',
 											],
 											'list' => [
-												'title' => __( 'Vertical List', 'tibetpress' ),
-												'desc'  => __( 'Clean vertical list item rows ideal for sidebars & footers', 'tibetpress' ),
+												'title' => __( 'Vertical List', 'omnitibet' ),
+												'desc'  => __( 'Clean vertical list item rows ideal for sidebars & footers', 'omnitibet' ),
 												'icon'  => 'dashicons-editor-ul',
 											],
 											'inline' => [
-												'title' => __( 'Inline Links', 'tibetpress' ),
-												'desc'  => __( 'Minimalist text links separated by sleek vertical dividers', 'tibetpress' ),
+												'title' => __( 'Inline Links', 'omnitibet' ),
+												'desc'  => __( 'Minimalist text links separated by sleek vertical dividers', 'omnitibet' ),
 												'icon'  => 'dashicons-ellipsis',
 											],
 										];
@@ -633,24 +633,24 @@ trait TMT_Admin_Settings_Trait {
 								<!-- Display Mode Selection -->
 								<div class="tmt-form-row" style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
 									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
-										<?php esc_html_e( '2. Display Content (Flag Icon vs. Native Name):', 'tibetpress' ); ?>
+										<?php esc_html_e( '2. Display Content (Flag Icon vs. Native Name):', 'omnitibet' ); ?>
 									</label>
 									<div class="tmt-radio-cards-grid" id="tmt-display-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
 										<?php
 										$displays = [
 											'both' => [
-												'title' => __( 'Flag & Native Name (Both)', 'tibetpress' ),
-												'desc'  => __( 'Shows flag graphic accompanied by native script (e.g. བོད་ཡིག)', 'tibetpress' ),
+												'title' => __( 'Flag & Native Name (Both)', 'omnitibet' ),
+												'desc'  => __( 'Shows flag graphic accompanied by native script (e.g. བོད་ཡིག)', 'omnitibet' ),
 												'icon'  => 'dashicons-visibility',
 											],
 											'icon_only' => [
-												'title' => __( 'Flag Icon Only', 'tibetpress' ),
-												'desc'  => __( 'Ultra-compact display showing flag graphics without text labels', 'tibetpress' ),
+												'title' => __( 'Flag Icon Only', 'omnitibet' ),
+												'desc'  => __( 'Ultra-compact display showing flag graphics without text labels', 'omnitibet' ),
 												'icon'  => 'dashicons-format-image',
 											],
 											'text_only' => [
-												'title' => __( 'Native Name Only', 'tibetpress' ),
-												'desc'  => __( 'Clean typographic text display without flag graphics', 'tibetpress' ),
+												'title' => __( 'Native Name Only', 'omnitibet' ),
+												'desc'  => __( 'Clean typographic text display without flag graphics', 'omnitibet' ),
 												'icon'  => 'dashicons-editor-textcolor',
 											],
 										];
@@ -670,20 +670,20 @@ trait TMT_Admin_Settings_Trait {
 								<!-- Flag Size Selection -->
 								<div class="tmt-form-row" style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
 									<label class="tmt-label" style="font-size:14px;font-weight:600;margin-bottom:8px;display:block;">
-										<?php esc_html_e( '3. Flag Icon Dimension:', 'tibetpress' ); ?>
+										<?php esc_html_e( '3. Flag Icon Dimension:', 'omnitibet' ); ?>
 									</label>
 									<div class="tmt-flag-size-options" id="tmt-size-group">
 										<label class="tmt-size-pill <?php echo 'small' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="small">
 											<input type="radio" name="tmt_settings[switcher_flag_size]" value="small" <?php checked( 'small' === $switcher_flag_size ); ?> />
-											<span><strong><?php esc_html_e( 'Small', 'tibetpress' ); ?></strong> (16 &times; 11 px) &mdash; <?php esc_html_e( 'Ideal for navbar and tight headers', 'tibetpress' ); ?></span>
+											<span><strong><?php esc_html_e( 'Small', 'omnitibet' ); ?></strong> (16 &times; 11 px) &mdash; <?php esc_html_e( 'Ideal for navbar and tight headers', 'omnitibet' ); ?></span>
 										</label>
 										<label class="tmt-size-pill <?php echo 'medium' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="medium">
 											<input type="radio" name="tmt_settings[switcher_flag_size]" value="medium" <?php checked( 'medium' === $switcher_flag_size ); ?> />
-											<span><strong><?php esc_html_e( 'Medium', 'tibetpress' ); ?></strong> (22 &times; 15 px) &mdash; <?php esc_html_e( 'Standard comfortable button size', 'tibetpress' ); ?></span>
+											<span><strong><?php esc_html_e( 'Medium', 'omnitibet' ); ?></strong> (22 &times; 15 px) &mdash; <?php esc_html_e( 'Standard comfortable button size', 'omnitibet' ); ?></span>
 										</label>
 										<label class="tmt-size-pill <?php echo 'large' === $switcher_flag_size ? 'selected' : ''; ?>" data-size="large">
 											<input type="radio" name="tmt_settings[switcher_flag_size]" value="large" <?php checked( 'large' === $switcher_flag_size ); ?> />
-											<span><strong><?php esc_html_e( 'Large', 'tibetpress' ); ?></strong> (28 &times; 19 px) &mdash; <?php esc_html_e( 'Bold high-visibility display', 'tibetpress' ); ?></span>
+											<span><strong><?php esc_html_e( 'Large', 'omnitibet' ); ?></strong> (28 &times; 19 px) &mdash; <?php esc_html_e( 'Bold high-visibility display', 'omnitibet' ); ?></span>
 										</label>
 									</div>
 								</div>
@@ -693,10 +693,10 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-visibility"></span>
-									<?php esc_html_e( 'Live Interactive Switcher Preview', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Live Interactive Switcher Preview', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Preview updates in real time as you select formats, display modes, or flag dimensions above.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Preview updates in real time as you select formats, display modes, or flag dimensions above.', 'omnitibet' ); ?>
 								</p>
 
 								<div class="tmt-switcher-preview-box" id="tmt-switcher-preview-container">
@@ -708,25 +708,25 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-shortcode"></span>
-									<?php esc_html_e( 'Shortcode & Template Tag Integration', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Shortcode & Template Tag Integration', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Place this switcher anywhere on your website. When attributes are omitted, it automatically uses your saved settings above.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Place this switcher anywhere on your website. When attributes are omitted, it automatically uses your saved settings above.', 'omnitibet' ); ?>
 								</p>
 
 								<div style="margin-top:14px;">
-									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'Standard Shortcode (Block Editor, Widgets, Elementor):', 'tibetpress' ); ?></label>
+									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'Standard Shortcode (Block Editor, Widgets, Elementor):', 'omnitibet' ); ?></label>
 									<div class="tmt-code-box">
 										<code id="tmt-shortcode-display">[tibetan_lang_switcher]</code>
-										<button type="button" class="tmt-btn-copy" id="tmt-copy-shortcode"><?php esc_html_e( 'Copy Shortcode', 'tibetpress' ); ?></button>
+										<button type="button" class="tmt-btn-copy" id="tmt-copy-shortcode"><?php esc_html_e( 'Copy Shortcode', 'omnitibet' ); ?></button>
 									</div>
 								</div>
 
 								<div style="margin-top:14px;">
-									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'PHP Template Tag (header.php, navigation templates):', 'tibetpress' ); ?></label>
+									<label style="font-weight:600;font-size:13px;color:#334155;"><?php esc_html_e( 'PHP Template Tag (header.php, navigation templates):', 'omnitibet' ); ?></label>
 									<div class="tmt-code-box">
 										<code id="tmt-php-display">&lt;?php tibetan_language_switcher(); ?&gt;</code>
-										<button type="button" class="tmt-btn-copy" id="tmt-copy-php"><?php esc_html_e( 'Copy PHP Code', 'tibetpress' ); ?></button>
+										<button type="button" class="tmt-btn-copy" id="tmt-copy-php"><?php esc_html_e( 'Copy PHP Code', 'omnitibet' ); ?></button>
 									</div>
 								</div>
 							</div>
@@ -739,15 +739,15 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-admin-generic"></span>
-									<?php esc_html_e( 'Global Fallback Typography', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Global Fallback Typography', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Default typography applied if the element-specific customizer is toggled off, or as a base fallback across your entire theme.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Default typography applied if the element-specific customizer is toggled off, or as a base fallback across your entire theme.', 'omnitibet' ); ?>
 								</p>
 
 								<div class="tmt-form-row">
 									<label for="tmt_font_family" class="tmt-label">
-										<?php esc_html_e( 'Global Font Family Selection:', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Global Font Family Selection:', 'omnitibet' ); ?>
 									</label>
 									<select name="tmt_settings[font_family]" id="tmt_font_family" class="widefat">
 										<?php echo $this->render_font_options_html( $global_font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -756,15 +756,15 @@ trait TMT_Admin_Settings_Trait {
 
 								<div class="tmt-form-row">
 									<label for="tmt_line_height" class="tmt-label">
-										<?php esc_html_e( 'Global Line-Height Overwrite:', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Global Line-Height Overwrite:', 'omnitibet' ); ?>
 									</label>
 									<input type="number" step="0.1" min="1.5" max="4.0" name="tmt_settings[line_height]" id="tmt_line_height" value="<?php echo esc_attr( (string) $global_lh ); ?>" style="width:120px;" />
-									<span style="margin-left:8px;color:#64748b;"><?php esc_html_e( '(Default: 2.3 - Recommended range: 2.1 to 2.5)', 'tibetpress' ); ?></span>
+									<span style="margin-left:8px;color:#64748b;"><?php esc_html_e( '(Default: 2.3 - Recommended range: 2.1 to 2.5)', 'omnitibet' ); ?></span>
 								</div>
 
 								<div class="tmt-form-row" style="margin-top:20px;">
 									<label class="tmt-label" style="font-weight:600;margin-bottom:8px;display:block;">
-										<?php esc_html_e( 'Global Typography Preview:', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Global Typography Preview:', 'omnitibet' ); ?>
 									</label>
 									<div class="tmt-global-preview-box" id="tmt-global-preview">
 										༄༅། །འཛམ་གླིང་ཞི་བདེ་དང་མཐུན་སྒྲིལ་གོང་འཕེལ་དུ་གཏོང་བར་བོད་ཀྱི་རིག་གཞུང་ནི་རྩ་ཆེའི་ནོར་བུ་ཞིག་ཡིན། འདིར་བོད་ཡིག་གི་ཡིག་གཟུགས་དང་ཚིག་གི་བར་ཐག་སོགས་བཀོད་སྒྲིག་བྱེད་ཐུབ།
@@ -780,12 +780,12 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-admin-site-alt3"></span>
-									<?php esc_html_e( 'Multilingual Mapping & Syllable Wrap Engine', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Multilingual Mapping & Syllable Wrap Engine', 'omnitibet' ); ?>
 								</h2>
 
 								<div class="tmt-form-row">
 									<label for="tmt_base_language" class="tmt-label">
-										<?php esc_html_e( 'Base Language:', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Base Language:', 'omnitibet' ); ?>
 									</label>
 									<select name="tmt_settings[base_language]" id="tmt_base_language">
 										<?php foreach ( $supported_languages as $code => $language ) : ?>
@@ -795,13 +795,13 @@ trait TMT_Admin_Settings_Trait {
 										<?php endforeach; ?>
 									</select>
 									<p class="description">
-										<?php esc_html_e( 'Posts and pages without an assigned language are treated as this language. Changing this does not rewrite language codes already saved on posts.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Posts and pages without an assigned language are treated as this language. Changing this does not rewrite language codes already saved on posts.', 'omnitibet' ); ?>
 									</p>
 								</div>
 
 								<div class="tmt-form-row">
 									<label for="tmt_fallback_lang" class="tmt-label">
-										<?php esc_html_e( 'Fallback Language Allocation:', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Fallback Language Allocation:', 'omnitibet' ); ?>
 									</label>
 									<select name="tmt_settings[fallback_language]" id="tmt_fallback_lang">
 										<?php foreach ( $supported_languages as $code => $language ) : ?>
@@ -811,35 +811,35 @@ trait TMT_Admin_Settings_Trait {
 										<?php endforeach; ?>
 									</select>
 									<p class="description">
-										<?php esc_html_e( 'Determines the content language to use when a requested translation is unavailable.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Determines the content language to use when a requested translation is unavailable.', 'omnitibet' ); ?>
 									</p>
 								</div>
 
 								<fieldset class="tmt-form-row">
-									<legend class="tmt-label"><?php esc_html_e( 'Language URL Format', 'tibetpress' ); ?></legend>
+									<legend class="tmt-label"><?php esc_html_e( 'Language URL Format', 'omnitibet' ); ?></legend>
 									<label style="display:block;margin:8px 0;">
 										<input type="radio" name="tmt_settings[language_url_format]" value="directory" <?php checked( $language_url_format, 'directory' ); ?> />
-										<strong><?php esc_html_e( 'Language directories', 'tibetpress' ); ?></strong>
-										<span class="description"><?php esc_html_e( 'Place the language code in the URL path, for example /bo/.', 'tibetpress' ); ?></span>
+										<strong><?php esc_html_e( 'Language directories', 'omnitibet' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Place the language code in the URL path, for example /bo/.', 'omnitibet' ); ?></span>
 									</label>
 									<label style="display:block;margin:8px 0;">
 										<input type="radio" name="tmt_settings[language_url_format]" value="parameter" <?php checked( $language_url_format, 'parameter' ); ?> />
-										<strong><?php esc_html_e( 'Language query parameter', 'tibetpress' ); ?></strong>
-										<span class="description"><?php esc_html_e( 'Add the language code as a URL parameter, for example ?lang=bo.', 'tibetpress' ); ?></span>
+										<strong><?php esc_html_e( 'Language query parameter', 'omnitibet' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Add the language code as a URL parameter, for example ?lang=bo.', 'omnitibet' ); ?></span>
 									</label>
 									<label style="display:block;margin:8px 0;">
 										<input type="radio" name="tmt_settings[language_url_format]" value="subdomain" <?php checked( $language_url_format, 'subdomain' ); ?> />
-										<strong><?php esc_html_e( 'Language subdomains', 'tibetpress' ); ?></strong>
-										<span class="description"><?php esc_html_e( 'Use the language code as a subdomain. The base language stays on the main domain.', 'tibetpress' ); ?></span>
+										<strong><?php esc_html_e( 'Language subdomains', 'omnitibet' ); ?></strong>
+										<span class="description"><?php esc_html_e( 'Use the language code as a subdomain. The base language stays on the main domain.', 'omnitibet' ); ?></span>
 									</label>
 									<p class="description">
-										<?php esc_html_e( 'Subdomain mode requires DNS, hosting, and HTTPS to be configured for each enabled language subdomain and routed to this WordPress site.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Subdomain mode requires DNS, hosting, and HTTPS to be configured for each enabled language subdomain and routed to this WordPress site.', 'omnitibet' ); ?>
 									</p>
 								</fieldset>
 
 								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
-									<strong class="tmt-label"><?php esc_html_e( 'Available Languages', 'tibetpress' ); ?></strong>
-									<p class="description"><?php esc_html_e( 'English and Tibetan are built in. Chinese and other optional languages are unchecked by default; check one to add it to translation tools and the language switcher. Uncheck it to remove it; existing translated posts and metadata are preserved.', 'tibetpress' ); ?></p>
+									<strong class="tmt-label"><?php esc_html_e( 'Available Languages', 'omnitibet' ); ?></strong>
+									<p class="description"><?php esc_html_e( 'English and Tibetan are built in. Chinese and other optional languages are unchecked by default; check one to add it to translation tools and the language switcher. Uncheck it to remove it; existing translated posts and metadata are preserved.', 'omnitibet' ); ?></p>
 									<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px;">
 										<?php foreach ( $available_languages as $code => $language ) : ?>
 											<label style="display:flex;align-items:center;gap:7px;">
@@ -851,8 +851,8 @@ trait TMT_Admin_Settings_Trait {
 								</div>
 
 								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
-									<strong class="tmt-label"><?php esc_html_e( 'Hide Languages from Frontend Switchers', 'tibetpress' ); ?></strong>
-									<p class="description"><?php esc_html_e( 'Hidden languages remain enabled for routing and translation management; they are only omitted from frontend language switchers.', 'tibetpress' ); ?></p>
+									<strong class="tmt-label"><?php esc_html_e( 'Hide Languages from Frontend Switchers', 'omnitibet' ); ?></strong>
+									<p class="description"><?php esc_html_e( 'Hidden languages remain enabled for routing and translation management; they are only omitted from frontend language switchers.', 'omnitibet' ); ?></p>
 									<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px;">
 										<?php foreach ( $supported_languages as $code => $language ) : ?>
 											<label style="display:flex;align-items:center;gap:7px;">
@@ -866,10 +866,10 @@ trait TMT_Admin_Settings_Trait {
 								<div class="tmt-form-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #f1f5f9;">
 									<label class="tmt-toggle-switch">
 										<input type="checkbox" name="tmt_settings[syllable_wrap]" value="1" <?php checked( $wrap ); ?> />
-										<span><strong><?php esc_html_e( 'Enable Syllable Wrap Engine (Zero-Width Space &#8203; after Tsheg ་ and Shad །)', 'tibetpress' ); ?></strong></span>
+										<span><strong><?php esc_html_e( 'Enable Syllable Wrap Engine (Zero-Width Space &#8203; after Tsheg ་ and Shad །)', 'omnitibet' ); ?></strong></span>
 									</label>
 									<p class="description" style="margin-left:56px;">
-										<?php esc_html_e( 'Prevents mobile layout breaks and glyph clipping by automatically injecting zero-width spaces after each Tibetan tsheg dot delimiter and shad stroke.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Prevents mobile layout breaks and glyph clipping by automatically injecting zero-width spaces after each Tibetan tsheg dot delimiter and shad stroke.', 'omnitibet' ); ?>
 									</p>
 								</div>
 							</div>
@@ -877,7 +877,7 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-chart-bar"></span>
-									<?php esc_html_e( 'Translation Coverage', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Translation Coverage', 'omnitibet' ); ?>
 								</h2>
 								<?php if ( is_wp_error( $coverage ) ) : ?>
 									<div class="notice notice-error inline">
@@ -888,7 +888,7 @@ trait TMT_Admin_Settings_Trait {
 										<?php
 										printf(
 											/* translators: 1: base language, 2: published post/page groups, 3: unpublished post/page groups. */
-											esc_html__( 'Base language: %1$s. Published source groups: %2$s; unpublished source groups: %3$s.', 'tibetpress' ),
+											esc_html__( 'Base language: %1$s. Published source groups: %2$s; unpublished source groups: %3$s.', 'omnitibet' ),
 											esc_html( $supported_languages[ $base_language ]['name'] ),
 											esc_html( number_format_i18n( $coverage['base_published'] ) ),
 											esc_html( number_format_i18n( $coverage['base_unpublished'] ) )
@@ -899,11 +899,11 @@ trait TMT_Admin_Settings_Trait {
 										<table class="widefat striped" style="margin-top:12px;">
 											<thead>
 												<tr>
-													<th><?php esc_html_e( 'Language', 'tibetpress' ); ?></th>
-													<th><?php esc_html_e( 'Published', 'tibetpress' ); ?></th>
-													<th><?php esc_html_e( 'Unpublished', 'tibetpress' ); ?></th>
-													<th><?php esc_html_e( 'Missing', 'tibetpress' ); ?></th>
-													<th><?php esc_html_e( 'Review Base Content', 'tibetpress' ); ?></th>
+													<th><?php esc_html_e( 'Language', 'omnitibet' ); ?></th>
+													<th><?php esc_html_e( 'Published', 'omnitibet' ); ?></th>
+													<th><?php esc_html_e( 'Unpublished', 'omnitibet' ); ?></th>
+													<th><?php esc_html_e( 'Missing', 'omnitibet' ); ?></th>
+													<th><?php esc_html_e( 'Review Base Content', 'omnitibet' ); ?></th>
 												</tr>
 											</thead>
 											<tbody>
@@ -914,19 +914,19 @@ trait TMT_Admin_Settings_Trait {
 														<td><?php echo esc_html( number_format_i18n( $language_coverage['unpublished'] ) ); ?></td>
 														<td><?php echo esc_html( number_format_i18n( $language_coverage['missing'] ) ); ?></td>
 														<td>
-															<a href="<?php echo esc_url( $base_posts_url ); ?>"><?php esc_html_e( 'Posts', 'tibetpress' ); ?></a>
+															<a href="<?php echo esc_url( $base_posts_url ); ?>"><?php esc_html_e( 'Posts', 'omnitibet' ); ?></a>
 															&middot;
-															<a href="<?php echo esc_url( $base_pages_url ); ?>"><?php esc_html_e( 'Pages', 'tibetpress' ); ?></a>
+															<a href="<?php echo esc_url( $base_pages_url ); ?>"><?php esc_html_e( 'Pages', 'omnitibet' ); ?></a>
 														</td>
 													</tr>
 												<?php endforeach; ?>
 											</tbody>
 										</table>
 										<p class="description">
-											<?php esc_html_e( 'Open the base-language list and use the target language column to create or edit translations.', 'tibetpress' ); ?>
+											<?php esc_html_e( 'Open the base-language list and use the target language column to create or edit translations.', 'omnitibet' ); ?>
 										</p>
 									<?php else : ?>
-										<p class="description"><?php esc_html_e( 'Enable another language to see its translation coverage here.', 'tibetpress' ); ?></p>
+										<p class="description"><?php esc_html_e( 'Enable another language to see its translation coverage here.', 'omnitibet' ); ?></p>
 									<?php endif; ?>
 								<?php endif; ?>
 							</div>
@@ -934,17 +934,17 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-category"></span>
-									<?php esc_html_e( 'Category & Tag Translations', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Category & Tag Translations', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Assign a language to categories and tags, mark language-neutral terms as shared, or link equivalent terms across languages. Duplicated posts use a linked target-language term when available and keep the original term when no translation is linked.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Assign a language to categories and tags, mark language-neutral terms as shared, or link equivalent terms across languages. Duplicated posts use a linked target-language term when available and keep the original term when no translation is linked.', 'omnitibet' ); ?>
 								</p>
 								<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
 									<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=category&post_type=post' ) ); ?>">
-										<?php esc_html_e( 'Manage Categories', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Manage Categories', 'omnitibet' ); ?>
 									</a>
 									<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=post_tag&post_type=post' ) ); ?>">
-										<?php esc_html_e( 'Manage Tags', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Manage Tags', 'omnitibet' ); ?>
 									</a>
 								</div>
 							</div>
@@ -953,19 +953,19 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-admin-post"></span>
-									<?php esc_html_e( 'Post & Page Translation Management', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Post & Page Translation Management', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Easily translate or duplicate your posts and pages into any enabled language from your WordPress post tables.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Easily translate or duplicate your posts and pages into any enabled language from your WordPress post tables.', 'omnitibet' ); ?>
 								</p>
 								<div style="margin-top:15px;display:flex;gap:12px;flex-wrap:wrap;">
 									<a href="<?php echo esc_url( admin_url( 'edit.php' ) ); ?>" class="button button-secondary">
 										<span class="dashicons dashicons-admin-post" style="vertical-align:middle;margin-right:4px;"></span>
-										<?php esc_html_e( 'Go to All Posts Table', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Go to All Posts Table', 'omnitibet' ); ?>
 									</a>
 									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>" class="button button-secondary">
 										<span class="dashicons dashicons-admin-page" style="vertical-align:middle;margin-right:4px;"></span>
-										<?php esc_html_e( 'Go to All Pages Table', 'tibetpress' ); ?>
+										<?php esc_html_e( 'Go to All Pages Table', 'omnitibet' ); ?>
 									</a>
 								</div>
 							</div>
@@ -978,19 +978,19 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-keyboard"></span>
-									<?php esc_html_e( 'Extended Wylie Transliteration Input Engine', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Extended Wylie Transliteration Input Engine', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Convert standard Extended Wylie Latin keystrokes into native Tibetan Unicode characters in real time as you type.', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Convert standard Extended Wylie Latin keystrokes into native Tibetan Unicode characters in real time as you type.', 'omnitibet' ); ?>
 								</p>
 
 								<div class="tmt-form-row" style="margin-top:15px;">
 									<label class="tmt-toggle-switch">
 										<input type="checkbox" name="tmt_settings[wylie_enabled]" id="tmt_wylie_enabled" value="1" <?php checked( $wylie ); ?> />
-										<span><strong><?php esc_html_e( 'Enable Real-Time Wylie Input in Post Editor', 'tibetpress' ); ?></strong></span>
+										<span><strong><?php esc_html_e( 'Enable Real-Time Wylie Input in Post Editor', 'omnitibet' ); ?></strong></span>
 									</label>
 									<p class="description" style="margin-left:56px;">
-										<?php esc_html_e( 'When active, typing in Gutenberg or Classic Editor automatically converts Wylie phonetics to Tibetan. Press Alt+W to toggle conversion on/off while typing.', 'tibetpress' ); ?>
+										<?php esc_html_e( 'When active, typing in Gutenberg or Classic Editor automatically converts Wylie phonetics to Tibetan. Press Alt+W to toggle conversion on/off while typing.', 'omnitibet' ); ?>
 									</p>
 								</div>
 							</div>
@@ -999,55 +999,55 @@ trait TMT_Admin_Settings_Trait {
 							<div class="tmt-card">
 								<h2 class="tmt-card-title">
 									<span class="dashicons dashicons-edit"></span>
-									<?php esc_html_e( 'Interactive Wylie Live Typing Sandbox', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Interactive Wylie Live Typing Sandbox', 'omnitibet' ); ?>
 								</h2>
 								<p class="description">
-									<?php esc_html_e( 'Test the real-time transliteration engine directly in this box! Make sure Wylie input is enabled above, then type below (e.g. type "bkra shis bde legs" or "sangs rgyas"):', 'tibetpress' ); ?>
+									<?php esc_html_e( 'Test the real-time transliteration engine directly in this box! Make sure Wylie input is enabled above, then type below (e.g. type "bkra shis bde legs" or "sangs rgyas"):', 'omnitibet' ); ?>
 								</p>
 
 								<div class="tmt-wylie-sandbox-wrap">
-									<textarea id="tmt-wylie-sandbox" class="tmt-wylie-sandbox-textarea" placeholder="<?php esc_attr_e( 'Type Wylie here (e.g. bkra shis bde legs / bod yig / sangs rgyas)...', 'tibetpress' ); ?>" rows="4"></textarea>
+									<textarea id="tmt-wylie-sandbox" class="tmt-wylie-sandbox-textarea" placeholder="<?php esc_attr_e( 'Type Wylie here (e.g. bkra shis bde legs / bod yig / sangs rgyas)...', 'omnitibet' ); ?>" rows="4"></textarea>
 									<div style="margin-top:8px;font-size:12px;color:#64748b;display:flex;justify-content:space-between;align-items:center;">
-										<span><?php esc_html_e( 'Shortcut:', 'tibetpress' ); ?> <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">Alt</kbd> + <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">W</kbd> <?php esc_html_e( 'to toggle Wylie engine', 'tibetpress' ); ?></span>
-										<button type="button" class="button button-small" onclick="document.getElementById('tmt-wylie-sandbox').value='';document.getElementById('tmt-wylie-sandbox').focus();"><?php esc_html_e( 'Clear Sandbox', 'tibetpress' ); ?></button>
+										<span><?php esc_html_e( 'Shortcut:', 'omnitibet' ); ?> <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">Alt</kbd> + <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-weight:bold;">W</kbd> <?php esc_html_e( 'to toggle Wylie engine', 'omnitibet' ); ?></span>
+										<button type="button" class="button button-small" onclick="document.getElementById('tmt-wylie-sandbox').value='';document.getElementById('tmt-wylie-sandbox').focus();"><?php esc_html_e( 'Clear Sandbox', 'omnitibet' ); ?></button>
 									</div>
 								</div>
 
 								<!-- Wylie Cheat Table -->
-								<h3 style="margin-top:24px;font-size:14px;color:#1e293b;"><?php esc_html_e( 'Quick Extended Wylie Cheat Sheet:', 'tibetpress' ); ?></h3>
+								<h3 style="margin-top:24px;font-size:14px;color:#1e293b;"><?php esc_html_e( 'Quick Extended Wylie Cheat Sheet:', 'omnitibet' ); ?></h3>
 								<table class="tmt-wylie-cheat-table">
 									<thead>
 										<tr>
-											<th><?php esc_html_e( 'Wylie Input', 'tibetpress' ); ?></th>
-											<th><?php esc_html_e( 'Tibetan Output', 'tibetpress' ); ?></th>
-											<th><?php esc_html_e( 'Description / Category', 'tibetpress' ); ?></th>
+											<th><?php esc_html_e( 'Wylie Input', 'omnitibet' ); ?></th>
+											<th><?php esc_html_e( 'Tibetan Output', 'omnitibet' ); ?></th>
+											<th><?php esc_html_e( 'Description / Category', 'omnitibet' ); ?></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<td><code>ka, kha, ga, nga</code></td>
 											<td style="font-size:16px;">ཀ་ ཁ་ ག་ ང༌</td>
-											<td><?php esc_html_e( 'First Consonant Row (Guttrals)', 'tibetpress' ); ?></td>
+											<td><?php esc_html_e( 'First Consonant Row (Guttrals)', 'omnitibet' ); ?></td>
 										</tr>
 										<tr>
 											<td><code>bkra shis bde legs</code></td>
 											<td style="font-size:16px;">བཀྲ་ཤིས་བདེ་ལེགས</td>
-											<td><?php esc_html_e( 'Tashi Delek (Greeting with stacked subjoined ra "kra")', 'tibetpress' ); ?></td>
+											<td><?php esc_html_e( 'Tashi Delek (Greeting with stacked subjoined ra "kra")', 'omnitibet' ); ?></td>
 										</tr>
 										<tr>
 											<td><code>sangs rgyas</code></td>
 											<td style="font-size:16px;">སངས་རྒྱས</td>
-											<td><?php esc_html_e( 'Sangye (Buddha with superscribed and subjoined ya "rgya")', 'tibetpress' ); ?></td>
+											<td><?php esc_html_e( 'Sangye (Buddha with superscribed and subjoined ya "rgya")', 'omnitibet' ); ?></td>
 										</tr>
 										<tr>
 											<td><code>spyan ras gzigs</code></td>
 											<td style="font-size:16px;">སྤྱན་རས་གཟིགས</td>
-											<td><?php esc_html_e( 'Chenrezig (Avalokiteshvara with complex stacking)', 'tibetpress' ); ?></td>
+											<td><?php esc_html_e( 'Chenrezig (Avalokiteshvara with complex stacking)', 'omnitibet' ); ?></td>
 										</tr>
 										<tr>
 											<td><code>space</code> / <code>/</code> / <code>//</code></td>
 											<td style="font-size:16px;">་ / ། / ༎</td>
-											<td><?php esc_html_e( 'Tsheg (syllable dot), Shad (single verse line), Nyis Shad (double line)', 'tibetpress' ); ?></td>
+											<td><?php esc_html_e( 'Tsheg (syllable dot), Shad (single verse line), Nyis Shad (double line)', 'omnitibet' ); ?></td>
 										</tr>
 									</tbody>
 								</table>
@@ -1055,7 +1055,7 @@ trait TMT_Admin_Settings_Trait {
 						</div>
 
 						<div style="margin-top:24px;">
-							<?php submit_button( __( 'Save TibetPress Settings', 'tibetpress' ), 'primary large' ); ?>
+							<?php submit_button( __( 'Save OmniTibet Settings', 'omnitibet' ), 'primary large' ); ?>
 						</div>
 
 					</div>
@@ -1065,10 +1065,10 @@ trait TMT_Admin_Settings_Trait {
 						<div class="tmt-card">
 							<h3 class="tmt-card-title">
 								<span class="dashicons dashicons-category"></span>
-								<?php esc_html_e( 'Font Design Categories', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Font Design Categories', 'omnitibet' ); ?>
 							</h3>
 							<p style="margin:0 0 10px 0;font-size:13px;color:#475569;">
-								<?php esc_html_e( '36 professional Tibetan font designs bundled inside the plugin:', 'tibetpress' ); ?>
+								<?php esc_html_e( '36 professional Tibetan font designs bundled inside the plugin:', 'omnitibet' ); ?>
 							</p>
 							<div style="margin-bottom:8px;">
 								<span class="tmt-cat-pill tmt-cat-monlam">Monlam Bodtig (4)</span>
@@ -1077,32 +1077,32 @@ trait TMT_Admin_Settings_Trait {
 								<span class="tmt-cat-pill tmt-cat-web">Google & Web (4)</span>
 							</div>
 							<p style="font-size:12px;color:#64748b;margin:0;">
-								<?php esc_html_e( 'Self-hosted woff2 files ensure instant rendering on all phones, tablets, and desktop computers without user installs.', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Self-hosted woff2 files ensure instant rendering on all phones, tablets, and desktop computers without user installs.', 'omnitibet' ); ?>
 							</p>
 						</div>
 
 						<div class="tmt-card">
 							<h3 class="tmt-card-title">
 								<span class="dashicons dashicons-translation"></span>
-								<?php esc_html_e( 'Customizable Switcher', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Customizable Switcher', 'omnitibet' ); ?>
 							</h3>
 							<p style="font-size:13px;color:#475569;margin-bottom:8px;">
-								<?php esc_html_e( 'Choose from 5 styles (Dropdown, Toggle, Radio, List, Inline) and customize display content (Flag & Text, Flag Only, Text Only).', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Choose from 5 styles (Dropdown, Toggle, Radio, List, Inline) and customize display content (Flag & Text, Flag Only, Text Only).', 'omnitibet' ); ?>
 							</p>
 							<p style="font-size:12px;color:#64748b;margin:0;">
-								<?php esc_html_e( 'All styles adapt cleanly to light and dark theme backgrounds.', 'tibetpress' ); ?>
+								<?php esc_html_e( 'All styles adapt cleanly to light and dark theme backgrounds.', 'omnitibet' ); ?>
 							</p>
 						</div>
 
 						<div class="tmt-card">
 							<h3 class="tmt-card-title">
 								<span class="dashicons dashicons-keyboard"></span>
-								<?php esc_html_e( 'Keyboard Shortcut', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Keyboard Shortcut', 'omnitibet' ); ?>
 							</h3>
-							<p><?php esc_html_e( 'In Gutenberg or Classic editor, press:', 'tibetpress' ); ?></p>
+							<p><?php esc_html_e( 'In Gutenberg or Classic editor, press:', 'omnitibet' ); ?></p>
 							<p><kbd style="background:#e2e8f0;padding:3px 8px;border-radius:4px;font-weight:bold;">Alt</kbd> + <kbd style="background:#e2e8f0;padding:3px 8px;border-radius:4px;font-weight:bold;">W</kbd></p>
 							<p style="font-size:12px;color:#64748b;">
-								<?php esc_html_e( 'Instantly toggles Wylie phonetic typing mode without touching the mouse.', 'tibetpress' ); ?>
+								<?php esc_html_e( 'Instantly toggles Wylie phonetic typing mode without touching the mouse.', 'omnitibet' ); ?>
 							</p>
 						</div>
 					</div>
@@ -1110,7 +1110,7 @@ trait TMT_Admin_Settings_Trait {
 			</form>
 		</div>
 
-		<script>
+		<?php ob_start(); ?>
 		function initTmtSettings() {
 			var fontRegistry     = <?php echo wp_json_encode( $registry ); ?>;
 			var pluginUrl        = <?php echo wp_json_encode( TMT_PLUGIN_URL ); ?>;
@@ -1477,7 +1477,7 @@ trait TMT_Admin_Settings_Trait {
 
 			function showCopied(btn) {
 				var origText = btn.textContent;
-				btn.textContent = '<?php esc_attr_e( 'Copied!', 'tibetpress' ); ?>';
+				btn.textContent = '<?php esc_attr_e( 'Copied!', 'omnitibet' ); ?>';
 				btn.classList.add('copied');
 				setTimeout(function() {
 					btn.textContent = origText;
@@ -1509,7 +1509,10 @@ trait TMT_Admin_Settings_Trait {
 		} else {
 			initTmtSettings();
 		}
-		</script>
+		<?php
+		$inline_js = ob_get_clean();
+		wp_add_inline_script( 'tmt-switcher-js', (string) $inline_js, 'after' );
+		?>
 		<?php
 	}
 }

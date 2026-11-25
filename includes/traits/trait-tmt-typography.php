@@ -32,7 +32,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/monlam/MonlamUniOuChan2.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'tibetpress' ),
+				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 2', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-1' => [
@@ -42,7 +42,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/monlam/monlam-uni-ouchan1.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'tibetpress' ),
+				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 1', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-3' => [
@@ -52,7 +52,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/monlam/monlam-uni-ouchan3.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'tibetpress' ),
+				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 3', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-5' => [
@@ -62,7 +62,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/monlam/MonlamUniOuChan5.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'tibetpress' ),
+				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 5', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 
@@ -76,7 +76,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Title.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Title', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-subtitle' => [
@@ -86,7 +86,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Subtitle.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Subtitle', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-drutsa' => [
@@ -96,7 +96,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Drutsa.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Drutsa', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-chuyig' => [
@@ -106,7 +106,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Chuyig.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Chuyig', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', cursive, serif",
 			],
 			'qomolang-betsu' => [
@@ -116,7 +116,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Betsu.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Betsu', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-tsuring' => [
@@ -126,7 +126,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Tsuring.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Tsuring', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-tsutong' => [
@@ -136,7 +136,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Tsutong.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Tsutong', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-tsumachu' => [
@@ -146,7 +146,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Tsumachu.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Tsumachu', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-uchen-sarchen' => [
@@ -156,7 +156,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-UchenSarchen.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-UchenSarchen', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-uchen-sarchung' => [
@@ -166,7 +166,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-UchenSarchung.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-UchenSarchung', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-uchen-suring' => [
@@ -176,7 +176,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-UchenSuring.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-UchenSuring', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-uchen-sutung' => [
@@ -186,7 +186,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-UchenSutung.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-UchenSutung', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-woodblock' => [
@@ -196,7 +196,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Woodblock.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Woodblock', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-dunhuang' => [
@@ -206,7 +206,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Dunhuang.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Dunhuang', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-edict' => [
@@ -216,7 +216,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Edict.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Edict', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-art' => [
@@ -226,7 +226,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Art.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Art', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'qomolang-horyig' => [
@@ -236,7 +236,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/qomolang/Qomolangma-Horyig.woff2',
 				'format'     => 'woff2',
 				'category'   => 'qomolang',
-				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Qomolangma-Horyig', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 
@@ -250,7 +250,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_BOLDFACE.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-BOLDFACE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', sans-serif, serif",
 			],
 			'myilam-lightface' => [
@@ -260,7 +260,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_LIGHTFACE.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-LIGHTFACE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-carton' => [
@@ -270,7 +270,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_CARTON.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-CARTON', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-gothic' => [
@@ -280,7 +280,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_GOTHIC.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-GOTHIC', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', sans-serif",
 			],
 			'myilam-green-leaf' => [
@@ -290,7 +290,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/myilam-green-leaf.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-GREEN-LEAF', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-khyungdri' => [
@@ -300,7 +300,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_KHYUNGDRI.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-KHYUNGDRI', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-mandate' => [
@@ -310,7 +310,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_MANDATE.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-MANDATE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-masculine' => [
@@ -320,7 +320,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_MASCULINE.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-MASCULINE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-feminine' => [
@@ -330,7 +330,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_FEMININE.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-FEMININE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-pearl-necklace' => [
@@ -340,7 +340,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/myilam-pearl-necklace.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-PEARL-NECKLACE', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'myilam-horma' => [
@@ -350,7 +350,7 @@ trait TMT_Typography_Trait {
 				'file'       => 'fonts/myilam/MYILAM_HORMA.woff2',
 				'format'     => 'woff2',
 				'category'   => 'myilam',
-				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'MYILAM-HORMA', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 
@@ -364,7 +364,7 @@ trait TMT_Typography_Trait {
 				'file'       => '',
 				'google'     => 'https://fonts.googleapis.com/css2?family=Noto+Serif+Tibetan:wght@400;700&display=swap',
 				'category'   => 'google_web',
-				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Noto Serif Tibetan', 'Jomolhari', 'Monlam Uni OuChan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'noto-sans' => [
@@ -374,7 +374,7 @@ trait TMT_Typography_Trait {
 				'file'       => '',
 				'google'     => 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tibetan:wght@400;700&display=swap',
 				'category'   => 'google_web',
-				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Noto Sans Tibetan', 'Tibetan Machine Uni', 'Microsoft Himalaya', 'Kailash', sans-serif",
 			],
 			'jomolhari' => [
@@ -383,7 +383,7 @@ trait TMT_Typography_Trait {
 				'local'      => [ 'Jomolhari' ],
 				'file'       => '',
 				'category'   => 'google_web',
-				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "'Jomolhari', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'custom' => [
@@ -392,7 +392,7 @@ trait TMT_Typography_Trait {
 				'local'      => [],
 				'file'       => '',
 				'category'   => 'google_web',
-				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'tibetpress' ),
+				'category_l' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
 				'stack'      => "inherit, 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 		];
@@ -408,8 +408,8 @@ trait TMT_Typography_Trait {
 	public function get_configurable_elements(): array {
 		return [
 			'body' => [
-				'label'        => __( 'Body Text & Paragraphs (གཞུང་དངོས)', 'tibetpress' ),
-				'desc'         => __( 'Main article content, paragraphs, lists, and standard text elements.', 'tibetpress' ),
+				'label'        => __( 'Body Text & Paragraphs (གཞུང་དངོས)', 'omnitibet' ),
+				'desc'         => __( 'Main article content, paragraphs, lists, and standard text elements.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-paragraph',
 				'tags'         => [ 'body', 'p', 'li', 'article' ],
 				'selectors'    => 'body.tb-lang-bo, body.tb-lang-bo p, body.tb-lang-bo li, body.tb-lang-bo .entry-content p, body.tb-lang-bo .wp-block-paragraph, .tb-tibetan-text, [lang="bo"], [lang="bo-CN"], [lang="bo-IN"]',
@@ -418,8 +418,8 @@ trait TMT_Typography_Trait {
 				'preview_text' => '༄༅། །འཛམ་གླིང་ཞི་བདེ་དང་མཐུན་སྒྲིལ་གྱི་དོན་དུ་བོད་ཀྱི་རིག་གཞུང་དང་སྐད་ཡིག་འདི་ཉིད་གལ་ཆེན་པོ་ཡིན། འདིར་ཡིག་གཟུགས་དང་ཐིག་ཕྲེང་བར་སྟོང་གི་མཛེས་ཆ་ལྟ་ཐུབ། ཡི་གེ་སྟེང་འོག་བརྩེགས་མ་རྣམས་མི་ཆད་པར་གསལ་པོར་ཐོན་ཐུབ།',
 			],
 			'h1_h2' => [
-				'label'        => __( 'Main Headings - H1 & H2 (ཁ་བྱང་ཆེན་མོ)', 'tibetpress' ),
-				'desc'         => __( 'Document post titles, main page headers, and top-level article titles.', 'tibetpress' ),
+				'label'        => __( 'Main Headings - H1 & H2 (ཁ་བྱང་ཆེན་མོ)', 'omnitibet' ),
+				'desc'         => __( 'Document post titles, main page headers, and top-level article titles.', 'omnitibet' ),
 				'icon'         => 'dashicons-heading',
 				'tags'         => [ 'h1', 'h2', '.entry-title' ],
 				'selectors'    => 'body.tb-lang-bo h1, body.tb-lang-bo h2, body.tb-lang-bo .entry-title, body.tb-lang-bo .page-title, body.tb-lang-bo .wp-block-post-title, body.tb-lang-bo h1.wp-block-heading, body.tb-lang-bo h2.wp-block-heading',
@@ -428,8 +428,8 @@ trait TMT_Typography_Trait {
 				'preview_text' => 'བཀྲ་ཤིས་བདེ་ལེགས། དེང་རབས་བོད་ཡིག་དྲ་ཚིགས།',
 			],
 			'h3_h6' => [
-				'label'        => __( 'Sub-Headings - H3 to H6 (ཁ་བྱང་ཆུང་བ)', 'tibetpress' ),
-				'desc'         => __( 'Section headlines, sidebar widget titles, and subheadings.', 'tibetpress' ),
+				'label'        => __( 'Sub-Headings - H3 to H6 (ཁ་བྱང་ཆུང་བ)', 'omnitibet' ),
+				'desc'         => __( 'Section headlines, sidebar widget titles, and subheadings.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-italic',
 				'tags'         => [ 'h3', 'h4', 'h5', 'h6' ],
 				'selectors'    => 'body.tb-lang-bo h3, body.tb-lang-bo h4, body.tb-lang-bo h5, body.tb-lang-bo h6, body.tb-lang-bo h3.wp-block-heading, body.tb-lang-bo h4.wp-block-heading',
@@ -438,8 +438,8 @@ trait TMT_Typography_Trait {
 				'preview_text' => 'ས་བཅད་གསུམ་པ། སྐད་ཡིག་ཉམས་གསོ་དང་དར་སྤེལ།',
 			],
 			'nav' => [
-				'label'        => __( 'Navigation Menus & Links (དཀར་ཆག་དང་འབྲེལ་མཐུད)', 'tibetpress' ),
-				'desc'         => __( 'Header navigation bar, menu items, header buttons, and links.', 'tibetpress' ),
+				'label'        => __( 'Navigation Menus & Links (དཀར་ཆག་དང་འབྲེལ་མཐུད)', 'omnitibet' ),
+				'desc'         => __( 'Header navigation bar, menu items, header buttons, and links.', 'omnitibet' ),
 				'icon'         => 'dashicons-menu-alt3',
 				'tags'         => [ 'nav', '.menu', 'header a' ],
 				'selectors'    => 'body.tb-lang-bo nav, body.tb-lang-bo .nav-menu, body.tb-lang-bo .menu, body.tb-lang-bo .wp-block-navigation, body.tb-lang-bo .main-navigation a, body.tb-lang-bo header a, body.tb-lang-bo .wp-block-navigation-item a',
@@ -448,8 +448,8 @@ trait TMT_Typography_Trait {
 				'preview_text' => 'གཙོ་ངོས། ｜ གནས་ཚུལ། ｜ རིག་གཞུང་། ｜ ང་ཚོའི་སྐོར།',
 			],
 			'quotes' => [
-				'label'        => __( 'Blockquotes & Pullquotes (ལུང་འདྲེན་ཚིགས་བཅད)', 'tibetpress' ),
-				'desc'         => __( 'Blockquotes, pullquotes, callouts, citations, and traditional verses.', 'tibetpress' ),
+				'label'        => __( 'Blockquotes & Pullquotes (ལུང་འདྲེན་ཚིགས་བཅད)', 'omnitibet' ),
+				'desc'         => __( 'Blockquotes, pullquotes, callouts, citations, and traditional verses.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-quote',
 				'tags'         => [ 'blockquote', 'cite', 'q' ],
 				'selectors'    => 'body.tb-lang-bo blockquote, body.tb-lang-bo .wp-block-quote, body.tb-lang-bo .wp-block-pullquote, body.tb-lang-bo q, body.tb-lang-bo cite',
@@ -458,8 +458,8 @@ trait TMT_Typography_Trait {
 				'preview_text' => '« ཤེས་རབ་ཀྱི་ཕ་རོལ་ཏུ་ཕྱིན་པ་ནི་བླ་ན་མེད་པའི་ཡེ་ཤེས་ཡིན། »',
 			],
 			'site_title' => [
-				'label'        => __( 'Site Title & Branding (དྲ་ཚིགས་ཀྱི་མཚན་བྱང་)', 'tibetpress' ),
-				'desc'         => __( 'Top site brand title in website banner and logo text.', 'tibetpress' ),
+				'label'        => __( 'Site Title & Branding (དྲ་ཚིགས་ཀྱི་མཚན་བྱང་)', 'omnitibet' ),
+				'desc'         => __( 'Top site brand title in website banner and logo text.', 'omnitibet' ),
 				'icon'         => 'dashicons-admin-site-alt3',
 				'tags'         => [ '.site-title', 'brand' ],
 				'selectors'    => 'body.tb-lang-bo .site-title, body.tb-lang-bo .site-title a, body.tb-lang-bo .wp-block-site-title, body.tb-lang-bo .wp-block-site-title a, body.tb-lang-bo .custom-logo-link',
@@ -544,10 +544,10 @@ trait TMT_Typography_Trait {
 	public function render_font_options_html( string $selected_key ): string {
 		$registry   = $this->get_font_registry();
 		$categories = [
-			'monlam'     => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'tibetpress' ),
-			'qomolang'   => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'tibetpress' ),
-			'myilam'     => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'tibetpress' ),
-			'google_web' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'tibetpress' ),
+			'monlam'     => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+			'qomolang'   => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
+			'myilam'     => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
+			'google_web' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
 		];
 
 		$html = '';
@@ -578,11 +578,7 @@ trait TMT_Typography_Trait {
 		$registry       = $this->get_font_registry();
 		$all_keys       = array_keys( $registry );
 		$font_faces_css = $this->generate_font_faces_css( $all_keys );
-
-		echo "\n<!-- Tibetan Typography Admin Live Preview Font-Faces -->\n";
-		echo "<style id=\"tmt-admin-preview-fonts\" type=\"text/css\">\n";
-		echo $font_faces_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "</style>\n";
+		wp_add_inline_style( 'tmt-admin-css', $font_faces_css );
 	}
 
 	/**
@@ -647,16 +643,10 @@ trait TMT_Typography_Trait {
 		$active_font_keys = array_unique( $active_font_keys );
 
 		// Generate @font-face for active local fonts
-		$font_faces_css = $this->generate_font_faces_css( $active_font_keys );
-		?>
-		<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		$css = $this->generate_font_faces_css( $active_font_keys );
 
-		<style id="tibetan-typography-inline-css" type="text/css">
-		<?php echo $font_faces_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-
-		<?php if ( $use_elem ) : ?>
-			<?php foreach ( $elements as $elem_key => $elem_info ) :
+		if ( $use_elem ) {
+			foreach ( $elements as $elem_key => $elem_info ) {
 				$f_key     = $settings[ "font_{$elem_key}" ] ?? $elem_info['default_font'];
 				$stack     = $this->get_font_stack( $f_key );
 				$lh        = floatval( $settings[ "lh_{$elem_key}" ] ?? $elem_info['default_lh'] );
@@ -664,61 +654,48 @@ trait TMT_Typography_Trait {
 					$lh = $elem_info['default_lh'];
 				}
 				$selectors = $elem_info['selectors'];
-			?>
-			<?php echo $selectors; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> {
-				font-family: <?php echo $stack; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> !important;
-				line-height: <?php echo esc_html( (string) $lh ); ?> !important;
-				<?php if ( 'body' === $elem_key ) : ?>
-				letter-spacing: 0.03em !important;
-				text-align: justify;
-				word-break: break-word;
-				overflow-wrap: break-word;
-				<?php else : ?>
-				letter-spacing: 0.02em !important;
-				<?php endif; ?>
+				$css .= $selectors . " {\n";
+				$css .= 'font-family: ' . $stack . " !important;\n";
+				$css .= 'line-height: ' . (string) $lh . " !important;\n";
+				if ( 'body' === $elem_key ) {
+					$css .= "letter-spacing: 0.03em !important;\ntext-align: justify;\nword-break: break-word;\noverflow-wrap: break-word;\n";
+				} else {
+					$css .= "letter-spacing: 0.02em !important;\n";
+				}
+				$css .= "}\n";
 			}
-			<?php endforeach; ?>
-		<?php else :
+		} else {
 			$global_font  = $settings['font_family'] ?? 'monlam-bodtig-2';
 			$global_stack = $this->get_font_stack( $global_font );
 			$global_lh    = floatval( $settings['line_height'] ?? 2.3 );
 			if ( $global_lh < 1.5 || $global_lh > 4.0 ) {
 				$global_lh = 2.3;
 			}
-		?>
-			body.tb-lang-bo,
-			body.tb-lang-bo p,
-			body.tb-lang-bo li,
-			body.tb-lang-bo a,
-			body.tb-lang-bo blockquote,
-			body.tb-lang-bo .entry-content,
-			body.tb-lang-bo article,
-			.tb-tibetan-text,
-			[lang="bo"],
-			[lang="bo-CN"],
-			[lang="bo-IN"] {
-				font-family: <?php echo $global_stack; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> !important;
-				line-height: <?php echo esc_html( (string) $global_lh ); ?> !important;
-				letter-spacing: 0.03em !important;
-				text-align: justify;
-				word-break: break-word;
-				overflow-wrap: break-word;
-			}
-
-			body.tb-lang-bo h1,
-			body.tb-lang-bo h2,
-			body.tb-lang-bo h3,
-			body.tb-lang-bo h4,
-			body.tb-lang-bo h5,
-			body.tb-lang-bo h6,
-			body.tb-lang-bo .entry-title {
-				font-family: <?php echo $global_stack; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> !important;
-				line-height: <?php echo esc_html( (string) round( $global_lh * 0.9, 2 ) ); ?> !important;
-				letter-spacing: 0.02em !important;
-			}
-		<?php endif; ?>
-		</style>
-		<?php
+			$css .= "body.tb-lang-bo,\n";
+			$css .= "body.tb-lang-bo p,\n";
+			$css .= "body.tb-lang-bo li,\n";
+			$css .= "body.tb-lang-bo a,\n";
+			$css .= "body.tb-lang-bo blockquote,\n";
+			$css .= "body.tb-lang-bo .entry-content,\n";
+			$css .= "body.tb-lang-bo article,\n";
+			$css .= ".tb-tibetan-text,\n";
+			$css .= "[lang=\"bo\"],\n";
+			$css .= "[lang=\"bo-CN\"],\n";
+			$css .= "[lang=\"bo-IN\"] {\n";
+			$css .= 'font-family: ' . $global_stack . " !important;\n";
+			$css .= 'line-height: ' . (string) $global_lh . " !important;\n";
+			$css .= "letter-spacing: 0.03em !important;\n";
+			$css .= "text-align: justify;\n";
+			$css .= "word-break: break-word;\n";
+			$css .= "overflow-wrap: break-word;\n}\n";
+			$css .= "body.tb-lang-bo h1,\nbody.tb-lang-bo h2,\nbody.tb-lang-bo h3,\n";
+			$css .= "body.tb-lang-bo h4,\nbody.tb-lang-bo h5,\nbody.tb-lang-bo h6,\n";
+			$css .= "body.tb-lang-bo .entry-title {\n";
+			$css .= 'font-family: ' . $global_stack . " !important;\n";
+			$css .= 'line-height: ' . (string) round( $global_lh * 0.9, 2 ) . " !important;\n";
+			$css .= "letter-spacing: 0.02em !important;\n}\n";
+		}
+		wp_add_inline_style( 'tmt-frontend-css', $css );
 	}
 
 	/**

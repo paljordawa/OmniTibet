@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       TibetPress
- * Plugin URI:        https://github.com/paljordawa/TibetPress.git
+ * Plugin Name:       OmniTibet
+ * Plugin URI:        https://github.com/paljordawa/OmniTibet.git
  * Description:       A complete, production-ready WordPress multilingual and typography customizer for the Tibetan language (Bhod-yig). Resolves stacked character line clipping, mobile syllable wrapping via zero-width spaces, multilingual translation mapping with WPML-style duplicate options, 36 Tibetan font choices across Monlam Bodtig, Qomolangma, and Myilam categories, granular HTML element typography, customizable language switchers (dropdown, toggle, radio, list, inline with icon/text modes), tabbed admin settings, and real-time backend Extended Wylie transliteration input.
- * Version:           1.2.10
+ * Version:           1.2.12
  * Author:            Dawa Paljor
  * Author URI:        https://github.com/paljordawa
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       tibetpress
+ * Text Domain:       omnitibet
  * Requires at least: 6.0
  * Requires PHP:      8.0
  *
@@ -18,7 +18,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Define Plugin Constants
-define( 'TMT_VERSION', '1.2.10' );
+define( 'TMT_VERSION', '1.2.12' );
 define( 'TMT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TMT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'TMT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -286,21 +286,21 @@ final class Tibetan_Multilingual_Typography {
 			'bo' => sprintf(
 				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-bo" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);object-fit:cover;display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/tibetan-flag.svg' ),
-				esc_attr__( 'Tibetan (བོད་སྐད)', 'tibetpress' ),
+				esc_attr__( 'Tibetan (བོད་སྐད)', 'omnitibet' ),
 				$width,
 				$height
 			),
 			'zh' => sprintf(
 				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-zh" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/chinese-flag.svg' ),
-				esc_attr__( 'Chinese (Simplified)', 'tibetpress' ),
+				esc_attr__( 'Chinese (Simplified)', 'omnitibet' ),
 				$width,
 				$height
 			),
 			'en' => sprintf(
 				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-en" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/english-flag.svg' ),
-				esc_attr__( 'English', 'tibetpress' ),
+				esc_attr__( 'English', 'omnitibet' ),
 				$width,
 				$height
 			),

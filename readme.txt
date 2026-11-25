@@ -1,17 +1,17 @@
-=== TibetPress ===
+=== OmniTibet ===
 Tags: tibetan, typography, multilingual, language switcher, fonts
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 1.2.10
+Stable tag: 1.2.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-TibetPress provides Tibetan typography and language tools for multilingual WordPress sites.
+OmniTibet provides Tibetan typography and language tools for multilingual WordPress sites.
 
 == Description ==
 
-TibetPress helps you publish Tibetan content, manage language versions of posts and pages, and customize typography across your site.
+OmniTibet helps you publish Tibetan content, manage language versions of posts and pages, and customize typography across your site.
 
 The plugin provides language-management tools; it does not automatically translate content. You write or edit each language version and link it to the corresponding post, page, category, or tag.
 
@@ -26,7 +26,7 @@ The plugin provides language-management tools; it does not automatically transla
 * **Translation queue and health checks:** Filter missing, draft, unpublished, and outdated translations; detect unlinked translations, duplicate languages, and groups without a base-language post.
 * **Category and tag translations:** Assign term languages, mark terms as shared, link equivalent terms, and manage translations from per-language list columns.
 * **Language-specific menus:** Assign a separate WordPress menu to each theme location and language, with a base-menu fallback.
-* **Theme/plugin strings:** Register stable string IDs and manage their language values in **Settings → TibetPress Settings → Multilingual Tools**.
+* **Theme/plugin strings:** Register stable string IDs and manage their language values in **Settings → OmniTibet Settings → Multilingual Tools**.
 * **Multilingual SEO and RTL:** Output `hreflang` alternates for published translations, support translated SEO titles/descriptions, and apply language-specific text direction and locale formatting.
 * **Language-aware content:** Show posts and taxonomy terms for the active language. Content without a language assignment is treated as the configured base language.
 * **Language switcher:** Choose dropdown, toggle, radio, list, or inline layouts, with flag and text display options.
@@ -37,10 +37,10 @@ The plugin provides language-management tools; it does not automatically transla
 
 == Installation ==
 
-1. Upload the `tibetpress` folder to `/wp-content/plugins/`, or install the plugin ZIP through the WordPress Plugins screen.
+1. Upload the `omnitibet` folder to `/wp-content/plugins/`, or install the plugin ZIP through the WordPress Plugins screen.
 2. Activate the plugin from **Plugins**.
-3. Open **Settings → TibetPress Settings** to choose the base language, enable optional languages, and configure typography and language-switcher options.
-4. Choose a language URL format under **Settings → TibetPress Settings → Multilingual & Routing**.
+3. Open **Settings → OmniTibet Settings** to choose the base language, enable optional languages, and configure typography and language-switcher options.
+4. Choose a language URL format under **Settings → OmniTibet Settings → Multilingual & Routing**.
 5. Assign languages and connect translations from the post, page, category, and tag editing screens.
 
 Language-subdomain URLs require DNS and hosting configured to direct each language-code subdomain to this WordPress site, plus HTTPS certificates that cover those subdomains.
@@ -61,7 +61,7 @@ Theme developers can also call `tibetan_language_switcher()` from a theme templa
 
 = Translation tools =
 
-Open **Settings → TibetPress Settings → Multilingual Tools** to review the translation queue, inspect translation-group health, assign language-specific menus to theme locations, and edit registered string translations. The Multilingual Tools section is part of the TibetPress Settings page. Published translations are marked outdated when their source title, content, excerpt, or modified time has changed since the translation was last saved. Existing translations without a review snapshot are flagged for review the first time.
+Open **Settings → OmniTibet Settings → Multilingual Tools** to review the translation queue, inspect translation-group health, assign language-specific menus to theme locations, and edit registered string translations. The Multilingual Tools section is part of the OmniTibet Settings page. Published translations are marked outdated when their source title, content, excerpt, or modified time has changed since the translation was last saved. Existing translations without a review snapshot are flagged for review the first time.
 
 Theme and plugin developers can register UI strings by stable ID and retrieve the active language value:
 
@@ -85,7 +85,7 @@ No. It helps you create and link language versions. You provide the translated t
 
 = How do I add another language? =
 
-Go to **Settings → TibetPress Settings → Multilingual & Routing** and enable the language. English and Tibetan are built in; other available languages are optional.
+Go to **Settings → OmniTibet Settings → Multilingual & Routing** and enable the language. English and Tibetan are built in; other available languages are optional.
 
 = How do I translate a category or tag? =
 
@@ -93,7 +93,7 @@ Open **Posts → Categories** or **Posts → Tags**. Use the per-language column
 
 = What language is used for posts without a language assignment? =
 
-They are treated as the configured base language. The base language can be selected in **Settings → TibetPress Settings → Multilingual & Routing**.
+They are treated as the configured base language. The base language can be selected in **Settings → OmniTibet Settings → Multilingual & Routing**.
 
 = Do disabled optional languages delete existing translations? =
 
@@ -105,11 +105,19 @@ Confirm that the translated post, page, or term is published and assigned to Tib
 
 == Changelog ==
 
+= 1.2.12 =
+* Moved dynamic CSS and JavaScript output to WordPress enqueue and inline-enqueue APIs.
+* Reviewed nonce and permission checks on existing request handlers.
+
+= 1.2.11 =
+* Renamed the plugin from TibetPress to OmniTibet across WordPress metadata, settings, documentation, assets, and text-domain identifiers.
+* Preserved existing TMT settings and plugin identifiers for backward compatibility.
+
 = 1.2.10 =
-* Added a translation icon beside TibetPress Settings in the WordPress dashboard Settings menu.
+* Added a translation icon beside OmniTibet Settings in the WordPress dashboard Settings menu.
 
 = 1.2.9 =
-* Renamed the plugin to TibetPress in WordPress and user-facing settings.
+* Renamed the plugin to OmniTibet in WordPress and user-facing settings.
 
 = 1.2.8 =
 * Combined Tibetan Settings and Multilingual Tools under one Settings menu entry.
@@ -141,11 +149,14 @@ Confirm that the translated post, page, or term is published and assigned to Tib
 
 == Upgrade Notice ==
 
+= 1.2.11 =
+The plugin is now officially named OmniTibet. Existing settings and plugin identifiers remain compatible.
+
 = 1.2.10 =
-Adds a translation icon beside TibetPress Settings in the dashboard menu.
+Adds a translation icon beside OmniTibet Settings in the dashboard menu.
 
 = 1.2.9 =
-The plugin is now named TibetPress. Existing settings and plugin identifiers are unchanged.
+The plugin is now named OmniTibet. Existing settings and plugin identifiers are unchanged.
 
 = 1.2.8 =
 Tibetan Settings and Multilingual Tools now appear under one Settings menu entry.

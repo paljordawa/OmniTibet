@@ -132,7 +132,7 @@ trait TMT_Language_Switcher_Trait {
 		ob_start();
 
 		if ( 'toggle' === $format ) : ?>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'tibetpress' ); ?>">
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) : ?>
 					<a href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-toggle-btn <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
 						<?php if ( 'text_only' !== $display ) : ?>
@@ -145,7 +145,7 @@ trait TMT_Language_Switcher_Trait {
 				<?php endforeach; ?>
 			</div>
 		<?php elseif ( 'radio' === $format ) : ?>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="radiogroup" aria-label="<?php esc_attr_e( 'Language Selection', 'tibetpress' ); ?>">
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="radiogroup" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) :
 					$input_id = 'tmt_radio_' . esc_attr( $code ) . '_' . wp_unique_id();
 				?>
@@ -161,7 +161,7 @@ trait TMT_Language_Switcher_Trait {
 				<?php endforeach; ?>
 			</div>
 		<?php elseif ( 'list' === $format ) : ?>
-			<ul class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'tibetpress' ); ?>">
+			<ul class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) : ?>
 					<li class="tmt-list-item <?php echo $item['active'] ? 'active' : ''; ?>">
 						<a href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-list-link" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
@@ -181,7 +181,7 @@ trait TMT_Language_Switcher_Trait {
 				<?php endforeach; ?>
 			</ul>
 		<?php elseif ( 'inline' === $format ) : ?>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'tibetpress' ); ?>">
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php
 				$total_items = count( $items );
 				$curr_idx    = 0;
@@ -202,7 +202,7 @@ trait TMT_Language_Switcher_Trait {
 				<?php endforeach; ?>
 			</div>
 		<?php else : ?>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-tmt-switcher role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'tibetpress' ); ?>">
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-tmt-switcher role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<button class="tmt-switcher-current" aria-haspopup="true" aria-expanded="false" type="button" title="<?php echo esc_attr( $current_info['native'] ); ?>">
 					<?php if ( 'text_only' !== $display ) : ?>
 						<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $current_lang, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
