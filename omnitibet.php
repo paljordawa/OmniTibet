@@ -12,46 +12,46 @@
  * Requires at least: 6.0
  * Requires PHP:      8.0
  *
- * @package           Tibetan_Multilingual_Typography
+ * @package           OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // Define Plugin Constants
-define( 'TMT_VERSION', '1.2.12' );
-define( 'TMT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'TMT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'TMT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'TMT_FILE', __FILE__ );
-define( 'TMT_REWRITE_VERSION', 2 );
+define( 'OMNITI_VERSION', '1.2.12' );
+define( 'OMNITI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'OMNITI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'OMNITI_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'OMNITI_FILE', __FILE__ );
+define( 'OMNITI_REWRITE_VERSION', 2 );
 
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-language-routing.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-post-and-term-translations.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-language-switcher.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-typography.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-admin-settings.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-syllable-wrap.php';
-require_once TMT_PLUGIN_DIR . 'includes/traits/trait-tmt-translation-tools.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-language-routing.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-post-and-term-translations.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-language-switcher.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-typography.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-admin-settings.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-syllable-wrap.php';
+require_once OMNITI_PLUGIN_DIR . 'includes/traits/trait-omniti-translation-tools.php';
 
 /**
  * Main Orchestrator Class
  */
-final class Tibetan_Multilingual_Typography {
-	use TMT_Language_Routing_Trait;
-	use TMT_Translation_Admin_Trait;
-	use TMT_Language_Switcher_Trait;
-	use TMT_Typography_Trait;
-	use TMT_Admin_Settings_Trait;
-	use TMT_Syllable_Wrap_Trait;
-	use TMT_Translation_Tools_Trait;
+final class OmniTibet {
+	use OMNITI_Language_Routing_Trait;
+	use OMNITI_Translation_Admin_Trait;
+	use OMNITI_Language_Switcher_Trait;
+	use OMNITI_Typography_Trait;
+	use OMNITI_Admin_Settings_Trait;
+	use OMNITI_Syllable_Wrap_Trait;
+	use OMNITI_Translation_Tools_Trait;
 
 
 	/**
 	 * Singleton Instance
 	 *
-	 * @var Tibetan_Multilingual_Typography|null
+	 * @var OmniTibet|null
 	 */
-	private static ?Tibetan_Multilingual_Typography $instance = null;
+	private static ?OmniTibet $instance = null;
 
 	/**
 	 * Cached Plugin Settings
@@ -160,7 +160,7 @@ final class Tibetan_Multilingual_Typography {
 
 		$languages = $this->supported_languages;
 		$catalog   = $this->get_available_languages();
-		$settings  = get_option( 'tmt_settings', [] );
+		$settings  = get_option( 'omniti_settings', [] );
 		$enabled   = is_array( $settings ) && is_array( $settings['additional_languages'] ?? null )
 			? $settings['additional_languages']
 			: [];
@@ -182,7 +182,7 @@ final class Tibetan_Multilingual_Typography {
 	 * Get the configured base language, falling back to English if invalid.
 	 */
 	private function get_base_language(): string {
-		$settings = get_option( 'tmt_settings', [] );
+		$settings = get_option( 'omniti_settings', [] );
 		$base     = is_array( $settings ) && is_string( $settings['base_language'] ?? null )
 			? $settings['base_language']
 			: 'en';
@@ -193,9 +193,9 @@ final class Tibetan_Multilingual_Typography {
 	/**
 	 * Get Singleton Instance
 	 *
-	 * @return Tibetan_Multilingual_Typography
+	 * @return OmniTibet
 	 */
-	public static function get_instance(): Tibetan_Multilingual_Typography {
+	public static function get_instance(): OmniTibet {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
@@ -228,7 +228,7 @@ final class Tibetan_Multilingual_Typography {
 		add_filter( 'term_link', [ $this, 'filter_tibetan_term_link' ], 10, 3 );
 		add_filter( 'get_terms_args', [ $this, 'filter_terms_by_language' ], 10, 2 );
 		add_filter( 'redirect_canonical', [ $this, 'preserve_language_subdomain_redirect' ], 10, 2 );
-		add_action( 'update_option_tmt_settings', [ $this, 'refresh_language_rewrite_rules' ], 10, 3 );
+		add_action( 'update_option_omniti_settings', [ $this, 'refresh_language_rewrite_rules' ], 10, 3 );
 
 		// Translation Meta Box (Edit Screen - Image 2)
 		add_action( 'add_meta_boxes', [ $this, 'register_translation_metabox' ] );
@@ -243,11 +243,11 @@ final class Tibetan_Multilingual_Typography {
 		add_filter( 'page_row_actions', [ $this, 'add_post_row_actions' ], 10, 2 );
 
 		// Admin Action Handlers for Translation & Duplication
-		add_action( 'admin_action_tmt_action', [ $this, 'handle_admin_actions' ] );
+		add_action( 'admin_action_omniti_action', [ $this, 'handle_admin_actions' ] );
 		add_action( 'admin_notices', [ $this, 'display_admin_notices' ] );
 
 		// Shortcodes & Language Switcher
-		add_shortcode( 'tibetan_lang_switcher', [ $this, 'render_language_switcher_shortcode' ] );
+		add_shortcode( 'omniti_lang_switcher', [ $this, 'render_language_switcher_shortcode' ] );
 
 		// Module B: Dynamic Typography Engine
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_frontend_assets' ] );
@@ -281,31 +281,31 @@ final class Tibetan_Multilingual_Typography {
 	 * @return string HTML img string.
 	 */
 	public function get_flag_html( string $lang_code, int $width = 20, int $height = 14 ): string {
-		$plugin_url = TMT_PLUGIN_URL;
+		$plugin_url = OMNITI_PLUGIN_URL;
 		return match ( $lang_code ) {
 			'bo' => sprintf(
-				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-bo" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);object-fit:cover;display:inline-block;" />',
+				'<img src="%s" alt="%s" width="%d" height="%d" class="omniti-flag omniti-flag-bo" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);object-fit:cover;display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/tibetan-flag.svg' ),
 				esc_attr__( 'Tibetan (བོད་སྐད)', 'omnitibet' ),
 				$width,
 				$height
 			),
 			'zh' => sprintf(
-				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-zh" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
+				'<img src="%s" alt="%s" width="%d" height="%d" class="omniti-flag omniti-flag-zh" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/chinese-flag.svg' ),
 				esc_attr__( 'Chinese (Simplified)', 'omnitibet' ),
 				$width,
 				$height
 			),
 			'en' => sprintf(
-				'<img src="%s" alt="%s" width="%d" height="%d" class="tmt-flag tmt-flag-en" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
+				'<img src="%s" alt="%s" width="%d" height="%d" class="omniti-flag omniti-flag-en" style="vertical-align:middle;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.4);display:inline-block;" />',
 				esc_url( $plugin_url . 'assets/images/english-flag.svg' ),
 				esc_attr__( 'English', 'omnitibet' ),
 				$width,
 				$height
 			),
 			default => sprintf(
-				'<span class="tmt-flag tmt-flag-code" role="img" aria-label="%s" style="display:inline-flex;align-items:center;justify-content:center;width:%dpx;height:%dpx;font-size:9px;font-weight:700;line-height:1;background:#e2e8f0;color:#334155;border-radius:2px;">%s</span>',
+				'<span class="omniti-flag omniti-flag-code" role="img" aria-label="%s" style="display:inline-flex;align-items:center;justify-content:center;width:%dpx;height:%dpx;font-size:9px;font-weight:700;line-height:1;background:#e2e8f0;color:#334155;border-radius:2px;">%s</span>',
 				esc_attr( strtoupper( $lang_code ) ),
 				$width,
 				$height,
@@ -320,21 +320,70 @@ final class Tibetan_Multilingual_Typography {
  *
  * @param array<string, mixed> $args Arguments ('format' => 'dropdown'|'toggle').
  */
-function tibetan_language_switcher( array $args = [] ): void {
+function omniti_language_switcher( array $args = [] ): void {
 	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo Tibetan_Multilingual_Typography::get_instance()->render_language_switcher_shortcode( $args );
+	echo OmniTibet::get_instance()->render_language_switcher_shortcode( $args );
 }
 
-function tibetan_get_current_language(): string {
-	return Tibetan_Multilingual_Typography::get_instance()->get_current_language();
+function omniti_get_current_language(): string {
+	return OmniTibet::get_instance()->get_current_language();
 }
 
-function tibetan_get_translation( int $post_id, string $target_lang = 'bo' ): ?int {
-	return Tibetan_Multilingual_Typography::get_instance()->get_translation( $post_id, $target_lang );
+function omniti_get_translation( int $post_id, string $target_lang = 'bo' ): ?int {
+	return OmniTibet::get_instance()->get_translation( $post_id, $target_lang );
 }
 
-function tmt_activate_plugin(): void {
-	$elem_defs = Tibetan_Multilingual_Typography::get_element_defaults();
+/**
+ * Move settings and metadata from the legacy prefixed names to OmniTibet names.
+ */
+function omniti_migrate_legacy_plugin_data(): void {
+	$option_map = [
+		'tmt_settings'            => 'omniti_settings',
+		'tmt_rewrite_version'     => 'omniti_rewrite_version',
+		'tmt_registered_strings'  => 'omniti_registered_strings',
+		'tmt_language_menus'      => 'omniti_language_menus',
+	];
+
+	foreach ( $option_map as $legacy_name => $new_name ) {
+		$legacy_value = get_option( $legacy_name, null );
+		if ( null !== $legacy_value && false === get_option( $new_name, false ) ) {
+			update_option( $new_name, $legacy_value );
+		}
+	}
+
+	global $wpdb;
+	$meta_map = [
+		'_tb_lang_code'      => '_omniti_lang_code',
+		'_tb_lang_group_id'  => '_omniti_lang_group_id',
+	];
+
+	foreach ( $meta_map as $legacy_name => $new_name ) {
+		// Copy only missing values so the new names remain authoritative.
+		$wpdb->query(
+			$wpdb->prepare(
+				"INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value)
+				 SELECT legacy.post_id, %s, legacy.meta_value
+				 FROM {$wpdb->postmeta} legacy
+				 WHERE legacy.meta_key = %s
+				   AND NOT EXISTS (
+					 SELECT 1 FROM {$wpdb->postmeta} current_meta
+					 WHERE current_meta.post_id = legacy.post_id
+					   AND current_meta.meta_key = %s
+				   )",
+				$new_name,
+				$legacy_name,
+				$new_name
+			)
+		);
+	}
+
+	delete_transient( 'tmt_translation_groups' );
+}
+add_action( 'plugins_loaded', 'omniti_migrate_legacy_plugin_data', 1 );
+
+function omniti_activate_plugin(): void {
+	omniti_migrate_legacy_plugin_data();
+	$elem_defs = OmniTibet::get_element_defaults();
 
 	$defaults = [
 		'font_family'               => 'monlam-bodtig-2',
@@ -358,38 +407,34 @@ function tmt_activate_plugin(): void {
 		$defaults[ "lh_{$elem_key}" ]   = $elem_info['default_lh'];
 	}
 
-	if ( false === get_option( 'tmt_settings' ) ) {
-		add_option( 'tmt_settings', $defaults );
+	if ( false === get_option( 'omniti_settings' ) ) {
+		add_option( 'omniti_settings', $defaults );
 	}
 
-	Tibetan_Multilingual_Typography::get_instance()->register_rewrite_rules();
+	OmniTibet::get_instance()->register_rewrite_rules();
 	flush_rewrite_rules();
-	update_option( 'tmt_rewrite_version', TMT_REWRITE_VERSION );
+	update_option( 'omniti_rewrite_version', OMNITI_REWRITE_VERSION );
 }
-register_activation_hook( TMT_FILE, 'tmt_activate_plugin' );
+register_activation_hook( OMNITI_FILE, 'omniti_activate_plugin' );
 
-function tmt_deactivate_plugin(): void {
+function omniti_deactivate_plugin(): void {
 	flush_rewrite_rules();
 }
-register_deactivation_hook( TMT_FILE, 'tmt_deactivate_plugin' );
+register_deactivation_hook( OMNITI_FILE, 'omniti_deactivate_plugin' );
 
 // Bootstrap the Plugin
-if ( ! function_exists( 'tmt_register_string' ) ) {
-	/**
-	 * Register a stable string ID for manual translation in Multilingual Tools.
-	 */
-	function tmt_register_string( string $string_id, string $source, string $domain = 'default' ): void {
-		Tibetan_Multilingual_Typography::get_instance()->register_translation_string( $string_id, $source, $domain );
-	}
+/**
+ * Register a stable string ID for manual translation in Multilingual Tools.
+ */
+function omniti_register_string( string $string_id, string $source, string $domain = 'default' ): void {
+	OmniTibet::get_instance()->register_translation_string( $string_id, $source, $domain );
 }
 
-if ( ! function_exists( 'tmt_translate_string' ) ) {
-	/**
-	 * Return the registered string translated for the active language.
-	 */
-	function tmt_translate_string( string $string_id, string $fallback, ?string $language = null ): string {
-		return Tibetan_Multilingual_Typography::get_instance()->translate_registered_string( $string_id, $fallback, $language );
-	}
+/**
+ * Return the registered string translated for the active language.
+ */
+function omniti_translate_string( string $string_id, string $fallback, ?string $language = null ): string {
+	return OmniTibet::get_instance()->translate_registered_string( $string_id, $fallback, $language );
 }
 
-Tibetan_Multilingual_Typography::get_instance();
+OmniTibet::get_instance();

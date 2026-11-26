@@ -2,7 +2,7 @@
  * OmniTibet
  * Frontend Language Switcher Script
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  * @version 1.0.0
  */
 
@@ -10,11 +10,11 @@
   'use strict';
 
   function initLanguageSwitchers() {
-    const switchers = document.querySelectorAll('.tmt-language-switcher.tmt-dropdown');
+    const switchers = document.querySelectorAll('.omniti-language-switcher.omniti-dropdown');
 
     switchers.forEach(function (switcher) {
-      const btn = switcher.querySelector('.tmt-switcher-current');
-      const menu = switcher.querySelector('.tmt-switcher-menu');
+      const btn = switcher.querySelector('.omniti-switcher-current');
+      const menu = switcher.querySelector('.omniti-switcher-menu');
 
       if (!btn || !menu) return;
 
@@ -22,11 +22,11 @@
         e.preventDefault();
         e.stopPropagation();
 
-        const isOpen = switcher.classList.contains('tmt-open');
+        const isOpen = switcher.classList.contains('omniti-open');
         closeAllSwitchers();
 
         if (!isOpen) {
-          switcher.classList.add('tmt-open');
+          switcher.classList.add('omniti-open');
           btn.setAttribute('aria-expanded', 'true');
         }
       });
@@ -34,13 +34,13 @@
 
     // Close when clicking outside
     document.addEventListener('click', function (e) {
-      if (!e.target.closest('.tmt-language-switcher')) {
+      if (!e.target.closest('.omniti-language-switcher')) {
         closeAllSwitchers();
       }
     });
 
     // Handle radio button language switches
-    document.querySelectorAll('.tmt-language-switcher.tmt-radio input[type="radio"]').forEach(function (radio) {
+    document.querySelectorAll('.omniti-language-switcher.omniti-radio input[type="radio"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         if (this.value && this.value !== window.location.href) {
           window.location.href = this.value;
@@ -57,9 +57,9 @@
   }
 
   function closeAllSwitchers() {
-    document.querySelectorAll('.tmt-language-switcher.tmt-open').forEach(function (el) {
-      el.classList.remove('tmt-open');
-      const btn = el.querySelector('.tmt-switcher-current');
+    document.querySelectorAll('.omniti-language-switcher.omniti-open').forEach(function (el) {
+      el.classList.remove('omniti-open');
+      const btn = el.querySelector('.omniti-switcher-current');
       if (btn) btn.setAttribute('aria-expanded', 'false');
     });
   }

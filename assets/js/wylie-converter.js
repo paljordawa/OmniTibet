@@ -2,7 +2,7 @@
  * OmniTibet
  * Real-time Extended Wylie to Tibetan Unicode Converter
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  * @version 1.0.0
  */
 
@@ -365,7 +365,7 @@
   }
 
   // Expose on global window object
-  window.TibetanWylieConverter = {
+  window.OmniTibetWylieConverter = {
     convertSyllable: convertSyllable,
     toTibetan: wylieToTibetan,
     isEnabled: true
@@ -375,7 +375,7 @@
    * Real-time Editor Keystroke Interceptor
    */
   let wylieActive = true;
-  const STORAGE_KEY = 'tmt_wylie_active';
+  const STORAGE_KEY = 'omniti_wylie_active';
 
   // Restore saved state
   if (typeof localStorage !== 'undefined') {
@@ -389,19 +389,19 @@
    * Create Floating / Header Toggle Button for Wylie Converter
    */
   function initToggleButton() {
-    if (document.getElementById('tmt-wylie-toggle-badge')) return;
+    if (document.getElementById('omniti-wylie-toggle-badge')) return;
 
     const badge = document.createElement('div');
-    badge.id = 'tmt-wylie-toggle-badge';
-    badge.className = 'tmt-wylie-badge ' + (wylieActive ? 'active' : 'inactive');
+    badge.id = 'omniti-wylie-toggle-badge';
+    badge.className = 'omniti-wylie-badge ' + (wylieActive ? 'active' : 'inactive');
     badge.title = 'Tibetan Wylie Input (Shortcut: Alt + W)';
     badge.setAttribute('role', 'button');
     badge.setAttribute('tabindex', '0');
 
     badge.innerHTML = `
-      <span class="tmt-badge-icon">བོད</span>
-      <span class="tmt-badge-text">Wylie: <strong class="tmt-status">${wylieActive ? 'ON' : 'OFF'}</strong></span>
-      <span class="tmt-badge-hotkey">Alt+W</span>
+      <span class="omniti-badge-icon">བོད</span>
+      <span class="omniti-badge-text">Wylie: <strong class="omniti-status">${wylieActive ? 'ON' : 'OFF'}</strong></span>
+      <span class="omniti-badge-hotkey">Alt+W</span>
     `;
 
     badge.addEventListener('click', function (e) {
@@ -417,10 +417,10 @@
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, wylieActive ? '1' : '0');
     }
-    const badge = document.getElementById('tmt-wylie-toggle-badge');
+    const badge = document.getElementById('omniti-wylie-toggle-badge');
     if (badge) {
-      badge.className = 'tmt-wylie-badge ' + (wylieActive ? 'active' : 'inactive');
-      const statusEl = badge.querySelector('.tmt-status');
+      badge.className = 'omniti-wylie-badge ' + (wylieActive ? 'active' : 'inactive');
+      const statusEl = badge.querySelector('.omniti-status');
       if (statusEl) {
         statusEl.textContent = wylieActive ? 'ON' : 'OFF';
       }

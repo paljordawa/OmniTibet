@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Translation Admin Trait methods.
+ * OMNITI Translation Admin Trait methods.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Translation_Admin_Trait {
+trait OMNITI_Translation_Admin_Trait {
 	/* ==========================================================================
 	   POSTS & PAGES LIST TABLE COLUMNS (Image 1)
 	   ========================================================================== */
@@ -58,28 +58,28 @@ trait TMT_Translation_Admin_Trait {
 		$languages          = $this->get_enabled_languages();
 		$prefill_source_term = null;
 		$prefill_target_lang = '';
-		if ( ! $is_edit && isset( $_GET['tmt_source_term'] ) && is_string( $_GET['tmt_source_term'] ) ) {
-			$source_term = get_term( absint( wp_unslash( $_GET['tmt_source_term'] ) ), $taxonomy );
+		if ( ! $is_edit && isset( $_GET['omniti_source_term'] ) && is_string( $_GET['omniti_source_term'] ) ) {
+			$source_term = get_term( absint( wp_unslash( $_GET['omniti_source_term'] ) ), $taxonomy );
 			if ( $source_term instanceof WP_Term && current_user_can( 'edit_term', $source_term->term_id ) ) {
 				$prefill_source_term = $source_term;
 			}
 		}
-		if ( ! $is_edit && isset( $_GET['tmt_target_lang'] ) && is_string( $_GET['tmt_target_lang'] ) ) {
-			$requested_language = sanitize_key( wp_unslash( $_GET['tmt_target_lang'] ) );
+		if ( ! $is_edit && isset( $_GET['omniti_target_lang'] ) && is_string( $_GET['omniti_target_lang'] ) ) {
+			$requested_language = sanitize_key( wp_unslash( $_GET['omniti_target_lang'] ) );
 			if ( isset( $languages[ $requested_language ] ) ) {
 				$prefill_target_lang = $requested_language;
 			}
 		}
 
-		$current_lang  = $is_edit ? get_term_meta( $term->term_id, '_tmt_term_language', true ) : $prefill_target_lang;
+		$current_lang  = $is_edit ? get_term_meta( $term->term_id, '_omniti_term_language', true ) : $prefill_target_lang;
 		$current_lang  = ! empty( $current_lang ) && isset( $languages[ $current_lang ] ) ? $current_lang : $base_language;
-		$is_shared     = $is_edit && '1' === get_term_meta( $term->term_id, '_tmt_term_shared', true );
-		$current_group = $is_edit ? get_term_meta( $term->term_id, '_tmt_term_translation_group', true ) : '';
+		$is_shared     = $is_edit && '1' === get_term_meta( $term->term_id, '_omniti_term_shared', true );
+		$current_group = $is_edit ? get_term_meta( $term->term_id, '_omniti_term_translation_group', true ) : '';
 		$linked_term   = $prefill_source_term ? (int) $prefill_source_term->term_id : 0;
 
-		wp_nonce_field( 'tmt_save_term_language', 'tmt_term_language_nonce' );
+		wp_nonce_field( 'omniti_save_term_language', 'omniti_term_language_nonce' );
 
-		$language_control = '<select name="tmt_term_language" id="tmt_term_language">';
+		$language_control = '<select name="omniti_term_language" id="omniti_term_language">';
 		foreach ( $languages as $code => $language ) {
 			$language_control .= sprintf(
 				'<option value="%s" %s>%s</option>',
@@ -89,14 +89,14 @@ trait TMT_Translation_Admin_Trait {
 			);
 		}
 		$language_control .= '</select>';
-		$this->render_taxonomy_term_field( 'tmt_term_language', __( 'Term language', 'omnitibet' ), $language_control, $is_edit );
+		$this->render_taxonomy_term_field( 'omniti_term_language', __( 'Term language', 'omnitibet' ), $language_control, $is_edit );
 
 		$shared_control = sprintf(
-			'<label><input type="checkbox" name="tmt_term_shared" value="1" %s /> %s</label>',
+			'<label><input type="checkbox" name="omniti_term_shared" value="1" %s /> %s</label>',
 			checked( $is_shared, true, false ),
 			esc_html__( 'Reuse this term as-is in every language', 'omnitibet' )
 		);
-		$this->render_taxonomy_term_field( 'tmt_term_shared', __( 'Language behavior', 'omnitibet' ), $shared_control, $is_edit );
+		$this->render_taxonomy_term_field( 'omniti_term_shared', __( 'Language behavior', 'omnitibet' ), $shared_control, $is_edit );
 
 		$terms = get_terms(
 			[
@@ -118,21 +118,21 @@ trait TMT_Translation_Admin_Trait {
 			} else {
 				$link_label = __( 'Start a new translation group', 'omnitibet' );
 			}
-			$link_control = '<select name="tmt_term_translation_id" id="tmt_term_translation_id">';
+			$link_control = '<select name="omniti_term_translation_id" id="omniti_term_translation_id">';
 			$link_control .= '<option value="0">' . esc_html( $link_label ) . '</option>';
 			if ( $is_edit && ! empty( $current_group ) ) {
 				$link_control .= '<option value="-1">' . esc_html__( 'Unlink and start a new group', 'omnitibet' ) . '</option>';
 			}
 
 			foreach ( $terms as $related_term ) {
-				if ( '1' === get_term_meta( $related_term->term_id, '_tmt_term_shared', true ) ) {
+				if ( '1' === get_term_meta( $related_term->term_id, '_omniti_term_shared', true ) ) {
 					continue;
 				}
-				$related_group = get_term_meta( $related_term->term_id, '_tmt_term_translation_group', true );
+				$related_group = get_term_meta( $related_term->term_id, '_omniti_term_translation_group', true );
 				if ( ! empty( $current_group ) && $current_group === $related_group && ! $linked_term ) {
 					$linked_term = (int) $related_term->term_id;
 				}
-				$related_lang = get_term_meta( $related_term->term_id, '_tmt_term_language', true ) ?: $base_language;
+				$related_lang = get_term_meta( $related_term->term_id, '_omniti_term_language', true ) ?: $base_language;
 				$lang_name    = $languages[ $related_lang ]['name'] ?? $related_lang;
 				$link_control .= sprintf(
 					'<option value="%d" %s>%s — %s</option>',
@@ -145,7 +145,7 @@ trait TMT_Translation_Admin_Trait {
 			$link_control .= '</select>';
 			$link_control .= '<p class="description">' . esc_html__( 'Choose an existing equivalent term to link translations. Shared terms do not need a translation link.', 'omnitibet' ) . '</p>';
 		}
-		$this->render_taxonomy_term_field( 'tmt_term_translation_id', __( 'Link translated term', 'omnitibet' ), $link_control, $is_edit );
+		$this->render_taxonomy_term_field( 'omniti_term_translation_id', __( 'Link translated term', 'omnitibet' ), $link_control, $is_edit );
 	}
 
 	/**
@@ -179,9 +179,9 @@ trait TMT_Translation_Admin_Trait {
 	 */
 	public function save_taxonomy_translation_fields( int $term_id, int $tt_id, array $args ): void {
 		if (
-			! isset( $_POST['tmt_term_language_nonce'] )
-			|| ! is_string( $_POST['tmt_term_language_nonce'] )
-			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tmt_term_language_nonce'] ) ), 'tmt_save_term_language' )
+			! isset( $_POST['omniti_term_language_nonce'] )
+			|| ! is_string( $_POST['omniti_term_language_nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['omniti_term_language_nonce'] ) ), 'omniti_save_term_language' )
 		) {
 			return;
 		}
@@ -195,24 +195,24 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		$languages = $this->get_enabled_languages();
-		$language  = isset( $_POST['tmt_term_language'] ) && is_string( $_POST['tmt_term_language'] )
-			? sanitize_key( wp_unslash( $_POST['tmt_term_language'] ) )
+		$language  = isset( $_POST['omniti_term_language'] ) && is_string( $_POST['omniti_term_language'] )
+			? sanitize_key( wp_unslash( $_POST['omniti_term_language'] ) )
 			: $this->get_base_language();
 		if ( ! isset( $languages[ $language ] ) ) {
 			$language = $this->get_base_language();
 		}
 
-		if ( ! empty( $_POST['tmt_term_shared'] ) ) {
-			delete_term_meta( $term_id, '_tmt_term_language' );
-			delete_term_meta( $term_id, '_tmt_term_translation_group' );
-			update_term_meta( $term_id, '_tmt_term_shared', '1' );
+		if ( ! empty( $_POST['omniti_term_shared'] ) ) {
+			delete_term_meta( $term_id, '_omniti_term_language' );
+			delete_term_meta( $term_id, '_omniti_term_translation_group' );
+			update_term_meta( $term_id, '_omniti_term_shared', '1' );
 			return;
 		}
 
-		$selected_value = isset( $_POST['tmt_term_translation_id'] ) && is_string( $_POST['tmt_term_translation_id'] )
-			? sanitize_text_field( wp_unslash( $_POST['tmt_term_translation_id'] ) )
+		$selected_value = isset( $_POST['omniti_term_translation_id'] ) && is_string( $_POST['omniti_term_translation_id'] )
+			? sanitize_text_field( wp_unslash( $_POST['omniti_term_translation_id'] ) )
 			: '0';
-		$current_group = get_term_meta( $term_id, '_tmt_term_translation_group', true );
+		$current_group = get_term_meta( $term_id, '_omniti_term_translation_group', true );
 
 		$selected_term_id = '-1' === $selected_value ? 0 : absint( $selected_value );
 		if ( $selected_term_id ) {
@@ -220,21 +220,21 @@ trait TMT_Translation_Admin_Trait {
 			if ( ! $selected_term || is_wp_error( $selected_term ) || $selected_term->taxonomy !== $term->taxonomy ) {
 				wp_die( esc_html__( 'The selected translated term is invalid for this taxonomy.', 'omnitibet' ) );
 			}
-			if ( '1' === get_term_meta( $selected_term_id, '_tmt_term_shared', true ) ) {
+			if ( '1' === get_term_meta( $selected_term_id, '_omniti_term_shared', true ) ) {
 				wp_die( esc_html__( 'Shared terms cannot be linked as translated terms.', 'omnitibet' ) );
 			}
 		}
 
-		delete_term_meta( $term_id, '_tmt_term_shared' );
-		update_term_meta( $term_id, '_tmt_term_language', $language );
+		delete_term_meta( $term_id, '_omniti_term_shared' );
+		update_term_meta( $term_id, '_omniti_term_language', $language );
 		if ( '-1' === $selected_value ) {
-			update_term_meta( $term_id, '_tmt_term_translation_group', 'tmt_term_' . wp_generate_uuid4() );
+			update_term_meta( $term_id, '_omniti_term_translation_group', 'omniti_term_' . wp_generate_uuid4() );
 			return;
 		}
 
-		$selected_group = $selected_term_id ? get_term_meta( $selected_term_id, '_tmt_term_translation_group', true ) : '';
+		$selected_group = $selected_term_id ? get_term_meta( $selected_term_id, '_omniti_term_translation_group', true ) : '';
 		$group_ids      = array_values( array_unique( array_filter( [ $current_group, $selected_group ] ) ) );
-		$group_id       = $current_group ?: $selected_group ?: 'tmt_term_' . wp_generate_uuid4();
+		$group_id       = $current_group ?: $selected_group ?: 'omniti_term_' . wp_generate_uuid4();
 		$member_ids     = [ $term_id ];
 
 		if ( $selected_term_id ) {
@@ -246,7 +246,7 @@ trait TMT_Translation_Admin_Trait {
 					'taxonomy'   => $term->taxonomy,
 					'hide_empty' => false,
 					'fields'     => 'ids',
-					'meta_key'   => '_tmt_term_translation_group',
+					'meta_key'   => '_omniti_term_translation_group',
 					'meta_value' => $existing_group_id,
 				]
 			);
@@ -257,14 +257,14 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		foreach ( array_unique( $member_ids ) as $member_id ) {
-			update_term_meta( $member_id, '_tmt_term_translation_group', $group_id );
+			update_term_meta( $member_id, '_omniti_term_translation_group', $group_id );
 		}
 	}
 
 	public function add_taxonomy_language_column( array $columns ): array {
-		$columns['tmt_term_language'] = __( 'Language', 'omnitibet' );
+		$columns['omniti_term_language'] = __( 'Language', 'omnitibet' );
 		foreach ( $this->get_enabled_languages() as $code => $language ) {
-			$columns[ 'tmt_term_lang_' . $code ] = sprintf(
+			$columns[ 'omniti_term_lang_' . $code ] = sprintf(
 				'<span title="%s">%s</span>',
 				esc_attr( $language['name'] . ' (' . $language['native'] . ')' ),
 				$this->get_flag_html( $code, 20, 14 )
@@ -274,21 +274,21 @@ trait TMT_Translation_Admin_Trait {
 	}
 
 	public function render_taxonomy_language_column( string $content, string $column_name, int $term_id ): string {
-		if ( 'tmt_term_language' === $column_name ) {
-			if ( '1' === get_term_meta( $term_id, '_tmt_term_shared', true ) ) {
+		if ( 'omniti_term_language' === $column_name ) {
+			if ( '1' === get_term_meta( $term_id, '_omniti_term_shared', true ) ) {
 				return esc_html__( 'Shared', 'omnitibet' );
 			}
 
-			$language_code = get_term_meta( $term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
+			$language_code = get_term_meta( $term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
 			$languages     = $this->get_enabled_languages();
 			return esc_html( $languages[ $language_code ]['name'] ?? $language_code );
 		}
 
-		if ( ! str_starts_with( $column_name, 'tmt_term_lang_' ) ) {
+		if ( ! str_starts_with( $column_name, 'omniti_term_lang_' ) ) {
 			return $content;
 		}
 
-		$target_language = substr( $column_name, strlen( 'tmt_term_lang_' ) );
+		$target_language = substr( $column_name, strlen( 'omniti_term_lang_' ) );
 		if ( ! isset( $this->get_enabled_languages()[ $target_language ] ) ) {
 			return $content;
 		}
@@ -298,21 +298,21 @@ trait TMT_Translation_Admin_Trait {
 			return '';
 		}
 
-		$is_shared = '1' === get_term_meta( $term_id, '_tmt_term_shared', true );
-		$term_lang = get_term_meta( $term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
+		$is_shared = '1' === get_term_meta( $term_id, '_omniti_term_shared', true );
+		$term_lang = get_term_meta( $term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
 		if ( $is_shared || $term_lang === $target_language ) {
-			return '<span class="tmt-col-current" title="' . esc_attr__( 'Current or shared term language', 'omnitibet' ) . '">&#10003;</span>';
+			return '<span class="omniti-col-current" title="' . esc_attr__( 'Current or shared term language', 'omnitibet' ) . '">&#10003;</span>';
 		}
 
 		$translation_id = $this->get_translated_taxonomy_term_id( $term_id, $term->taxonomy, $target_language );
 		if ( is_wp_error( $translation_id ) ) {
-			return '<span class="tmt-col-error" title="' . esc_attr( $translation_id->get_error_message() ) . '">!</span>';
+			return '<span class="omniti-col-error" title="' . esc_attr( $translation_id->get_error_message() ) . '">!</span>';
 		}
 		if ( $translation_id !== $term_id ) {
 			$edit_link = get_edit_term_link( $translation_id, $term->taxonomy );
 			if ( $edit_link ) {
 				return sprintf(
-					'<a href="%s" class="tmt-col-action tmt-col-edit" title="%s"><span class="dashicons dashicons-edit"></span></a>',
+					'<a href="%s" class="omniti-col-action omniti-col-edit" title="%s"><span class="dashicons dashicons-edit"></span></a>',
 					esc_url( $edit_link ),
 					esc_attr(
 						sprintf(
@@ -329,14 +329,14 @@ trait TMT_Translation_Admin_Trait {
 			[
 				'taxonomy'        => $term->taxonomy,
 				'post_type'       => 'post',
-				'tmt_source_term' => $term_id,
-				'tmt_target_lang' => $target_language,
+				'omniti_source_term' => $term_id,
+				'omniti_target_lang' => $target_language,
 			],
 			admin_url( 'edit-tags.php' )
 		) . '#addtag';
 
 		return sprintf(
-			'<a href="%s" class="tmt-col-action tmt-col-plus" title="%s">+</a>',
+			'<a href="%s" class="omniti-col-action omniti-col-plus" title="%s">+</a>',
 			esc_url( $add_link ),
 			esc_attr(
 				sprintf(
@@ -363,7 +363,7 @@ trait TMT_Translation_Admin_Trait {
 			$new_columns[ $key ] = $title;
 			if ( 'title' === $key ) {
 				foreach ( $supported_languages as $code => $info ) {
-					$new_columns[ 'tmt_lang_' . $code ] = sprintf(
+					$new_columns[ 'omniti_lang_' . $code ] = sprintf(
 						'<span title="%s">%s</span>',
 						esc_attr( $info['name'] . ' (' . $info['native'] . ')' ),
 						$this->get_flag_html( $code, 20, 14 )
@@ -384,32 +384,32 @@ trait TMT_Translation_Admin_Trait {
 	 * @param int    $post_id     Current post ID.
 	 */
 	public function render_language_column( string $column_name, int $post_id ): void {
-		if ( ! str_starts_with( $column_name, 'tmt_lang_' ) ) {
+		if ( ! str_starts_with( $column_name, 'omniti_lang_' ) ) {
 			return;
 		}
 
-		$target_lang       = substr( $column_name, strlen( 'tmt_lang_' ) );
+		$target_lang       = substr( $column_name, strlen( 'omniti_lang_' ) );
 		$supported_languages = $this->get_enabled_languages();
 		if ( ! isset( $supported_languages[ $target_lang ] ) ) {
 			return;
 		}
-		$post_lang   = get_post_meta( $post_id, '_tb_lang_code', true ) ?: $this->get_base_language();
+		$post_lang   = get_post_meta( $post_id, '_omniti_lang_code', true ) ?: $this->get_base_language();
 
 		// If this post itself is in this target language
 		if ( $post_lang === $target_lang ) {
-			echo '<span class="tmt-col-current" title="' . esc_attr__( 'Current language of this post', 'omnitibet' ) . '">&#10003;</span>';
+			echo '<span class="omniti-col-current" title="' . esc_attr__( 'Current language of this post', 'omnitibet' ) . '">&#10003;</span>';
 			return;
 		}
 
 		$trans_id = $this->get_translation( $post_id, $target_lang );
-		$nonce    = wp_create_nonce( 'tmt_action_nonce' );
+		$nonce    = wp_create_nonce( 'omniti_action_nonce' );
 
 		if ( $trans_id && $trans_id !== $post_id ) {
 			// Translation exists: Render pencil edit icon
 			$edit_url    = get_edit_post_link( $trans_id );
 			$trans_title = get_the_title( $trans_id ) ?: __( '(no title)', 'omnitibet' );
 			printf(
-				'<a href="%s" class="tmt-col-action tmt-col-edit" title="%s"><span class="dashicons dashicons-edit"></span></a>',
+				'<a href="%s" class="omniti-col-action omniti-col-edit" title="%s"><span class="dashicons dashicons-edit"></span></a>',
 				esc_url( $edit_url ),
 				esc_attr(
 					sprintf(
@@ -424,8 +424,8 @@ trait TMT_Translation_Admin_Trait {
 			// Translation does NOT exist: Render '+' (translate) and duplicate action
 			$translate_url = add_query_arg(
 				[
-					'action'      => 'tmt_action',
-					'tmt_task'    => 'translate',
+					'action'      => 'omniti_action',
+					'omniti_task'    => 'translate',
 					'source_id'   => $post_id,
 					'target_lang' => $target_lang,
 					'_wpnonce'    => $nonce,
@@ -435,8 +435,8 @@ trait TMT_Translation_Admin_Trait {
 
 			$duplicate_url = add_query_arg(
 				[
-					'action'      => 'tmt_action',
-					'tmt_task'    => 'duplicate',
+					'action'      => 'omniti_action',
+					'omniti_task'    => 'duplicate',
 					'source_id'   => $post_id,
 					'target_lang' => $target_lang,
 					'_wpnonce'    => $nonce,
@@ -445,9 +445,9 @@ trait TMT_Translation_Admin_Trait {
 			);
 
 			printf(
-				'<div class="tmt-col-actions">' .
-				'<a href="%s" class="tmt-col-action tmt-col-plus" title="%s">+</a>' .
-				'<a href="%s" class="tmt-col-action tmt-col-dup" title="%s"><span class="dashicons dashicons-admin-page"></span></a>' .
+				'<div class="omniti-col-actions">' .
+				'<a href="%s" class="omniti-col-action omniti-col-plus" title="%s">+</a>' .
+				'<a href="%s" class="omniti-col-action omniti-col-dup" title="%s"><span class="dashicons dashicons-admin-page"></span></a>' .
 				'</div>',
 				esc_url( $translate_url ),
 				esc_attr(
@@ -477,8 +477,8 @@ trait TMT_Translation_Admin_Trait {
 	 * @return array<string, string>
 	 */
 	public function add_post_row_actions( array $actions, WP_Post $post ): array {
-		$post_lang = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
-		$nonce     = wp_create_nonce( 'tmt_action_nonce' );
+		$post_lang = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
+		$nonce     = wp_create_nonce( 'omniti_action_nonce' );
 		$supported_languages = $this->get_enabled_languages();
 
 		foreach ( $supported_languages as $lang_code => $language ) {
@@ -490,15 +490,15 @@ trait TMT_Translation_Admin_Trait {
 			if ( ! $trans_id ) {
 				$dup_url = add_query_arg(
 					[
-						'action'      => 'tmt_action',
-						'tmt_task'    => 'duplicate',
+						'action'      => 'omniti_action',
+						'omniti_task'    => 'duplicate',
 						'source_id'   => $post->ID,
 						'target_lang' => $lang_code,
 						'_wpnonce'    => $nonce,
 					],
 					admin_url( 'admin.php' )
 				);
-				$actions[ 'tmt_dup_' . $lang_code ] = sprintf(
+				$actions[ 'omniti_dup_' . $lang_code ] = sprintf(
 					'<a href="%s" style="color:#0f766e;">%s %s</a>',
 					esc_url( $dup_url ),
 					esc_html__( 'Duplicate to', 'omnitibet' ),
@@ -519,14 +519,14 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		$selected = $this->get_base_language();
-		if ( isset( $_GET['tmt_lang_filter'] ) && is_string( $_GET['tmt_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$selected = sanitize_key( wp_unslash( $_GET['tmt_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['omniti_lang_filter'] ) && is_string( $_GET['omniti_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$selected = sanitize_key( wp_unslash( $_GET['omniti_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( '' !== $selected && ! isset( $this->get_enabled_languages()[ $selected ] ) ) {
 				$selected = $this->get_base_language();
 			}
 		}
 		?>
-		<select name="tmt_lang_filter" id="tmt_lang_filter">
+		<select name="omniti_lang_filter" id="omniti_lang_filter">
 			<option value=""><?php esc_html_e( 'All languages', 'omnitibet' ); ?></option>
 			<?php foreach ( $this->get_enabled_languages() as $code => $info ) : ?>
 				<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $selected, $code ); ?>>
@@ -566,7 +566,7 @@ trait TMT_Translation_Admin_Trait {
 
 		$admin_bar->add_node(
 			[
-				'id'    => 'tmt-admin-language-switcher',
+				'id'    => 'omniti-admin-language-switcher',
 				'title' => $current_flag . '<span class="ab-label">' . sprintf(
 					/* translators: %s: current language name */
 					esc_html__( 'Language: %s', 'omnitibet' ),
@@ -579,12 +579,12 @@ trait TMT_Translation_Admin_Trait {
 		if ( $is_dashboard ) {
 			$admin_bar->add_node(
 				[
-					'id'     => 'tmt-admin-language-all',
-					'parent' => 'tmt-admin-language-switcher',
+					'id'     => 'omniti-admin-language-all',
+					'parent' => 'omniti-admin-language-switcher',
 					'title'  => esc_html__( 'All languages', 'omnitibet' ),
 					'href'   => $this->get_language_toolbar_url( 'all' ),
 					'meta'   => [
-						'class' => 'all' === $current_language ? 'tmt-current-admin-language' : '',
+						'class' => 'all' === $current_language ? 'omniti-current-admin-language' : '',
 					],
 				]
 			);
@@ -593,12 +593,12 @@ trait TMT_Translation_Admin_Trait {
 		foreach ( $languages as $code => $language ) {
 			$admin_bar->add_node(
 				[
-					'id'     => 'tmt-admin-language-' . sanitize_key( $code ),
-					'parent' => 'tmt-admin-language-switcher',
+					'id'     => 'omniti-admin-language-' . sanitize_key( $code ),
+					'parent' => 'omniti-admin-language-switcher',
 					'title'  => $this->get_flag_html( $code, 16, 11 ) . '<span class="ab-label">' . esc_html( $language['name'] . ' (' . $language['native'] . ')' ) . '</span>',
 					'href'   => $this->get_language_toolbar_url( $code ),
 					'meta'   => [
-						'class' => $code === $current_language ? 'tmt-current-admin-language' : '',
+						'class' => $code === $current_language ? 'omniti-current-admin-language' : '',
 					],
 				]
 			);
@@ -634,7 +634,7 @@ trait TMT_Translation_Admin_Trait {
 
 		$fallback = $this->get_settings()['fallback_language'] ?? $this->get_base_language();
 		if ( $language === $fallback ) {
-			$post_language = get_post_meta( $post_id, '_tb_lang_code', true ) ?: $this->get_base_language();
+			$post_language = get_post_meta( $post_id, '_omniti_lang_code', true ) ?: $this->get_base_language();
 			return $post_language === $fallback
 				? (string) get_permalink( $post_id )
 				: $this->get_language_home_url( $fallback );
@@ -653,13 +653,13 @@ trait TMT_Translation_Admin_Trait {
 		if ( $screen && 'post' === $screen->base && isset( $_GET['post'] ) && is_scalar( $_GET['post'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$post = get_post( absint( wp_unslash( $_GET['post'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $post instanceof WP_Post ) {
-				$post_language = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
+				$post_language = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
 				return isset( $languages[ $post_language ] ) ? $post_language : $this->get_base_language();
 			}
 		}
 
-		if ( $screen && 'edit' === $screen->base && isset( $_GET['tmt_lang_filter'] ) && is_string( $_GET['tmt_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$requested_language = sanitize_key( wp_unslash( $_GET['tmt_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $screen && 'edit' === $screen->base && isset( $_GET['omniti_lang_filter'] ) && is_string( $_GET['omniti_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$requested_language = sanitize_key( wp_unslash( $_GET['omniti_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( '' === $requested_language ) {
 				return 'all';
 			}
@@ -681,7 +681,7 @@ trait TMT_Translation_Admin_Trait {
 		if ( 'all' !== $language && isset( $languages[ $language ] ) && $screen && 'post' === $screen->base && isset( $_GET['post'] ) && is_scalar( $_GET['post'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$post = get_post( absint( wp_unslash( $_GET['post'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $post instanceof WP_Post ) {
-				$post_language = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
+				$post_language = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
 				if ( $language === $post_language ) {
 					$edit_url = get_edit_post_link( $post->ID, 'raw' );
 					if ( is_string( $edit_url ) ) {
@@ -707,7 +707,7 @@ trait TMT_Translation_Admin_Trait {
 			$url = add_query_arg( 'post_type', $post_type, $url );
 		}
 
-		return add_query_arg( 'tmt_lang_filter', 'all' === $language ? '' : $language, $url );
+		return add_query_arg( 'omniti_lang_filter', 'all' === $language ? '' : $language, $url );
 	}
 
 	/**
@@ -727,8 +727,8 @@ trait TMT_Translation_Admin_Trait {
 			}
 
 			$filter_lang = $this->get_base_language();
-			if ( isset( $_GET['tmt_lang_filter'] ) && is_string( $_GET['tmt_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$requested_language = sanitize_key( wp_unslash( $_GET['tmt_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( isset( $_GET['omniti_lang_filter'] ) && is_string( $_GET['omniti_lang_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$requested_language = sanitize_key( wp_unslash( $_GET['omniti_lang_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				if ( '' === $requested_language ) {
 					return;
 				}
@@ -744,23 +744,23 @@ trait TMT_Translation_Admin_Trait {
 					$language_clause = [
 						'relation' => 'OR',
 						[
-							'key'     => '_tb_lang_code',
+							'key'     => '_omniti_lang_code',
 							'value'   => $filter_lang,
 							'compare' => '=',
 						],
 						[
-							'key'     => '_tb_lang_code',
+							'key'     => '_omniti_lang_code',
 							'compare' => 'NOT EXISTS',
 						],
 						[
-							'key'     => '_tb_lang_code',
+							'key'     => '_omniti_lang_code',
 							'value'   => '',
 							'compare' => '=',
 						],
 					];
 				} else {
 					$language_clause = [
-						'key'     => '_tb_lang_code',
+						'key'     => '_omniti_lang_code',
 						'value'   => $filter_lang,
 						'compare' => '=',
 					];
@@ -785,23 +785,23 @@ trait TMT_Translation_Admin_Trait {
 			$language_clause = [
 				'relation' => 'OR',
 				[
-					'key'     => '_tb_lang_code',
+					'key'     => '_omniti_lang_code',
 					'value'   => $filter_lang,
 					'compare' => '=',
 				],
 				[
-					'key'     => '_tb_lang_code',
+					'key'     => '_omniti_lang_code',
 					'compare' => 'NOT EXISTS',
 				],
 				[
-					'key'     => '_tb_lang_code',
+					'key'     => '_omniti_lang_code',
 					'value'   => '',
 					'compare' => '=',
 				],
 			];
 		} else {
 			$language_clause = [
-				'key'     => '_tb_lang_code',
+				'key'     => '_omniti_lang_code',
 				'value'   => $filter_lang,
 				'compare' => '=',
 			];
@@ -832,7 +832,7 @@ trait TMT_Translation_Admin_Trait {
 		$post_types = get_post_types( [ 'public' => true ], 'names' );
 		foreach ( $post_types as $pt ) {
 			add_meta_box(
-				'tmt_post_translation_box',
+				'omniti_post_translation_box',
 				__( 'Language & Translations', 'omnitibet' ),
 				[ $this, 'render_translation_metabox' ],
 				$pt,
@@ -848,54 +848,54 @@ trait TMT_Translation_Admin_Trait {
 	 * @param WP_Post $post Current post.
 	 */
 	public function render_translation_metabox( WP_Post $post ): void {
-		wp_nonce_field( 'tmt_save_post_lang', 'tmt_lang_nonce' );
+		wp_nonce_field( 'omniti_save_post_lang', 'omniti_lang_nonce' );
 
 		$supported_languages = $this->get_enabled_languages();
-		$current_post_lang  = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
-		$group_id           = get_post_meta( $post->ID, '_tb_lang_group_id', true );
+		$current_post_lang  = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
+		$group_id           = get_post_meta( $post->ID, '_omniti_lang_group_id', true );
 		if ( empty( $group_id ) ) {
 			$group_id = 'grp_' . wp_generate_uuid4();
-			update_post_meta( $post->ID, '_tb_lang_group_id', $group_id );
+			update_post_meta( $post->ID, '_omniti_lang_group_id', $group_id );
 		}
 
-		$nonce = wp_create_nonce( 'tmt_action_nonce' );
+		$nonce = wp_create_nonce( 'omniti_action_nonce' );
 		?>
-		<div class="tmt-editor-box">
+		<div class="omniti-editor-box">
 			<!-- Connect with translations link -->
-			<div class="tmt-connect-header">
-				<a href="#" class="tmt-connect-link" id="tmt-toggle-connect">
+			<div class="omniti-connect-header">
+				<a href="#" class="omniti-connect-link" id="omniti-toggle-connect">
 					<?php esc_html_e( 'Connect with translations', 'omnitibet' ); ?>
 				</a>
 			</div>
 
 			<!-- Collapsible Connect Panel -->
-			<div class="tmt-connect-panel" id="tmt-connect-drawer" style="display:none;">
-				<div class="tmt-connect-inner">
-					<label for="tmt_link_existing_post">
+			<div class="omniti-connect-panel" id="omniti-connect-drawer" style="display:none;">
+				<div class="omniti-connect-inner">
+					<label for="omniti_link_existing_post">
 						<strong><?php esc_html_e( 'Link an existing post to this translation group:', 'omnitibet' ); ?></strong>
 					</label>
-					<input type="number" id="tmt_link_existing_post" name="tmt_link_existing_post" placeholder="<?php esc_attr_e( 'Enter Post ID to link', 'omnitibet' ); ?>" class="widefat" style="margin:5px 0 8px 0;" />
+					<input type="number" id="omniti_link_existing_post" name="omniti_link_existing_post" placeholder="<?php esc_attr_e( 'Enter Post ID to link', 'omnitibet' ); ?>" class="widefat" style="margin:5px 0 8px 0;" />
 					
 					<div style="display:flex;gap:6px;">
-						<button type="submit" name="tmt_meta_action" value="connect_post" class="button button-secondary button-small">
+						<button type="submit" name="omniti_meta_action" value="connect_post" class="button button-secondary button-small">
 							<?php esc_html_e( 'Connect Post', 'omnitibet' ); ?>
 						</button>
 						<?php if ( ! empty( $group_id ) ) : ?>
-							<a href="<?php echo esc_url( add_query_arg( [ 'action' => 'tmt_action', 'tmt_task' => 'unlink', 'source_id' => $post->ID, '_wpnonce' => $nonce ], admin_url( 'admin.php' ) ) ); ?>" class="button button-link-delete button-small" onclick="return confirm('<?php echo esc_js( __( 'Are you sure you want to unlink this post from its translations?', 'omnitibet' ) ); ?>');">
+							<a href="<?php echo esc_url( add_query_arg( [ 'action' => 'omniti_action', 'omniti_task' => 'unlink', 'source_id' => $post->ID, '_wpnonce' => $nonce ], admin_url( 'admin.php' ) ) ); ?>" class="button button-link-delete button-small" onclick="return confirm('<?php echo esc_js( __( 'Are you sure you want to unlink this post from its translations?', 'omnitibet' ) ); ?>');">
 								<?php esc_html_e( 'Unlink', 'omnitibet' ); ?>
 							</a>
 						<?php endif; ?>
 					</div>
-					<input type="hidden" name="tb_lang_group_id" value="<?php echo esc_attr( $group_id ); ?>" />
+					<input type="hidden" name="omniti_lang_group_id" value="<?php echo esc_attr( $group_id ); ?>" />
 				</div>
 			</div>
 
 			<!-- Post Language Selector -->
-			<div class="tmt-doc-lang-row" style="margin: 10px 0 14px 0;">
-				<label for="tb_lang_code" style="font-weight:600;font-size:12px;color:#475569;display:block;margin-bottom:4px;">
+			<div class="omniti-doc-lang-row" style="margin: 10px 0 14px 0;">
+				<label for="omniti_lang_code" style="font-weight:600;font-size:12px;color:#475569;display:block;margin-bottom:4px;">
 					<?php esc_html_e( 'This document language:', 'omnitibet' ); ?>
 				</label>
-				<select name="tb_lang_code" id="tb_lang_code" class="widefat" style="font-size:13px;">
+				<select name="omniti_lang_code" id="omniti_lang_code" class="widefat" style="font-size:13px;">
 					<?php foreach ( $supported_languages as $code => $info ) : ?>
 						<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $current_post_lang, $code ); ?>>
 							<?php echo esc_html( $info['name'] . ' (' . $info['native'] . ')' ); ?>
@@ -905,26 +905,26 @@ trait TMT_Translation_Admin_Trait {
 			</div>
 
 			<!-- Translate this Document Section (Image 2) -->
-			<div class="tmt-section-title">
+			<div class="omniti-section-title">
 				<strong><?php esc_html_e( 'Translate this Document', 'omnitibet' ); ?></strong>
 			</div>
 
-			<div class="tmt-wpml-card">
+			<div class="omniti-wpml-card">
 				<!-- Card Tabs Header -->
-				<div class="tmt-card-tabs">
-					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'Overview', 'omnitibet' ); ?>">
+				<div class="omniti-card-tabs">
+					<span class="omniti-tab-icon" title="<?php esc_attr_e( 'Overview', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-grid-view"></span>
 					</span>
-					<span class="tmt-tab-icon active" title="<?php esc_attr_e( 'Translate & Duplicate', 'omnitibet' ); ?>">
+					<span class="omniti-tab-icon active" title="<?php esc_attr_e( 'Translate & Duplicate', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-edit"></span>
 					</span>
-					<span class="tmt-tab-icon" title="<?php esc_attr_e( 'WordPress Core', 'omnitibet' ); ?>">
+					<span class="omniti-tab-icon" title="<?php esc_attr_e( 'WordPress Core', 'omnitibet' ); ?>">
 						<span class="dashicons dashicons-wordpress"></span>
 					</span>
 				</div>
 
 				<!-- Table matching Image 2 -->
-				<table class="tmt-doc-table">
+				<table class="omniti-doc-table">
 					<thead>
 						<tr>
 							<th style="text-align:left;padding-left:12px;"><?php esc_html_e( 'Language', 'omnitibet' ); ?></th>
@@ -942,8 +942,8 @@ trait TMT_Translation_Admin_Trait {
 
 							$translate_url = add_query_arg(
 								[
-									'action'      => 'tmt_action',
-									'tmt_task'    => 'translate',
+									'action'      => 'omniti_action',
+									'omniti_task'    => 'translate',
 									'source_id'   => $post->ID,
 									'target_lang' => $code,
 									'_wpnonce'    => $nonce,
@@ -953,8 +953,8 @@ trait TMT_Translation_Admin_Trait {
 
 							$duplicate_url = add_query_arg(
 								[
-									'action'      => 'tmt_action',
-									'tmt_task'    => 'duplicate',
+									'action'      => 'omniti_action',
+									'omniti_task'    => 'duplicate',
 									'source_id'   => $post->ID,
 									'target_lang' => $code,
 									'_wpnonce'    => $nonce,
@@ -963,29 +963,29 @@ trait TMT_Translation_Admin_Trait {
 							);
 						?>
 							<tr>
-								<td class="tmt-lang-label-cell">
+								<td class="omniti-lang-label-cell">
 									<?php echo $this->get_flag_html( $code, 18, 12 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-									<span class="tmt-lang-text"><?php echo esc_html( $data['name'] ); ?></span>
+									<span class="omniti-lang-text"><?php echo esc_html( $data['name'] ); ?></span>
 								</td>
 
 								<!-- Translate Column -->
-								<td class="tmt-center-cell">
+								<td class="omniti-center-cell">
 									<?php if ( $trans_id && $trans_id !== $post->ID ) : ?>
-										<a href="<?php echo esc_url( get_edit_post_link( $trans_id ) ); ?>" class="tmt-btn-edit" title="<?php esc_attr_e( 'Edit Translation', 'omnitibet' ); ?>">
+										<a href="<?php echo esc_url( get_edit_post_link( $trans_id ) ); ?>" class="omniti-btn-edit" title="<?php esc_attr_e( 'Edit Translation', 'omnitibet' ); ?>">
 											<span class="dashicons dashicons-edit"></span>
 										</a>
 									<?php else : ?>
-										<a href="<?php echo esc_url( $translate_url ); ?>" class="tmt-table-plus" title="<?php esc_attr_e( 'Add Translation', 'omnitibet' ); ?>">+</a>
+										<a href="<?php echo esc_url( $translate_url ); ?>" class="omniti-table-plus" title="<?php esc_attr_e( 'Add Translation', 'omnitibet' ); ?>">+</a>
 									<?php endif; ?>
 								</td>
 
 								<!-- Duplicate Column -->
-								<td class="tmt-center-cell">
+								<td class="omniti-center-cell">
 									<?php if ( $trans_id && $trans_id !== $post->ID ) : ?>
-										<span class="tmt-check-done" title="<?php esc_attr_e( 'Already translated', 'omnitibet' ); ?>">&#10003;</span>
+										<span class="omniti-check-done" title="<?php esc_attr_e( 'Already translated', 'omnitibet' ); ?>">&#10003;</span>
 									<?php else : ?>
-										<input type="checkbox" name="tmt_duplicate_langs[]" value="<?php echo esc_attr( $code ); ?>" class="tmt-dup-checkbox" title="<?php esc_attr_e( 'Duplicate this document', 'omnitibet' ); ?>" />
-										<a href="<?php echo esc_url( $duplicate_url ); ?>" class="tmt-quick-dup-link" title="<?php esc_attr_e( 'Instant Duplicate', 'omnitibet' ); ?>">
+										<input type="checkbox" name="omniti_duplicate_langs[]" value="<?php echo esc_attr( $code ); ?>" class="omniti-dup-checkbox" title="<?php esc_attr_e( 'Duplicate this document', 'omnitibet' ); ?>" />
+										<a href="<?php echo esc_url( $duplicate_url ); ?>" class="omniti-quick-dup-link" title="<?php esc_attr_e( 'Instant Duplicate', 'omnitibet' ); ?>">
 											<span class="dashicons dashicons-admin-page"></span>
 										</a>
 									<?php endif; ?>
@@ -996,8 +996,8 @@ trait TMT_Translation_Admin_Trait {
 				</table>
 
 				<!-- Action button that appears when duplicate checkbox is checked -->
-				<div class="tmt-dup-action-bar" id="tmt-dup-action-bar" style="display:none;padding:10px;background:#f8fafc;border-top:1px solid #e2e8f0;">
-					<button type="submit" name="tmt_meta_action" value="duplicate_checked" class="button button-primary button-small" style="width:100%;font-weight:600;">
+				<div class="omniti-dup-action-bar" id="omniti-dup-action-bar" style="display:none;padding:10px;background:#f8fafc;border-top:1px solid #e2e8f0;">
+					<button type="submit" name="omniti_meta_action" value="duplicate_checked" class="button button-primary button-small" style="width:100%;font-weight:600;">
 						<?php esc_html_e( 'Duplicate Selected Document', 'omnitibet' ); ?>
 					</button>
 				</div>
@@ -1005,12 +1005,12 @@ trait TMT_Translation_Admin_Trait {
 		</div>
 
 		<?php
-		wp_enqueue_script( 'tmt-admin-metabox-js', TMT_PLUGIN_URL . 'assets/js/admin-metabox.js', [], TMT_VERSION, true );
+		wp_enqueue_script( 'omniti-admin-metabox-js', OMNITI_PLUGIN_URL . 'assets/js/admin-metabox.js', [], OMNITI_VERSION, true );
 		ob_start();
 		?>
 		document.addEventListener('DOMContentLoaded', function() {
-			const toggleBtn = document.getElementById('tmt-toggle-connect');
-			const drawer = document.getElementById('tmt-connect-drawer');
+			const toggleBtn = document.getElementById('omniti-toggle-connect');
+			const drawer = document.getElementById('omniti-connect-drawer');
 			if (toggleBtn && drawer) {
 				toggleBtn.addEventListener('click', function(e) {
 					e.preventDefault();
@@ -1018,9 +1018,9 @@ trait TMT_Translation_Admin_Trait {
 				});
 			}
 
-			const checkboxes = document.querySelectorAll('.tmt-dup-checkbox');
-			const actionBar = document.getElementById('tmt-dup-action-bar');
-			function checkDupes() {
+			const checkboxes = document.querySelectorAll('.omniti-dup-checkbox');
+			const actionBar = document.getElementById('omniti-dup-action-bar');
+			function omnitiCheckDupes() {
 				let anyChecked = false;
 				checkboxes.forEach(function(cb) {
 					if (cb.checked) anyChecked = true;
@@ -1030,12 +1030,12 @@ trait TMT_Translation_Admin_Trait {
 				}
 			}
 			checkboxes.forEach(function(cb) {
-				cb.addEventListener('change', checkDupes);
+				cb.addEventListener('change', omnitiCheckDupes);
 			});
 		});
 		<?php
 		$inline_js = ob_get_clean();
-		wp_add_inline_script( 'tmt-admin-metabox-js', (string) $inline_js, 'after' );
+		wp_add_inline_script( 'omniti-admin-metabox-js', (string) $inline_js, 'after' );
 		?>
 		<?php
 	}
@@ -1049,7 +1049,7 @@ trait TMT_Translation_Admin_Trait {
 	 * @param WP_Post $post    Post object.
 	 */
 	public function save_translation_metadata( int $post_id, WP_Post $post ): void {
-		if ( ! isset( $_POST['tmt_lang_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tmt_lang_nonce'] ) ), 'tmt_save_post_lang' ) ) {
+		if ( ! isset( $_POST['omniti_lang_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['omniti_lang_nonce'] ) ), 'omniti_save_post_lang' ) ) {
 			return;
 		}
 
@@ -1061,40 +1061,40 @@ trait TMT_Translation_Admin_Trait {
 			return;
 		}
 		$supported_languages = $this->get_enabled_languages();
-		$current_post_lang = get_post_meta( $post_id, '_tb_lang_code', true ) ?: $this->get_base_language();
+		$current_post_lang = get_post_meta( $post_id, '_omniti_lang_code', true ) ?: $this->get_base_language();
 
 		// Save language code
-		if ( isset( $_POST['tb_lang_code'] ) ) {
-			$lang_code = sanitize_key( wp_unslash( $_POST['tb_lang_code'] ) );
+		if ( isset( $_POST['omniti_lang_code'] ) ) {
+			$lang_code = sanitize_key( wp_unslash( $_POST['omniti_lang_code'] ) );
 			if ( isset( $supported_languages[ $lang_code ] ) ) {
-				update_post_meta( $post_id, '_tb_lang_code', $lang_code );
+				update_post_meta( $post_id, '_omniti_lang_code', $lang_code );
 				$current_post_lang = $lang_code;
 			}
 		}
 
 		// Save translation group ID (or generate a unique one if empty)
-		$group_id = ! empty( $_POST['tb_lang_group_id'] ) ? sanitize_text_field( wp_unslash( $_POST['tb_lang_group_id'] ) ) : '';
+		$group_id = ! empty( $_POST['omniti_lang_group_id'] ) ? sanitize_text_field( wp_unslash( $_POST['omniti_lang_group_id'] ) ) : '';
 		if ( empty( $group_id ) ) {
 			$group_id = 'grp_' . wp_generate_uuid4();
 		}
-		update_post_meta( $post_id, '_tb_lang_group_id', $group_id );
+		update_post_meta( $post_id, '_omniti_lang_group_id', $group_id );
 
 		// Connect an existing post if requested
-		if ( isset( $_POST['tmt_meta_action'] ) && 'connect_post' === $_POST['tmt_meta_action'] && ! empty( $_POST['tmt_link_existing_post'] ) ) {
-			$link_id = absint( $_POST['tmt_link_existing_post'] );
+		if ( isset( $_POST['omniti_meta_action'] ) && 'connect_post' === $_POST['omniti_meta_action'] && ! empty( $_POST['omniti_link_existing_post'] ) ) {
+			$link_id = absint( $_POST['omniti_link_existing_post'] );
 			if ( $link_id && current_user_can( 'edit_post', $link_id ) ) {
-				update_post_meta( $link_id, '_tb_lang_group_id', $group_id );
+				update_post_meta( $link_id, '_omniti_lang_group_id', $group_id );
 			}
 		}
 
 		// Invalidate group cache
-		$cache_key = 'tmt_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
-		wp_cache_delete( $cache_key, 'tmt_translations' );
+		$cache_key = 'omniti_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
+		wp_cache_delete( $cache_key, 'omniti_translations' );
 
 		// Handle duplicate checked languages action
-		if ( isset( $_POST['tmt_meta_action'] ) && 'duplicate_checked' === $_POST['tmt_meta_action'] && ! empty( $_POST['tmt_duplicate_langs'] ) && is_array( $_POST['tmt_duplicate_langs'] ) ) {
+		if ( isset( $_POST['omniti_meta_action'] ) && 'duplicate_checked' === $_POST['omniti_meta_action'] && ! empty( $_POST['omniti_duplicate_langs'] ) && is_array( $_POST['omniti_duplicate_langs'] ) ) {
 			$dupe_ids = [];
-			foreach ( $_POST['tmt_duplicate_langs'] as $target_code ) {
+			foreach ( $_POST['omniti_duplicate_langs'] as $target_code ) {
 				$code = sanitize_key( $target_code );
 				if ( isset( $supported_languages[ $code ] ) && $code !== $current_post_lang ) {
 					$new_id = $this->duplicate_post_to_language( $post_id, $code );
@@ -1107,7 +1107,7 @@ trait TMT_Translation_Admin_Trait {
 
 			if ( 1 === count( $dupe_ids ) ) {
 				// Redirect directly to the single duplicated draft
-				wp_safe_redirect( admin_url( 'post.php?post=' . $dupe_ids[0] . '&action=edit&tmt_msg=duplicated' ) );
+				wp_safe_redirect( admin_url( 'post.php?post=' . $dupe_ids[0] . '&action=edit&omniti_msg=duplicated' ) );
 				exit;
 			}
 		}
@@ -1117,11 +1117,11 @@ trait TMT_Translation_Admin_Trait {
 	 * Central Admin Action Dispatcher
 	 */
 	public function handle_admin_actions(): void {
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'tmt_action_nonce' ) ) {
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'omniti_action_nonce' ) ) {
 			wp_die( esc_html__( 'Security check failed. Please refresh and try again.', 'omnitibet' ) );
 		}
 
-		$task        = isset( $_GET['tmt_task'] ) ? sanitize_key( wp_unslash( $_GET['tmt_task'] ) ) : '';
+		$task        = isset( $_GET['omniti_task'] ) ? sanitize_key( wp_unslash( $_GET['omniti_task'] ) ) : '';
 		$source_id   = isset( $_GET['source_id'] ) ? absint( $_GET['source_id'] ) : 0;
 		$target_lang = isset( $_GET['target_lang'] ) ? sanitize_key( wp_unslash( $_GET['target_lang'] ) ) : '';
 
@@ -1134,7 +1134,7 @@ trait TMT_Translation_Admin_Trait {
 			if ( is_wp_error( $new_id ) ) {
 				wp_die( esc_html( $new_id->get_error_message() ) );
 			}
-			wp_safe_redirect( admin_url( 'post.php?post=' . $new_id . '&action=edit&tmt_msg=duplicated' ) );
+			wp_safe_redirect( admin_url( 'post.php?post=' . $new_id . '&action=edit&omniti_msg=duplicated' ) );
 			exit;
 		}
 
@@ -1143,13 +1143,13 @@ trait TMT_Translation_Admin_Trait {
 			if ( is_wp_error( $new_id ) ) {
 				wp_die( esc_html( $new_id->get_error_message() ) );
 			}
-			wp_safe_redirect( admin_url( 'post.php?post=' . $new_id . '&action=edit&tmt_msg=translated' ) );
+			wp_safe_redirect( admin_url( 'post.php?post=' . $new_id . '&action=edit&omniti_msg=translated' ) );
 			exit;
 		}
 
 		if ( 'unlink' === $task ) {
-			delete_post_meta( $source_id, '_tb_lang_group_id' );
-			wp_safe_redirect( admin_url( 'post.php?post=' . $source_id . '&action=edit&tmt_msg=unlinked' ) );
+			delete_post_meta( $source_id, '_omniti_lang_group_id' );
+			wp_safe_redirect( admin_url( 'post.php?post=' . $source_id . '&action=edit&omniti_msg=unlinked' ) );
 			exit;
 		}
 
@@ -1175,17 +1175,17 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		// Ensure group ID on source post
-		$group_id = get_post_meta( $source_post_id, '_tb_lang_group_id', true );
+		$group_id = get_post_meta( $source_post_id, '_omniti_lang_group_id', true );
 		if ( empty( $group_id ) ) {
 			$group_id = 'grp_' . wp_generate_uuid4();
-			update_post_meta( $source_post_id, '_tb_lang_group_id', $group_id );
+			update_post_meta( $source_post_id, '_omniti_lang_group_id', $group_id );
 		}
 
 		// Ensure language on source post
-		$source_lang = get_post_meta( $source_post_id, '_tb_lang_code', true );
+		$source_lang = get_post_meta( $source_post_id, '_omniti_lang_code', true );
 		if ( empty( $source_lang ) ) {
 			$source_lang = $this->get_base_language();
-			update_post_meta( $source_post_id, '_tb_lang_code', $source_lang );
+			update_post_meta( $source_post_id, '_omniti_lang_code', $source_lang );
 		}
 
 		// Check if translation already exists
@@ -1216,8 +1216,8 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		// Assign language and translation group ID
-		update_post_meta( $new_post_id, '_tb_lang_code', $target_lang );
-		update_post_meta( $new_post_id, '_tb_lang_group_id', $group_id );
+		update_post_meta( $new_post_id, '_omniti_lang_code', $target_lang );
+		update_post_meta( $new_post_id, '_omniti_lang_group_id', $group_id );
 
 		// Clone Taxonomies (Categories, Tags)
 		$taxonomies = get_object_taxonomies( $source_post->post_type );
@@ -1254,8 +1254,8 @@ trait TMT_Translation_Admin_Trait {
 		}
 
 		// Invalidate cache after the duplicate and its taxonomy relationships are ready.
-		$cache_key = 'tmt_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
-		wp_cache_delete( $cache_key, 'tmt_translations' );
+		$cache_key = 'omniti_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
+		wp_cache_delete( $cache_key, 'omniti_translations' );
 
 		// Clone Featured Image
 		$thumb_id = get_post_thumbnail_id( $source_post_id );
@@ -1267,7 +1267,7 @@ trait TMT_Translation_Admin_Trait {
 		$custom_keys = get_post_custom_keys( $source_post_id );
 		if ( ! empty( $custom_keys ) ) {
 			foreach ( $custom_keys as $k ) {
-				if ( in_array( $k, [ '_tb_lang_code', '_tb_lang_group_id', '_edit_lock', '_edit_last' ], true ) ) {
+				if ( in_array( $k, [ '_omniti_lang_code', '_omniti_lang_group_id', '_edit_lock', '_edit_last' ], true ) ) {
 					continue;
 				}
 				$vals = get_post_custom_values( $k, $source_post_id );
@@ -1293,19 +1293,19 @@ trait TMT_Translation_Admin_Trait {
 	private function get_translated_taxonomy_term_id( int $term_id, string $taxonomy, string $target_lang ): int|WP_Error {
 		$term = get_term( $term_id, $taxonomy );
 		if ( ! $term || is_wp_error( $term ) ) {
-			return new WP_Error( 'tmt_term_not_found', __( 'A source taxonomy term could not be loaded.', 'omnitibet' ) );
+			return new WP_Error( 'omniti_term_not_found', __( 'A source taxonomy term could not be loaded.', 'omnitibet' ) );
 		}
 
-		if ( '1' === get_term_meta( $term_id, '_tmt_term_shared', true ) ) {
+		if ( '1' === get_term_meta( $term_id, '_omniti_term_shared', true ) ) {
 			return $term_id;
 		}
 
-		$source_language = get_term_meta( $term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
+		$source_language = get_term_meta( $term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
 		if ( $source_language === $target_lang ) {
 			return $term_id;
 		}
 
-		$group_id = get_term_meta( $term_id, '_tmt_term_translation_group', true );
+		$group_id = get_term_meta( $term_id, '_omniti_term_translation_group', true );
 		if ( empty( $group_id ) ) {
 			return $term_id;
 		}
@@ -1313,14 +1313,14 @@ trait TMT_Translation_Admin_Trait {
 		$language_query = [
 			'relation' => 'OR',
 			[
-				'key'     => '_tmt_term_language',
+				'key'     => '_omniti_term_language',
 				'value'   => $target_lang,
 				'compare' => '=',
 			],
 		];
 		if ( $target_lang === $this->get_base_language() ) {
 			$language_query[] = [
-				'key'     => '_tmt_term_language',
+				'key'     => '_omniti_term_language',
 				'compare' => 'NOT EXISTS',
 			];
 		}
@@ -1336,7 +1336,7 @@ trait TMT_Translation_Admin_Trait {
 				'meta_query' => [
 					'relation' => 'AND',
 					[
-						'key'     => '_tmt_term_translation_group',
+						'key'     => '_omniti_term_translation_group',
 						'value'   => $group_id,
 						'compare' => '=',
 					],
@@ -1345,7 +1345,7 @@ trait TMT_Translation_Admin_Trait {
 			]
 		);
 		if ( is_wp_error( $translated_terms ) ) {
-			return new WP_Error( 'tmt_term_translation_lookup_failed', __( 'A translated taxonomy term could not be loaded.', 'omnitibet' ) );
+			return new WP_Error( 'omniti_term_translation_lookup_failed', __( 'A translated taxonomy term could not be loaded.', 'omnitibet' ) );
 		}
 
 		return ! empty( $translated_terms ) ? absint( $translated_terms[0] ) : $term_id;
@@ -1368,16 +1368,16 @@ trait TMT_Translation_Admin_Trait {
 			return new WP_Error( 'not_found', __( 'Source post not found.', 'omnitibet' ) );
 		}
 
-		$group_id = get_post_meta( $source_post_id, '_tb_lang_group_id', true );
+		$group_id = get_post_meta( $source_post_id, '_omniti_lang_group_id', true );
 		if ( empty( $group_id ) ) {
 			$group_id = 'grp_' . wp_generate_uuid4();
-			update_post_meta( $source_post_id, '_tb_lang_group_id', $group_id );
+			update_post_meta( $source_post_id, '_omniti_lang_group_id', $group_id );
 		}
 
-		$source_lang = get_post_meta( $source_post_id, '_tb_lang_code', true );
+		$source_lang = get_post_meta( $source_post_id, '_omniti_lang_code', true );
 		if ( empty( $source_lang ) ) {
 			$source_lang = $this->get_base_language();
-			update_post_meta( $source_post_id, '_tb_lang_code', $source_lang );
+			update_post_meta( $source_post_id, '_omniti_lang_code', $source_lang );
 		}
 
 		$existing_id = $this->get_translation( $source_post_id, $target_lang );
@@ -1402,11 +1402,11 @@ trait TMT_Translation_Admin_Trait {
 			return $new_post_id;
 		}
 
-		update_post_meta( $new_post_id, '_tb_lang_code', $target_lang );
-		update_post_meta( $new_post_id, '_tb_lang_group_id', $group_id );
+		update_post_meta( $new_post_id, '_omniti_lang_code', $target_lang );
+		update_post_meta( $new_post_id, '_omniti_lang_group_id', $group_id );
 
-		$cache_key = 'tmt_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
-		wp_cache_delete( $cache_key, 'tmt_translations' );
+		$cache_key = 'omniti_group_' . md5( (string) $group_id . ':' . $this->get_base_language() );
+		wp_cache_delete( $cache_key, 'omniti_translations' );
 
 		return $new_post_id;
 	}
@@ -1415,8 +1415,8 @@ trait TMT_Translation_Admin_Trait {
 	 * Display Admin Notices for Translation/Duplication Events
 	 */
 	public function display_admin_notices(): void {
-		if ( ! empty( $_GET['tmt_msg'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$msg = sanitize_key( wp_unslash( $_GET['tmt_msg'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_GET['omniti_msg'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$msg = sanitize_key( wp_unslash( $_GET['omniti_msg'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$text = match ( $msg ) {
 				'duplicated' => __( 'Document successfully duplicated for translation. You can now edit the translation below.', 'omnitibet' ),
 				'translated' => __( 'New translation draft created and linked.', 'omnitibet' ),

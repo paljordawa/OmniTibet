@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Language Switcher Trait methods.
+ * OMNITI Language Switcher Trait methods.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Language_Switcher_Trait {
+trait OMNITI_Language_Switcher_Trait {
 	/**
 	 * Render Frontend Language Switcher Shortcode
 	 *
@@ -23,7 +23,7 @@ trait TMT_Language_Switcher_Trait {
 				'flag_size' => $settings['switcher_flag_size'] ?? 'small',
 			],
 			$atts,
-			'tibetan_lang_switcher'
+			'omniti_lang_switcher'
 		);
 
 		return $this->get_language_switcher_html( $parsed );
@@ -99,7 +99,7 @@ trait TMT_Language_Switcher_Trait {
 					if ( $translated_id ) {
 						$url = get_permalink( $translated_id );
 					} elseif ( $code === $fallback ) {
-						$post_language = get_post_meta( $post_id, '_tb_lang_code', true ) ?: $this->get_base_language();
+						$post_language = get_post_meta( $post_id, '_omniti_lang_code', true ) ?: $this->get_base_language();
 						$url = $post_language === $fallback
 							? get_permalink( $post_id )
 							: $this->get_language_home_url( $fallback );
@@ -123,10 +123,10 @@ trait TMT_Language_Switcher_Trait {
 		}
 
 		$wrapper_classes = [
-			'tmt-language-switcher',
-			'tmt-' . $format,
-			'tmt-disp-' . $display,
-			'tmt-size-' . $flag_size,
+			'omniti-language-switcher',
+			'omniti-' . $format,
+			'omniti-disp-' . $display,
+			'omniti-size-' . $flag_size,
 		];
 
 		ob_start();
@@ -134,12 +134,12 @@ trait TMT_Language_Switcher_Trait {
 		if ( 'toggle' === $format ) : ?>
 			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) : ?>
-					<a href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-toggle-btn <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
+					<a href="<?php echo esc_url( $item['url'] ); ?>" class="omniti-toggle-btn <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
 						<?php if ( 'text_only' !== $display ) : ?>
-							<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
 						<?php if ( 'icon_only' !== $display ) : ?>
-							<span class="tmt-toggle-label"><?php echo esc_html( $item['native'] ); ?></span>
+							<span class="omniti-toggle-label"><?php echo esc_html( $item['native'] ); ?></span>
 						<?php endif; ?>
 					</a>
 				<?php endforeach; ?>
@@ -147,15 +147,15 @@ trait TMT_Language_Switcher_Trait {
 		<?php elseif ( 'radio' === $format ) : ?>
 			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="radiogroup" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) :
-					$input_id = 'tmt_radio_' . esc_attr( $code ) . '_' . wp_unique_id();
+					$input_id = 'omniti_radio_' . esc_attr( $code ) . '_' . wp_unique_id();
 				?>
-					<label for="<?php echo esc_attr( $input_id ); ?>" class="tmt-radio-label <?php echo $item['active'] ? 'active' : ''; ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
-						<input type="radio" id="<?php echo esc_attr( $input_id ); ?>" name="tmt_radio_lang_grp" value="<?php echo esc_url( $item['url'] ); ?>" <?php checked( $item['active'] ); ?> onchange="if(this.value){window.location.href=this.value;}" />
+					<label for="<?php echo esc_attr( $input_id ); ?>" class="omniti-radio-label <?php echo $item['active'] ? 'active' : ''; ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
+						<input type="radio" id="<?php echo esc_attr( $input_id ); ?>" name="omniti_radio_lang_grp" value="<?php echo esc_url( $item['url'] ); ?>" <?php checked( $item['active'] ); ?> onchange="if(this.value){window.location.href=this.value;}" />
 						<?php if ( 'text_only' !== $display ) : ?>
-							<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
 						<?php if ( 'icon_only' !== $display ) : ?>
-							<span class="tmt-radio-text"><?php echo esc_html( $item['native'] ); ?></span>
+							<span class="omniti-radio-text"><?php echo esc_html( $item['native'] ); ?></span>
 						<?php endif; ?>
 					</label>
 				<?php endforeach; ?>
@@ -163,18 +163,18 @@ trait TMT_Language_Switcher_Trait {
 		<?php elseif ( 'list' === $format ) : ?>
 			<ul class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
 				<?php foreach ( $items as $code => $item ) : ?>
-					<li class="tmt-list-item <?php echo $item['active'] ? 'active' : ''; ?>">
-						<a href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-list-link" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
-							<span class="tmt-item-inner">
+					<li class="omniti-list-item <?php echo $item['active'] ? 'active' : ''; ?>">
+						<a href="<?php echo esc_url( $item['url'] ); ?>" class="omniti-list-link" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
+							<span class="omniti-item-inner">
 								<?php if ( 'text_only' !== $display ) : ?>
-									<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+									<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 								<?php endif; ?>
 								<?php if ( 'icon_only' !== $display ) : ?>
-									<span class="tmt-list-text"><?php echo esc_html( $item['native'] ); ?></span>
+									<span class="omniti-list-text"><?php echo esc_html( $item['native'] ); ?></span>
 								<?php endif; ?>
 							</span>
 							<?php if ( $item['active'] ) : ?>
-								<span class="tmt-list-badge" aria-hidden="true">&#10003;</span>
+								<span class="omniti-list-badge" aria-hidden="true">&#10003;</span>
 							<?php endif; ?>
 						</a>
 					</li>
@@ -188,44 +188,44 @@ trait TMT_Language_Switcher_Trait {
 				foreach ( $items as $code => $item ) :
 					$curr_idx++;
 				?>
-					<a href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-inline-link <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
+					<a href="<?php echo esc_url( $item['url'] ); ?>" class="omniti-inline-link <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
 						<?php if ( 'text_only' !== $display ) : ?>
-							<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
 						<?php if ( 'icon_only' !== $display ) : ?>
-							<span class="tmt-inline-text"><?php echo esc_html( $item['native'] ); ?></span>
+							<span class="omniti-inline-text"><?php echo esc_html( $item['native'] ); ?></span>
 						<?php endif; ?>
 					</a>
 					<?php if ( $curr_idx < $total_items ) : ?>
-						<span class="tmt-inline-divider" aria-hidden="true">|</span>
+						<span class="omniti-inline-divider" aria-hidden="true">|</span>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 		<?php else : ?>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-tmt-switcher role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
-				<button class="tmt-switcher-current" aria-haspopup="true" aria-expanded="false" type="button" title="<?php echo esc_attr( $current_info['native'] ); ?>">
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-omniti-switcher role="navigation" aria-label="<?php esc_attr_e( 'Language Selection', 'omnitibet' ); ?>">
+				<button class="omniti-switcher-current" aria-haspopup="true" aria-expanded="false" type="button" title="<?php echo esc_attr( $current_info['native'] ); ?>">
 					<?php if ( 'text_only' !== $display ) : ?>
-						<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $current_lang, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+						<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $current_lang, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 					<?php endif; ?>
 					<?php if ( 'icon_only' !== $display ) : ?>
-						<span class="tmt-lang-label" style="margin-left:5px;"><?php echo esc_html( $current_info['native'] ); ?></span>
+						<span class="omniti-lang-label" style="margin-left:5px;"><?php echo esc_html( $current_info['native'] ); ?></span>
 					<?php endif; ?>
-					<span class="tmt-arrow" aria-hidden="true">&#9662;</span>
+					<span class="omniti-arrow" aria-hidden="true">&#9662;</span>
 				</button>
-				<ul class="tmt-switcher-menu" role="menu">
+				<ul class="omniti-switcher-menu" role="menu">
 					<?php foreach ( $items as $code => $item ) : ?>
 						<li role="none">
-							<a role="menuitem" href="<?php echo esc_url( $item['url'] ); ?>" class="tmt-item <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
-								<span class="tmt-item-inner">
+							<a role="menuitem" href="<?php echo esc_url( $item['url'] ); ?>" class="omniti-item <?php echo $item['active'] ? 'active' : ''; ?>" hreflang="<?php echo esc_attr( $code ); ?>" title="<?php echo esc_attr( $item['native'] . ' (' . $item['name'] . ')' ); ?>">
+								<span class="omniti-item-inner">
 									<?php if ( 'text_only' !== $display ) : ?>
-										<span class="tmt-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+										<span class="omniti-flag-wrap"><?php echo $this->get_flag_html( $code, $dimensions['w'], $dimensions['h'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 									<?php endif; ?>
 									<?php if ( 'icon_only' !== $display ) : ?>
-										<span class="tmt-item-name"><?php echo esc_html( $item['native'] ); ?></span>
+										<span class="omniti-item-name"><?php echo esc_html( $item['native'] ); ?></span>
 									<?php endif; ?>
 								</span>
 								<?php if ( $item['active'] ) : ?>
-									<span class="tmt-check" aria-hidden="true">&#10003;</span>
+									<span class="omniti-check" aria-hidden="true">&#10003;</span>
 								<?php endif; ?>
 							</a>
 						</li>

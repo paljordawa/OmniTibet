@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Syllable Wrap Trait methods.
+ * OMNITI Syllable Wrap Trait methods.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Syllable_Wrap_Trait {
+trait OMNITI_Syllable_Wrap_Trait {
 	/* ==========================================================================
 	   MODULE D: Frontend Syllable Wrap Engine (Regex Fixes)
 	   ========================================================================== */

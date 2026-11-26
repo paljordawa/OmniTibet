@@ -2,7 +2,7 @@
  * OmniTibet
  * Frontend Stylesheet
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  * @version 1.0.0
  */
 
@@ -10,8 +10,8 @@
    Tibetan Typography Base Engine
    ========================================================================== */
 
-body.tb-lang-bo,
-.tb-tibetan-text,
+body.omniti-lang-bo,
+.omniti-tibetan-text,
 [lang="bo"],
 [lang="bo-CN"],
 [lang="bo-IN"] {
@@ -24,26 +24,26 @@ body.tb-lang-bo,
 }
 
 /* Force adequate line height so stacked consonants and vowels (gengu, zhabs-kyu) never clip */
-body.tb-lang-bo p,
-body.tb-lang-bo li,
-body.tb-lang-bo blockquote,
-body.tb-lang-bo dd,
-body.tb-lang-bo dt,
-body.tb-lang-bo .entry-content p,
-body.tb-lang-bo .wp-block-paragraph,
-.tb-tibetan-text {
+body.omniti-lang-bo p,
+body.omniti-lang-bo li,
+body.omniti-lang-bo blockquote,
+body.omniti-lang-bo dd,
+body.omniti-lang-bo dt,
+body.omniti-lang-bo .entry-content p,
+body.omniti-lang-bo .wp-block-paragraph,
+.omniti-tibetan-text {
   text-align: justify;
   text-justify: inter-word;
 }
 
 /* Tibetan Headings */
-body.tb-lang-bo h1,
-body.tb-lang-bo h2,
-body.tb-lang-bo h3,
-body.tb-lang-bo h4,
-body.tb-lang-bo h5,
-body.tb-lang-bo h6,
-body.tb-lang-bo .wp-block-heading {
+body.omniti-lang-bo h1,
+body.omniti-lang-bo h2,
+body.omniti-lang-bo h3,
+body.omniti-lang-bo h4,
+body.omniti-lang-bo h5,
+body.omniti-lang-bo h6,
+body.omniti-lang-bo .wp-block-heading {
   font-weight: 700;
   letter-spacing: 0.02em !important;
 }
@@ -52,7 +52,7 @@ body.tb-lang-bo .wp-block-heading {
    Language Switcher Component
    ========================================================================== */
 
-.tmt-language-switcher {
+.omniti-language-switcher {
   display: inline-block;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 14px;
@@ -62,11 +62,11 @@ body.tb-lang-bo .wp-block-heading {
 }
 
 /* Dropdown Variant */
-.tmt-language-switcher.tmt-dropdown {
+.omniti-language-switcher.omniti-dropdown {
   position: relative;
 }
 
-.tmt-switcher-current {
+.omniti-switcher-current {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -83,24 +83,24 @@ body.tb-lang-bo .wp-block-heading {
   user-select: none;
 }
 
-.tmt-switcher-current:hover,
-.tmt-switcher-current:focus {
+.omniti-switcher-current:hover,
+.omniti-switcher-current:focus {
   border-color: #0d66d0;
   outline: none;
   box-shadow: 0 0 0 3px rgba(13, 102, 208, 0.15);
 }
 
-.tmt-switcher-current .tmt-arrow {
+.omniti-switcher-current .omniti-arrow {
   font-size: 11px;
   color: #667085;
   transition: transform 0.2s ease;
 }
 
-.tmt-language-switcher.tmt-open .tmt-switcher-current .tmt-arrow {
+.omniti-language-switcher.omniti-open .omniti-switcher-current .omniti-arrow {
   transform: rotate(180deg);
 }
 
-.tmt-switcher-menu {
+.omniti-switcher-menu {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -119,18 +119,18 @@ body.tb-lang-bo .wp-block-heading {
   z-index: 1050;
 }
 
-.tmt-language-switcher.tmt-open .tmt-switcher-menu {
+.omniti-language-switcher.omniti-open .omniti-switcher-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.tmt-switcher-menu li {
+.omniti-switcher-menu li {
   margin: 0;
   padding: 0;
 }
 
-.tmt-switcher-menu .tmt-item {
+.omniti-switcher-menu .omniti-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -142,21 +142,21 @@ body.tb-lang-bo .wp-block-heading {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.tmt-switcher-menu .tmt-item:hover,
-.tmt-switcher-menu .tmt-item:focus {
+.omniti-switcher-menu .omniti-item:hover,
+.omniti-switcher-menu .omniti-item:focus {
   background-color: #f2f4f7;
   color: #101828;
   outline: none;
 }
 
-.tmt-switcher-menu .tmt-item.active {
+.omniti-switcher-menu .omniti-item.active {
   background-color: #eef4ff;
   color: #0d66d0;
   font-weight: 600;
 }
 
 /* Toggle Pill Variant */
-.tmt-language-switcher.tmt-toggle {
+.omniti-language-switcher.omniti-toggle {
   display: inline-flex;
   background: #f2f4f7;
   padding: 3px;
@@ -164,7 +164,7 @@ body.tb-lang-bo .wp-block-heading {
   border: 1px solid #eaecf0;
 }
 
-.tmt-language-switcher.tmt-toggle .tmt-toggle-btn {
+.omniti-language-switcher.omniti-toggle .omniti-toggle-btn {
   display: inline-block;
   padding: 5px 12px;
   font-size: 13px;
@@ -175,11 +175,11 @@ body.tb-lang-bo .wp-block-heading {
   transition: all 0.2s ease;
 }
 
-.tmt-language-switcher.tmt-toggle .tmt-toggle-btn:hover {
+.omniti-language-switcher.omniti-toggle .omniti-toggle-btn:hover {
   color: #101828;
 }
 
-.tmt-language-switcher.tmt-toggle .tmt-toggle-btn.active {
+.omniti-language-switcher.omniti-toggle .omniti-toggle-btn.active {
   background: #ffffff;
   color: #0d66d0;
   font-weight: 600;
@@ -190,14 +190,14 @@ body.tb-lang-bo .wp-block-heading {
    Language Switcher Customizer Variants & Display Modes
    ========================================================================== */
 
-.tmt-language-switcher .tmt-flag-wrap {
+.omniti-language-switcher .omniti-flag-wrap {
   display: inline-flex;
   align-items: center;
   line-height: 1;
   flex-shrink: 0;
 }
 
-.tmt-language-switcher .tmt-flag {
+.omniti-language-switcher .omniti-flag {
   vertical-align: middle;
   border-radius: 2px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
@@ -205,20 +205,20 @@ body.tb-lang-bo .wp-block-heading {
   display: inline-block;
 }
 
-.tmt-language-switcher .tmt-item-inner {
+.omniti-language-switcher .omniti-item-inner {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.tmt-language-switcher.tmt-toggle .tmt-toggle-btn {
+.omniti-language-switcher.omniti-toggle .omniti-toggle-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 /* Radio Button Group Variant */
-.tmt-language-switcher.tmt-radio {
+.omniti-language-switcher.omniti-radio {
   display: inline-flex;
   flex-direction: column;
   gap: 6px;
@@ -229,7 +229,7 @@ body.tb-lang-bo .wp-block-heading {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.tmt-radio-label {
+.omniti-radio-label {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -242,18 +242,18 @@ body.tb-lang-bo .wp-block-heading {
   user-select: none;
 }
 
-.tmt-radio-label:hover {
+.omniti-radio-label:hover {
   background-color: #f1f5f9;
   color: #0f172a;
 }
 
-.tmt-radio-label.active {
+.omniti-radio-label.active {
   background-color: #eff6ff;
   color: #1d4ed8;
   font-weight: 600;
 }
 
-.tmt-radio-label input[type="radio"] {
+.omniti-radio-label input[type="radio"] {
   margin: 0;
   cursor: pointer;
   accent-color: #2563eb;
@@ -263,7 +263,7 @@ body.tb-lang-bo .wp-block-heading {
 }
 
 /* Vertical List Variant */
-.tmt-language-switcher.tmt-list {
+.omniti-language-switcher.omniti-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -276,17 +276,17 @@ body.tb-lang-bo .wp-block-heading {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.tmt-list-item {
+.omniti-list-item {
   margin: 0;
   padding: 0;
   border-bottom: 1px solid #f1f5f9;
 }
 
-.tmt-list-item:last-child {
+.omniti-list-item:last-child {
   border-bottom: none;
 }
 
-.tmt-list-link {
+.omniti-list-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -298,25 +298,25 @@ body.tb-lang-bo .wp-block-heading {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.tmt-list-link:hover {
+.omniti-list-link:hover {
   background-color: #f8fafc;
   color: #0f172a;
 }
 
-.tmt-list-item.active .tmt-list-link {
+.omniti-list-item.active .omniti-list-link {
   background-color: #eff6ff;
   color: #1d4ed8;
   font-weight: 600;
 }
 
-.tmt-list-badge {
+.omniti-list-badge {
   font-size: 13px;
   color: #16a34a;
   font-weight: bold;
 }
 
 /* Inline Horizontal Variant */
-.tmt-language-switcher.tmt-inline {
+.omniti-language-switcher.omniti-inline {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
@@ -324,7 +324,7 @@ body.tb-lang-bo .wp-block-heading {
   font-size: 14px;
 }
 
-.tmt-inline-link {
+.omniti-inline-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -335,52 +335,52 @@ body.tb-lang-bo .wp-block-heading {
   transition: all 0.15s ease;
 }
 
-.tmt-inline-link:hover {
+.omniti-inline-link:hover {
   color: #0f172a;
   background: #f1f5f9;
 }
 
-.tmt-inline-link.active {
+.omniti-inline-link.active {
   color: #1d4ed8;
   font-weight: 600;
   background: #eff6ff;
 }
 
-.tmt-inline-divider {
+.omniti-inline-divider {
   color: #cbd5e1;
   font-size: 12px;
   user-select: none;
 }
 
 /* Display Modes */
-.tmt-disp-icon_only .tmt-toggle-btn {
+.omniti-disp-icon_only .omniti-toggle-btn {
   padding: 6px 10px;
 }
 
-.tmt-disp-icon_only .tmt-switcher-current {
+.omniti-disp-icon_only .omniti-switcher-current {
   padding: 6px 10px;
 }
 
-.tmt-disp-icon_only .tmt-radio-label {
+.omniti-disp-icon_only .omniti-radio-label {
   padding: 5px 8px;
 }
 
-.tmt-disp-text_only .tmt-flag-wrap {
+.omniti-disp-text_only .omniti-flag-wrap {
   display: none !important;
 }
 
 /* Flag Sizes */
-.tmt-size-small .tmt-flag {
+.omniti-size-small .omniti-flag {
   width: 16px;
   height: 11px;
 }
 
-.tmt-size-medium .tmt-flag {
+.omniti-size-medium .omniti-flag {
   width: 22px;
   height: 15px;
 }
 
-.tmt-size-large .tmt-flag {
+.omniti-size-large .omniti-flag {
   width: 28px;
   height: 19px;
 }

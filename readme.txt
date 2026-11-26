@@ -49,15 +49,15 @@ Language-subdomain URLs require DNS and hosting configured to direct each langua
 
 Add the language switcher to a page or post with:
 
-`[tibetan_lang_switcher]`
+`[omniti_lang_switcher]`
 
 The shortcode accepts `format`, `display`, and `flag_size` options. For example:
 
-`[tibetan_lang_switcher format="inline" display="both" flag_size="medium"]`
+`[omniti_lang_switcher format="inline" display="both" flag_size="medium"]`
 
 Available formats are `dropdown`, `toggle`, `radio`, `list`, and `inline`. Display modes are `both`, `icon_only`, and `text_only`. Flag sizes are `small`, `medium`, and `large`.
 
-Theme developers can also call `tibetan_language_switcher()` from a theme template.
+Theme developers can also call `omniti_language_switcher()` from a theme template.
 
 = Translation tools =
 
@@ -65,9 +65,9 @@ Open **Settings → OmniTibet Settings → Multilingual Tools** to review the tr
 
 Theme and plugin developers can register UI strings by stable ID and retrieve the active language value:
 
-`tmt_register_string( 'theme_hero_title', 'Welcome', 'my-theme' );`
+`omniti_register_string( 'theme_hero_title', 'Welcome', 'my-theme' );`
 
-`echo esc_html( tmt_translate_string( 'theme_hero_title', 'Welcome' ) );`
+`echo esc_html( omniti_translate_string( 'theme_hero_title', 'Welcome' ) );`
 
 Registration is explicit; the plugin does not automatically scan rendered pages. Unassigned language menus fall back to the base-language menu.
 
@@ -111,7 +111,7 @@ Confirm that the translated post, page, or term is published and assigned to Tib
 
 = 1.2.11 =
 * Renamed the plugin from TibetPress to OmniTibet across WordPress metadata, settings, documentation, assets, and text-domain identifiers.
-* Preserved existing TMT settings and plugin identifiers for backward compatibility.
+* Preserved existing OMNITI settings and plugin identifiers for backward compatibility.
 
 = 1.2.10 =
 * Added a translation icon beside OmniTibet Settings in the WordPress dashboard Settings menu.

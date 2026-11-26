@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Typography Trait methods.
+ * OMNITI Typography Trait methods.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Typography_Trait {
+trait OMNITI_Typography_Trait {
 	/* ==========================================================================
 	   MODULE B: Dynamic Typography Engine & Master Tibetan Font Registry
 	   ========================================================================== */
@@ -15,7 +15,7 @@ trait TMT_Typography_Trait {
 	/**
 	 * Master Tibetan Font Registry
 	 *
-	 * Categorized into Monlam Bodtig Series, Qomolang Series, Myilam Series,
+	 * Categorized into Monlam Bodyig Series, Qomolang Series, Myilam Series,
 	 * and Web & Open Standards.
 	 *
 	 * @return array<string, array<string, mixed>>
@@ -23,46 +23,46 @@ trait TMT_Typography_Trait {
 	public function get_font_registry(): array {
 		return [
 			// ==========================================
-			// Category 1: Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)
+			// Category 1: Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)
 			// ==========================================
 			'monlam-bodtig-2' => [
-				'name'       => 'Monlam Bodtig Uchen 2 (མོན་ལམ་དབུ་ཅན་དཀྱུས་མ)',
+				'name'       => 'Monlam Bodyig Uchen 2 (མོན་ལམ་དབུ་ཅན་དཀྱུས་མ)',
 				'family'     => "'Monlam Uni OuChan 2'",
 				'local'      => [ 'Monlam Uni OuChan 2', 'MonlamUniOuChan2', 'Monlam Uni OuChan' ],
 				'file'       => 'fonts/monlam/MonlamUniOuChan2.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+				'category_l' => __( 'Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 2', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-1' => [
-				'name'       => 'Monlam Bodtig 1 Fine (མོན་ལམ་ཡིག་གཟུགས་ཕྲ་མོ)',
+				'name'       => 'Monlam Bodyig 1 Fine (མོན་ལམ་ཡིག་གཟུགས་ཕྲ་མོ)',
 				'family'     => "'Monlam Uni OuChan 1'",
 				'local'      => [ 'Monlam Uni OuChan 1', 'MonlamUniOuChan1' ],
 				'file'       => 'fonts/monlam/monlam-uni-ouchan1.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+				'category_l' => __( 'Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 1', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-3' => [
-				'name'       => 'Monlam Bodtig 3 Bold (མོན་ལམ་སྦོམ་པོ)',
+				'name'       => 'Monlam Bodyig 3 Bold (མོན་ལམ་སྦོམ་པོ)',
 				'family'     => "'Monlam Uni OuChan 3'",
 				'local'      => [ 'Monlam Uni OuChan 3', 'MonlamUniOuChan3' ],
 				'file'       => 'fonts/monlam/monlam-uni-ouchan3.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+				'category_l' => __( 'Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 3', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 			'monlam-bodtig-5' => [
-				'name'       => 'Monlam Bodtig 5 Tsugring / Title (མོན་ལམ་ཚུགས་རིང)',
+				'name'       => 'Monlam Bodyig 5 Tsugring / Title (མོན་ལམ་ཚུགས་རིང)',
 				'family'     => "'Monlam Uni OuChan 5'",
 				'local'      => [ 'Monlam Uni OuChan 5', 'MonlamUniOuChan5' ],
 				'file'       => 'fonts/monlam/MonlamUniOuChan5.woff2',
 				'format'     => 'woff2',
 				'category'   => 'monlam',
-				'category_l' => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+				'category_l' => __( 'Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 				'stack'      => "'Monlam Uni OuChan 5', 'Monlam Uni OuChan', 'Noto Serif Tibetan', 'Microsoft Himalaya', 'Kailash', serif",
 			],
 
@@ -412,7 +412,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Main article content, paragraphs, lists, and standard text elements.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-paragraph',
 				'tags'         => [ 'body', 'p', 'li', 'article' ],
-				'selectors'    => 'body.tb-lang-bo, body.tb-lang-bo p, body.tb-lang-bo li, body.tb-lang-bo .entry-content p, body.tb-lang-bo .wp-block-paragraph, .tb-tibetan-text, [lang="bo"], [lang="bo-CN"], [lang="bo-IN"]',
+				'selectors'    => 'body.omniti-lang-bo, body.omniti-lang-bo p, body.omniti-lang-bo li, body.omniti-lang-bo .entry-content p, body.omniti-lang-bo .wp-block-paragraph, .omniti-tibetan-text, [lang="bo"], [lang="bo-CN"], [lang="bo-IN"]',
 				'default_font' => 'monlam-bodtig-2',
 				'default_lh'   => 2.3,
 				'preview_text' => '༄༅། །འཛམ་གླིང་ཞི་བདེ་དང་མཐུན་སྒྲིལ་གྱི་དོན་དུ་བོད་ཀྱི་རིག་གཞུང་དང་སྐད་ཡིག་འདི་ཉིད་གལ་ཆེན་པོ་ཡིན། འདིར་ཡིག་གཟུགས་དང་ཐིག་ཕྲེང་བར་སྟོང་གི་མཛེས་ཆ་ལྟ་ཐུབ། ཡི་གེ་སྟེང་འོག་བརྩེགས་མ་རྣམས་མི་ཆད་པར་གསལ་པོར་ཐོན་ཐུབ།',
@@ -422,7 +422,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Document post titles, main page headers, and top-level article titles.', 'omnitibet' ),
 				'icon'         => 'dashicons-heading',
 				'tags'         => [ 'h1', 'h2', '.entry-title' ],
-				'selectors'    => 'body.tb-lang-bo h1, body.tb-lang-bo h2, body.tb-lang-bo .entry-title, body.tb-lang-bo .page-title, body.tb-lang-bo .wp-block-post-title, body.tb-lang-bo h1.wp-block-heading, body.tb-lang-bo h2.wp-block-heading',
+				'selectors'    => 'body.omniti-lang-bo h1, body.omniti-lang-bo h2, body.omniti-lang-bo .entry-title, body.omniti-lang-bo .page-title, body.omniti-lang-bo .wp-block-post-title, body.omniti-lang-bo h1.wp-block-heading, body.omniti-lang-bo h2.wp-block-heading',
 				'default_font' => 'qomolang-title',
 				'default_lh'   => 2.1,
 				'preview_text' => 'བཀྲ་ཤིས་བདེ་ལེགས། དེང་རབས་བོད་ཡིག་དྲ་ཚིགས།',
@@ -432,7 +432,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Section headlines, sidebar widget titles, and subheadings.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-italic',
 				'tags'         => [ 'h3', 'h4', 'h5', 'h6' ],
-				'selectors'    => 'body.tb-lang-bo h3, body.tb-lang-bo h4, body.tb-lang-bo h5, body.tb-lang-bo h6, body.tb-lang-bo h3.wp-block-heading, body.tb-lang-bo h4.wp-block-heading',
+				'selectors'    => 'body.omniti-lang-bo h3, body.omniti-lang-bo h4, body.omniti-lang-bo h5, body.omniti-lang-bo h6, body.omniti-lang-bo h3.wp-block-heading, body.omniti-lang-bo h4.wp-block-heading',
 				'default_font' => 'monlam-bodtig-3',
 				'default_lh'   => 2.2,
 				'preview_text' => 'ས་བཅད་གསུམ་པ། སྐད་ཡིག་ཉམས་གསོ་དང་དར་སྤེལ།',
@@ -442,7 +442,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Header navigation bar, menu items, header buttons, and links.', 'omnitibet' ),
 				'icon'         => 'dashicons-menu-alt3',
 				'tags'         => [ 'nav', '.menu', 'header a' ],
-				'selectors'    => 'body.tb-lang-bo nav, body.tb-lang-bo .nav-menu, body.tb-lang-bo .menu, body.tb-lang-bo .wp-block-navigation, body.tb-lang-bo .main-navigation a, body.tb-lang-bo header a, body.tb-lang-bo .wp-block-navigation-item a',
+				'selectors'    => 'body.omniti-lang-bo nav, body.omniti-lang-bo .nav-menu, body.omniti-lang-bo .menu, body.omniti-lang-bo .wp-block-navigation, body.omniti-lang-bo .main-navigation a, body.omniti-lang-bo header a, body.omniti-lang-bo .wp-block-navigation-item a',
 				'default_font' => 'myilam-boldface',
 				'default_lh'   => 2.0,
 				'preview_text' => 'གཙོ་ངོས། ｜ གནས་ཚུལ། ｜ རིག་གཞུང་། ｜ ང་ཚོའི་སྐོར།',
@@ -452,7 +452,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Blockquotes, pullquotes, callouts, citations, and traditional verses.', 'omnitibet' ),
 				'icon'         => 'dashicons-editor-quote',
 				'tags'         => [ 'blockquote', 'cite', 'q' ],
-				'selectors'    => 'body.tb-lang-bo blockquote, body.tb-lang-bo .wp-block-quote, body.tb-lang-bo .wp-block-pullquote, body.tb-lang-bo q, body.tb-lang-bo cite',
+				'selectors'    => 'body.omniti-lang-bo blockquote, body.omniti-lang-bo .wp-block-quote, body.omniti-lang-bo .wp-block-pullquote, body.omniti-lang-bo q, body.omniti-lang-bo cite',
 				'default_font' => 'qomolang-drutsa',
 				'default_lh'   => 2.4,
 				'preview_text' => '« ཤེས་རབ་ཀྱི་ཕ་རོལ་ཏུ་ཕྱིན་པ་ནི་བླ་ན་མེད་པའི་ཡེ་ཤེས་ཡིན། »',
@@ -462,7 +462,7 @@ trait TMT_Typography_Trait {
 				'desc'         => __( 'Top site brand title in website banner and logo text.', 'omnitibet' ),
 				'icon'         => 'dashicons-admin-site-alt3',
 				'tags'         => [ '.site-title', 'brand' ],
-				'selectors'    => 'body.tb-lang-bo .site-title, body.tb-lang-bo .site-title a, body.tb-lang-bo .wp-block-site-title, body.tb-lang-bo .wp-block-site-title a, body.tb-lang-bo .custom-logo-link',
+				'selectors'    => 'body.omniti-lang-bo .site-title, body.omniti-lang-bo .site-title a, body.omniti-lang-bo .wp-block-site-title, body.omniti-lang-bo .wp-block-site-title a, body.omniti-lang-bo .custom-logo-link',
 				'default_font' => 'myilam-pearl-necklace',
 				'default_lh'   => 2.0,
 				'preview_text' => 'བོད་ཀྱི་དྲ་བའི་གནས་མཆོག',
@@ -479,7 +479,7 @@ trait TMT_Typography_Trait {
 	public function get_font_file_url( string $relative_path ): string {
 		$segments = explode( '/', $relative_path );
 		$encoded  = array_map( 'rawurlencode', $segments );
-		return TMT_PLUGIN_URL . implode( '/', $encoded );
+		return OMNITI_PLUGIN_URL . implode( '/', $encoded );
 	}
 
 	/**
@@ -505,7 +505,7 @@ trait TMT_Typography_Trait {
 				continue;
 			}
 
-			$font_path = TMT_PLUGIN_DIR . $info['file'];
+			$font_path = OMNITI_PLUGIN_DIR . $info['file'];
 			if ( ! file_exists( $font_path ) ) {
 				continue;
 			}
@@ -544,7 +544,7 @@ trait TMT_Typography_Trait {
 	public function render_font_options_html( string $selected_key ): string {
 		$registry   = $this->get_font_registry();
 		$categories = [
-			'monlam'     => __( 'Monlam Bodtig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
+			'monlam'     => __( 'Monlam Bodyig Series (མོན་ལམ་བོད་ཡིག)', 'omnitibet' ),
 			'qomolang'   => __( 'Qomolang Series (ཇོ་མོ་གླང་མའི་ཡིག་གཟུགས)', 'omnitibet' ),
 			'myilam'     => __( 'Myilam Series (རྨི་ལམ་ཡིག་གཟུགས)', 'omnitibet' ),
 			'google_web' => __( 'Web & Open Standards (དྲ་ཐོག་ཡིག་གཟུགས)', 'omnitibet' ),
@@ -578,7 +578,7 @@ trait TMT_Typography_Trait {
 		$registry       = $this->get_font_registry();
 		$all_keys       = array_keys( $registry );
 		$font_faces_css = $this->generate_font_faces_css( $all_keys );
-		wp_add_inline_style( 'tmt-admin-css', $font_faces_css );
+		wp_add_inline_style( 'omniti-admin-css', $font_faces_css );
 	}
 
 	/**
@@ -588,8 +588,8 @@ trait TMT_Typography_Trait {
 		$settings = $this->get_settings();
 		$lang     = $this->get_current_language();
 
-		wp_enqueue_style( 'tmt-frontend-css', TMT_PLUGIN_URL . 'assets/css/tibetan-frontend.css', [], TMT_VERSION );
-		wp_enqueue_script( 'tmt-switcher-js', TMT_PLUGIN_URL . 'assets/js/tibetan-switcher.js', [], TMT_VERSION, true );
+		wp_enqueue_style( 'omniti-frontend-css', OMNITI_PLUGIN_URL . 'assets/css/tibetan-frontend.css', [], OMNITI_VERSION );
+		wp_enqueue_script( 'omniti-switcher-js', OMNITI_PLUGIN_URL . 'assets/js/tibetan-switcher.js', [], OMNITI_VERSION, true );
 
 		if ( 'bo' === $lang ) {
 			$registry    = $this->get_font_registry();
@@ -610,7 +610,7 @@ trait TMT_Typography_Trait {
 
 			foreach ( array_unique( $active_keys ) as $key ) {
 				if ( ! empty( $registry[ $key ]['google'] ) ) {
-					wp_enqueue_style( 'tmt-google-' . sanitize_key( $key ), $registry[ $key ]['google'], [], null );
+					wp_enqueue_style( 'omniti-google-' . sanitize_key( $key ), $registry[ $key ]['google'], [], null );
 				}
 			}
 		}
@@ -671,14 +671,14 @@ trait TMT_Typography_Trait {
 			if ( $global_lh < 1.5 || $global_lh > 4.0 ) {
 				$global_lh = 2.3;
 			}
-			$css .= "body.tb-lang-bo,\n";
-			$css .= "body.tb-lang-bo p,\n";
-			$css .= "body.tb-lang-bo li,\n";
-			$css .= "body.tb-lang-bo a,\n";
-			$css .= "body.tb-lang-bo blockquote,\n";
-			$css .= "body.tb-lang-bo .entry-content,\n";
-			$css .= "body.tb-lang-bo article,\n";
-			$css .= ".tb-tibetan-text,\n";
+			$css .= "body.omniti-lang-bo,\n";
+			$css .= "body.omniti-lang-bo p,\n";
+			$css .= "body.omniti-lang-bo li,\n";
+			$css .= "body.omniti-lang-bo a,\n";
+			$css .= "body.omniti-lang-bo blockquote,\n";
+			$css .= "body.omniti-lang-bo .entry-content,\n";
+			$css .= "body.omniti-lang-bo article,\n";
+			$css .= ".omniti-tibetan-text,\n";
 			$css .= "[lang=\"bo\"],\n";
 			$css .= "[lang=\"bo-CN\"],\n";
 			$css .= "[lang=\"bo-IN\"] {\n";
@@ -688,14 +688,14 @@ trait TMT_Typography_Trait {
 			$css .= "text-align: justify;\n";
 			$css .= "word-break: break-word;\n";
 			$css .= "overflow-wrap: break-word;\n}\n";
-			$css .= "body.tb-lang-bo h1,\nbody.tb-lang-bo h2,\nbody.tb-lang-bo h3,\n";
-			$css .= "body.tb-lang-bo h4,\nbody.tb-lang-bo h5,\nbody.tb-lang-bo h6,\n";
-			$css .= "body.tb-lang-bo .entry-title {\n";
+			$css .= "body.omniti-lang-bo h1,\nbody.omniti-lang-bo h2,\nbody.omniti-lang-bo h3,\n";
+			$css .= "body.omniti-lang-bo h4,\nbody.omniti-lang-bo h5,\nbody.omniti-lang-bo h6,\n";
+			$css .= "body.omniti-lang-bo .entry-title {\n";
 			$css .= 'font-family: ' . $global_stack . " !important;\n";
 			$css .= 'line-height: ' . (string) round( $global_lh * 0.9, 2 ) . " !important;\n";
 			$css .= "letter-spacing: 0.02em !important;\n}\n";
 		}
-		wp_add_inline_style( 'tmt-frontend-css', $css );
+		wp_add_inline_style( 'omniti-frontend-css', $css );
 	}
 
 	/**

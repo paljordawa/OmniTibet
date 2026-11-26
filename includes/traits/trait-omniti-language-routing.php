@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Language Routing Trait methods.
+ * OMNITI Language Routing Trait methods.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Language_Routing_Trait {
+trait OMNITI_Language_Routing_Trait {
 	/* ==========================================================================
 	   MODULE A: Multilingual Mapping & Routing
 	   ========================================================================== */
@@ -28,9 +28,9 @@ trait TMT_Language_Routing_Trait {
 		foreach ( $this->get_enabled_languages() as $code => $_language ) {
 			$language_pattern = preg_quote( $code, '#' );
 			$rules = [
-				'^' . $language_pattern . '/?$'                         => 'index.php?tb_lang=' . $code,
-				'^' . $language_pattern . '/page/?([0-9]{1,})/?$'      => 'index.php?tb_lang=' . $code . '&paged=$matches[1]',
-				'^' . $language_pattern . '/(.+?)/?$'                  => 'index.php?tb_lang=' . $code . '&name=$matches[1]',
+				'^' . $language_pattern . '/?$'                         => 'index.php?omniti_lang=' . $code,
+				'^' . $language_pattern . '/page/?([0-9]{1,})/?$'      => 'index.php?omniti_lang=' . $code . '&paged=$matches[1]',
+				'^' . $language_pattern . '/(.+?)/?$'                  => 'index.php?omniti_lang=' . $code . '&name=$matches[1]',
 			];
 			foreach ( $rules as $pattern => $query ) {
 				add_rewrite_rule( $pattern, $query, 'top' );
@@ -63,29 +63,29 @@ trait TMT_Language_Routing_Trait {
 		$this->settings          = null;
 		$this->register_rewrite_rules();
 		flush_rewrite_rules( false );
-		update_option( 'tmt_rewrite_version', TMT_REWRITE_VERSION );
+		update_option( 'omniti_rewrite_version', OMNITI_REWRITE_VERSION );
 	}
 
 	/**
 	 * Refresh the stored rewrite rules once after a plugin update.
 	 */
 	public function maybe_refresh_language_rewrite_rules(): void {
-		if ( (int) get_option( 'tmt_rewrite_version', 0 ) >= TMT_REWRITE_VERSION ) {
+		if ( (int) get_option( 'omniti_rewrite_version', 0 ) >= OMNITI_REWRITE_VERSION ) {
 			return;
 		}
 
 		flush_rewrite_rules( false );
-		update_option( 'tmt_rewrite_version', TMT_REWRITE_VERSION );
+		update_option( 'omniti_rewrite_version', OMNITI_REWRITE_VERSION );
 	}
 
 	/**
-	 * Register 'tb_lang' and 'lang' Query Variables
+	 * Register 'omniti_lang' and 'lang' Query Variables
 	 *
 	 * @param array<int, string> $vars Registered query variables.
 	 * @return array<int, string>
 	 */
 	public function register_query_vars( array $vars ): array {
-		$vars[] = 'tb_lang';
+		$vars[] = 'omniti_lang';
 		$vars[] = 'lang';
 		return $vars;
 	}
@@ -97,8 +97,8 @@ trait TMT_Language_Routing_Trait {
 	 * @return array<string, mixed>
 	 */
 	public function resolve_tibetan_content_path( array $query_vars ): array {
-		$target_language = isset( $query_vars['tb_lang'] ) && is_string( $query_vars['tb_lang'] )
-			? sanitize_key( $query_vars['tb_lang'] )
+		$target_language = isset( $query_vars['omniti_lang'] ) && is_string( $query_vars['omniti_lang'] )
+			? sanitize_key( $query_vars['omniti_lang'] )
 			: '';
 		if ( ! isset( $this->get_enabled_languages()[ $target_language ] ) || empty( $query_vars['name'] ) || ! is_string( $query_vars['name'] ) ) {
 			return $query_vars;
@@ -136,7 +136,7 @@ trait TMT_Language_Routing_Trait {
 		}
 
 		$page = get_page_by_path( $path, OBJECT, 'page' );
-		if ( $page instanceof WP_Post && 'publish' === $page->post_status && $target_language === ( get_post_meta( $page->ID, '_tb_lang_code', true ) ?: $this->get_base_language() ) ) {
+		if ( $page instanceof WP_Post && 'publish' === $page->post_status && $target_language === ( get_post_meta( $page->ID, '_omniti_lang_code', true ) ?: $this->get_base_language() ) ) {
 			unset( $query_vars['name'], $query_vars['pagename'] );
 			$query_vars['page_id'] = $page->ID;
 			return $query_vars;
@@ -152,7 +152,7 @@ trait TMT_Language_Routing_Trait {
 				'numberposts'    => 1,
 				'fields'         => 'ids',
 				'no_found_rows'  => true,
-				'meta_key'       => '_tb_lang_code',
+				'meta_key'       => '_omniti_lang_code',
 				'meta_value'     => $target_language,
 			]
 		);
@@ -177,8 +177,8 @@ trait TMT_Language_Routing_Trait {
 			return $term_link;
 		}
 
-		$is_shared     = '1' === get_term_meta( $term->term_id, '_tmt_term_shared', true );
-		$term_language = get_term_meta( $term->term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
+		$is_shared     = '1' === get_term_meta( $term->term_id, '_omniti_term_shared', true );
+		$term_language = get_term_meta( $term->term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
 		$link_language = $is_shared ? $this->get_current_language() : $term_language;
 		if ( $link_language === $this->get_base_language() ) {
 			return $term_link;
@@ -204,12 +204,12 @@ trait TMT_Language_Routing_Trait {
 		$language_query = [
 			'relation' => 'OR',
 			[
-				'key'     => '_tmt_term_language',
+				'key'     => '_omniti_term_language',
 				'value'   => $language,
 				'compare' => '=',
 			],
 			[
-				'key'     => '_tmt_term_shared',
+				'key'     => '_omniti_term_shared',
 				'value'   => '1',
 				'compare' => '=',
 			],
@@ -217,11 +217,11 @@ trait TMT_Language_Routing_Trait {
 
 		if ( $language === $base_language ) {
 			$language_query[] = [
-				'key'     => '_tmt_term_language',
+				'key'     => '_omniti_term_language',
 				'compare' => 'NOT EXISTS',
 			];
 			$language_query[] = [
-				'key'     => '_tmt_term_language',
+				'key'     => '_omniti_term_language',
 				'value'   => '',
 				'compare' => '=',
 			];
@@ -243,11 +243,11 @@ trait TMT_Language_Routing_Trait {
 	 * Check whether a term is shared or belongs to the requested language.
 	 */
 	private function is_term_available_in_language( WP_Term $term, string $language ): bool {
-		if ( '1' === get_term_meta( $term->term_id, '_tmt_term_shared', true ) ) {
+		if ( '1' === get_term_meta( $term->term_id, '_omniti_term_shared', true ) ) {
 			return true;
 		}
 
-		$term_language = get_term_meta( $term->term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
+		$term_language = get_term_meta( $term->term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
 		return $term_language === $language;
 	}
 
@@ -272,7 +272,7 @@ trait TMT_Language_Routing_Trait {
 		// 1. Check URL query variables for an enabled language.
 		$query_lang = '';
 		if ( isset( $GLOBALS['wp_query'] ) && function_exists( 'get_query_var' ) ) {
-			$query_lang = get_query_var( 'tb_lang' );
+			$query_lang = get_query_var( 'omniti_lang' );
 			if ( empty( $query_lang ) ) {
 				$query_lang = get_query_var( 'lang' );
 			}
@@ -312,7 +312,7 @@ trait TMT_Language_Routing_Trait {
 		if ( isset( $GLOBALS['wp_query'] ) && function_exists( 'is_singular' ) && is_singular() ) {
 			$post_id = get_the_ID();
 			if ( $post_id ) {
-				$post_lang = get_post_meta( $post_id, '_tb_lang_code', true );
+				$post_lang = get_post_meta( $post_id, '_omniti_lang_code', true );
 				if ( ! empty( $post_lang ) && isset( $supported_languages[ $post_lang ] ) ) {
 					$this->current_language  = $post_lang;
 					$this->is_resolving_lang = false;
@@ -327,7 +327,7 @@ trait TMT_Language_Routing_Trait {
 		}
 
 		// 5. Fallback Default: query option directly without invoking heavy translation calls
-		$saved                   = get_option( 'tmt_settings', [] );
+		$saved                   = get_option( 'omniti_settings', [] );
 		$fallback = is_array( $saved ) && is_string( $saved['fallback_language'] ?? null )
 			? $saved['fallback_language']
 			: $base_language;
@@ -378,9 +378,9 @@ trait TMT_Language_Routing_Trait {
 
 	public function add_body_classes( array $classes ): array {
 		$lang = $this->get_current_language();
-		$classes[] = 'tb-lang-' . sanitize_html_class( $lang );
+		$classes[] = 'omniti-lang-' . sanitize_html_class( $lang );
 		if ( 'bo' === $lang ) {
-			$classes[] = 'tb-tibetan-active';
+			$classes[] = 'omniti-tibetan-active';
 		}
 		return $classes;
 	}
@@ -390,7 +390,7 @@ trait TMT_Language_Routing_Trait {
 			return $permalink;
 		}
 
-		$post_lang = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
+		$post_lang = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
 		if ( $this->get_base_language() === $post_lang ) {
 			return $permalink;
 		}
@@ -402,7 +402,7 @@ trait TMT_Language_Routing_Trait {
 	 * Get the selected URL format from settings.
 	 */
 	private function get_language_url_format(): string {
-		$settings = get_option( 'tmt_settings', [] );
+		$settings = get_option( 'omniti_settings', [] );
 		$format   = is_array( $settings ) && is_string( $settings['language_url_format'] ?? null )
 			? $settings['language_url_format']
 			: 'directory';
@@ -525,14 +525,14 @@ trait TMT_Language_Routing_Trait {
 	 * @return int|null Post ID of translated post or null if not found.
 	 */
 	public function get_translation( int $post_id, string $target_lang ): ?int {
-		$group_id = get_post_meta( $post_id, '_tb_lang_group_id', true );
+		$group_id = get_post_meta( $post_id, '_omniti_lang_group_id', true );
 		if ( empty( $group_id ) ) {
 			return null;
 		}
 
 		$base_language = $this->get_base_language();
-		$cache_key     = 'tmt_group_' . md5( (string) $group_id . ':' . $base_language );
-		$group_map = wp_cache_get( $cache_key, 'tmt_translations' );
+		$cache_key     = 'omniti_group_' . md5( (string) $group_id . ':' . $base_language );
+		$group_map = wp_cache_get( $cache_key, 'omniti_translations' );
 
 		if ( false === $group_map ) {
 			global $wpdb;
@@ -543,8 +543,8 @@ trait TMT_Language_Routing_Trait {
 					 FROM {$wpdb->postmeta} AS group_meta
 					 LEFT JOIN {$wpdb->postmeta} AS language_meta
 					   ON language_meta.post_id = group_meta.post_id
-					  AND language_meta.meta_key = '_tb_lang_code'
-					 WHERE group_meta.meta_key = '_tb_lang_group_id'
+					  AND language_meta.meta_key = '_omniti_lang_code'
+					 WHERE group_meta.meta_key = '_omniti_lang_group_id'
 					   AND group_meta.meta_value = %s",
 					$base_language,
 					$group_id
@@ -557,7 +557,7 @@ trait TMT_Language_Routing_Trait {
 					$group_map[ $row->lang_code ] = (int) $row->post_id;
 				}
 			}
-			wp_cache_set( $cache_key, $group_map, 'tmt_translations', HOUR_IN_SECONDS );
+			wp_cache_set( $cache_key, $group_map, 'omniti_translations', HOUR_IN_SECONDS );
 		}
 
 		return $group_map[ $target_lang ] ?? null;

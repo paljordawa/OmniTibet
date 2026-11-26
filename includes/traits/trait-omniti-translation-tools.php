@@ -1,13 +1,13 @@
 <?php
 /**
- * TMT Translation Tools trait.
+ * OMNITI Translation Tools trait.
  *
- * @package Tibetan_Multilingual_Typography
+ * @package OmniTibet
  */
 
 defined( 'ABSPATH' ) || exit;
 
-trait TMT_Translation_Tools_Trait {
+trait OMNITI_Translation_Tools_Trait {
 	public function register_translation_tool_hooks(): void {
 		add_action( 'admin_init', [ $this, 'redirect_legacy_translation_tools_page' ] );
 		add_action( 'admin_init', [ $this, 'save_translation_tool_options' ] );
@@ -30,7 +30,7 @@ trait TMT_Translation_Tools_Trait {
 	}
 
 	public function redirect_legacy_translation_tools_page(): void {
-		if ( ! isset( $_GET['page'] ) || ! is_string( $_GET['page'] ) || 'tmt-translation-tools' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
+		if ( ! isset( $_GET['page'] ) || ! is_string( $_GET['page'] ) || 'omniti-translation-tools' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
 
@@ -47,18 +47,18 @@ trait TMT_Translation_Tools_Trait {
 	}
 
 	public function save_translation_tool_options(): void {
-		if ( ! is_admin() || ! current_user_can( 'manage_options' ) || empty( $_POST['tmt_tools_action'] ) ) {
+		if ( ! is_admin() || ! current_user_can( 'manage_options' ) || empty( $_POST['omniti_tools_action'] ) ) {
 			return;
 		}
 
-		$action = is_string( $_POST['tmt_tools_action'] )
-			? sanitize_key( wp_unslash( $_POST['tmt_tools_action'] ) )
+		$action = is_string( $_POST['omniti_tools_action'] )
+			? sanitize_key( wp_unslash( $_POST['omniti_tools_action'] ) )
 			: '';
 		if ( ! in_array( $action, [ 'menus', 'strings' ], true ) ) {
 			return;
 		}
 
-		check_admin_referer( 'tmt_save_' . $action, 'tmt_tools_nonce' );
+		check_admin_referer( 'omniti_save_' . $action, 'omniti_tools_nonce' );
 		$this->persist_registered_translation_strings();
 		if ( 'menus' === $action ) {
 			$this->save_language_menu_assignments();
@@ -99,7 +99,7 @@ trait TMT_Translation_Tools_Trait {
 		}
 		?>
 		<div class="wrap">
-			<nav class="nav-tab-wrapper tmt-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'omnitibet' ); ?>">
+			<nav class="nav-tab-wrapper omniti-section-nav" aria-label="<?php esc_attr_e( 'Plugin settings sections', 'omnitibet' ); ?>">
 				<a class="nav-tab" href="<?php echo esc_url( admin_url( 'options-general.php?page=tibetan-settings' ) ); ?>">
 					<?php esc_html_e( 'OmniTibet Settings', 'omnitibet' ); ?>
 				</a>
@@ -141,7 +141,7 @@ trait TMT_Translation_Tools_Trait {
 		}
 
 		if ( null === $this->registered_translation_strings ) {
-			$stored = get_option( 'tmt_registered_strings', [] );
+			$stored = get_option( 'omniti_registered_strings', [] );
 			$this->registered_translation_strings = is_array( $stored ) ? $stored : [];
 		}
 		$strings = $this->registered_translation_strings;
@@ -164,8 +164,8 @@ trait TMT_Translation_Tools_Trait {
 		if ( ! $this->registered_translation_strings_dirty || ! is_array( $this->registered_translation_strings ) ) {
 			return;
 		}
-		if ( ! add_option( 'tmt_registered_strings', $this->registered_translation_strings, '', 'no' ) ) {
-			update_option( 'tmt_registered_strings', $this->registered_translation_strings );
+		if ( ! add_option( 'omniti_registered_strings', $this->registered_translation_strings, '', 'no' ) ) {
+			update_option( 'omniti_registered_strings', $this->registered_translation_strings );
 		}
 		$this->registered_translation_strings_dirty = false;
 	}
@@ -174,7 +174,7 @@ trait TMT_Translation_Tools_Trait {
 		$string_id = sanitize_key( $string_id );
 		$language = $language ?? $this->get_current_language();
 		if ( null === $this->registered_translation_strings ) {
-			$stored = get_option( 'tmt_registered_strings', [] );
+			$stored = get_option( 'omniti_registered_strings', [] );
 			$this->registered_translation_strings = is_array( $stored ) ? $stored : [];
 		}
 		$strings = $this->registered_translation_strings;
@@ -196,7 +196,7 @@ trait TMT_Translation_Tools_Trait {
 			return;
 		}
 
-		$language = get_post_meta( $post_id, '_tb_lang_code', true ) ?: $this->get_base_language();
+		$language = get_post_meta( $post_id, '_omniti_lang_code', true ) ?: $this->get_base_language();
 		if ( $language === $this->get_base_language() ) {
 			return;
 		}
@@ -204,8 +204,8 @@ trait TMT_Translation_Tools_Trait {
 		$source_id = $this->get_translation( $post_id, $this->get_base_language() );
 		$source    = $source_id ? get_post( $source_id ) : null;
 		if ( $source instanceof WP_Post ) {
-			update_post_meta( $post_id, '_tmt_source_revision_gmt', $source->post_modified_gmt );
-			update_post_meta( $post_id, '_tmt_source_revision_hash', $this->get_translation_source_fingerprint( $source ) );
+			update_post_meta( $post_id, '_omniti_source_revision_gmt', $source->post_modified_gmt );
+			update_post_meta( $post_id, '_omniti_source_revision_hash', $this->get_translation_source_fingerprint( $source ) );
 		}
 	}
 
@@ -226,8 +226,8 @@ trait TMT_Translation_Tools_Trait {
 			];
 		}
 
-		$snapshot = get_post_meta( $translation->ID, '_tmt_source_revision_gmt', true );
-		$snapshot_hash = get_post_meta( $translation->ID, '_tmt_source_revision_hash', true );
+		$snapshot = get_post_meta( $translation->ID, '_omniti_source_revision_gmt', true );
+		$snapshot_hash = get_post_meta( $translation->ID, '_omniti_source_revision_hash', true );
 		$source_time = strtotime( $source->post_modified_gmt . ' UTC' );
 		$snapshot_time = is_string( $snapshot ) && '' !== $snapshot ? strtotime( $snapshot . ' UTC' ) : false;
 		$source_hash = $this->get_translation_source_fingerprint( $source );
@@ -252,7 +252,7 @@ trait TMT_Translation_Tools_Trait {
 			return $args;
 		}
 
-		$assignments = get_option( 'tmt_language_menus', [] );
+		$assignments = get_option( 'omniti_language_menus', [] );
 		if ( ! is_array( $assignments ) ) {
 			return $args;
 		}
@@ -286,7 +286,7 @@ trait TMT_Translation_Tools_Trait {
 	public function add_language_direction_class( array $classes ): array {
 		$languages = $this->get_enabled_languages();
 		if ( 'rtl' === ( $languages[ $this->get_current_language() ]['dir'] ?? 'ltr' ) ) {
-			$classes[] = 'tmt-language-rtl';
+			$classes[] = 'omniti-language-rtl';
 		}
 		return $classes;
 	}
@@ -295,7 +295,7 @@ trait TMT_Translation_Tools_Trait {
 		if ( ! is_singular() ) {
 			return $title;
 		}
-		$translated_title = get_post_meta( get_queried_object_id(), '_tmt_seo_title', true );
+		$translated_title = get_post_meta( get_queried_object_id(), '_omniti_seo_title', true );
 		return is_string( $translated_title ) && '' !== $translated_title ? $translated_title : $title;
 	}
 
@@ -303,7 +303,7 @@ trait TMT_Translation_Tools_Trait {
 		if ( ! is_singular() ) {
 			return $description;
 		}
-		$translated_description = get_post_meta( get_queried_object_id(), '_tmt_seo_description', true );
+		$translated_description = get_post_meta( get_queried_object_id(), '_omniti_seo_description', true );
 		return is_string( $translated_description ) && '' !== $translated_description ? $translated_description : $description;
 	}
 
@@ -326,7 +326,7 @@ trait TMT_Translation_Tools_Trait {
 		if ( ! is_singular() || defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) ) {
 			return;
 		}
-		$description = get_post_meta( get_queried_object_id(), '_tmt_seo_description', true );
+		$description = get_post_meta( get_queried_object_id(), '_omniti_seo_description', true );
 		if ( is_string( $description ) && '' !== $description ) {
 			printf( "<meta name=\"description\" content=\"%s\" />\n", esc_attr( $description ) );
 		}
@@ -343,7 +343,7 @@ trait TMT_Translation_Tools_Trait {
 			if ( ! $post instanceof WP_Post || 'publish' !== $post->post_status ) {
 				return;
 			}
-			$current_language = get_post_meta( $post->ID, '_tb_lang_code', true ) ?: $this->get_base_language();
+			$current_language = get_post_meta( $post->ID, '_omniti_lang_code', true ) ?: $this->get_base_language();
 			foreach ( $this->get_enabled_languages() as $code => $_language ) {
 				$translation_id = $code === $current_language ? $post->ID : $this->get_translation( $post->ID, $code );
 				$translation    = $translation_id ? get_post( $translation_id ) : null;
@@ -357,8 +357,8 @@ trait TMT_Translation_Tools_Trait {
 			if ( ! $term instanceof WP_Term ) {
 				return;
 			}
-			$term_language = get_term_meta( $term->term_id, '_tmt_term_language', true ) ?: $this->get_base_language();
-			$is_shared = '1' === get_term_meta( $term->term_id, '_tmt_term_shared', true );
+			$term_language = get_term_meta( $term->term_id, '_omniti_term_language', true ) ?: $this->get_base_language();
+			$is_shared = '1' === get_term_meta( $term->term_id, '_omniti_term_shared', true );
 			foreach ( $this->get_enabled_languages() as $code => $_language ) {
 				$term_id = $this->get_translated_taxonomy_term_id( $term->term_id, $taxonomy, $code );
 				if ( ! is_int( $term_id ) || ( ! $is_shared && $code !== $term_language && $term_id === $term->term_id ) ) {
@@ -389,7 +389,7 @@ trait TMT_Translation_Tools_Trait {
 	public function register_translation_seo_metabox(): void {
 		foreach ( get_post_types( [ 'public' => true ], 'names' ) as $post_type ) {
 			add_meta_box(
-				'tmt_translation_seo',
+				'omniti_translation_seo',
 				__( 'Translated SEO Metadata', 'omnitibet' ),
 				[ $this, 'render_translation_seo_metabox' ],
 				$post_type,
@@ -400,38 +400,38 @@ trait TMT_Translation_Tools_Trait {
 	}
 
 	public function render_translation_seo_metabox( WP_Post $post ): void {
-		wp_nonce_field( 'tmt_save_translation_seo', 'tmt_translation_seo_nonce' );
-		$title = get_post_meta( $post->ID, '_tmt_seo_title', true );
-		$description = get_post_meta( $post->ID, '_tmt_seo_description', true );
+		wp_nonce_field( 'omniti_save_translation_seo', 'omniti_translation_seo_nonce' );
+		$title = get_post_meta( $post->ID, '_omniti_seo_title', true );
+		$description = get_post_meta( $post->ID, '_omniti_seo_description', true );
 		?>
 		<p>
-			<label for="tmt_seo_title"><strong><?php esc_html_e( 'SEO title', 'omnitibet' ); ?></strong></label>
-			<input type="text" class="widefat" id="tmt_seo_title" name="tmt_seo_title" value="<?php echo esc_attr( is_string( $title ) ? $title : '' ); ?>" />
+			<label for="omniti_seo_title"><strong><?php esc_html_e( 'SEO title', 'omnitibet' ); ?></strong></label>
+			<input type="text" class="widefat" id="omniti_seo_title" name="omniti_seo_title" value="<?php echo esc_attr( is_string( $title ) ? $title : '' ); ?>" />
 		</p>
 		<p>
-			<label for="tmt_seo_description"><strong><?php esc_html_e( 'SEO description', 'omnitibet' ); ?></strong></label>
-			<textarea class="widefat" rows="3" id="tmt_seo_description" name="tmt_seo_description"><?php echo esc_textarea( is_string( $description ) ? $description : '' ); ?></textarea>
+			<label for="omniti_seo_description"><strong><?php esc_html_e( 'SEO description', 'omnitibet' ); ?></strong></label>
+			<textarea class="widefat" rows="3" id="omniti_seo_description" name="omniti_seo_description"><?php echo esc_textarea( is_string( $description ) ? $description : '' ); ?></textarea>
 		</p>
 		<p class="description"><?php esc_html_e( 'These values are used when no SEO plugin overrides the corresponding metadata.', 'omnitibet' ); ?></p>
 		<?php
 	}
 
 	public function save_translation_seo_metadata( int $post_id, WP_Post $post ): void {
-		if ( ! isset( $_POST['tmt_translation_seo_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tmt_translation_seo_nonce'] ) ), 'tmt_save_translation_seo' ) ) {
+		if ( ! isset( $_POST['omniti_translation_seo_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['omniti_translation_seo_nonce'] ) ), 'omniti_save_translation_seo' ) ) {
 			return;
 		}
 		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
-		$title = isset( $_POST['tmt_seo_title'] ) && is_string( $_POST['tmt_seo_title'] )
-			? sanitize_text_field( wp_unslash( $_POST['tmt_seo_title'] ) )
+		$title = isset( $_POST['omniti_seo_title'] ) && is_string( $_POST['omniti_seo_title'] )
+			? sanitize_text_field( wp_unslash( $_POST['omniti_seo_title'] ) )
 			: '';
-		$description = isset( $_POST['tmt_seo_description'] ) && is_string( $_POST['tmt_seo_description'] )
-			? sanitize_textarea_field( wp_unslash( $_POST['tmt_seo_description'] ) )
+		$description = isset( $_POST['omniti_seo_description'] ) && is_string( $_POST['omniti_seo_description'] )
+			? sanitize_textarea_field( wp_unslash( $_POST['omniti_seo_description'] ) )
 			: '';
-		$this->update_post_translation_meta( $post_id, '_tmt_seo_title', $title );
-		$this->update_post_translation_meta( $post_id, '_tmt_seo_description', $description );
+		$this->update_post_translation_meta( $post_id, '_omniti_seo_title', $title );
+		$this->update_post_translation_meta( $post_id, '_omniti_seo_description', $description );
 	}
 
 	private function update_post_translation_meta( int $post_id, string $meta_key, string $value ): void {
@@ -445,8 +445,8 @@ trait TMT_Translation_Tools_Trait {
 	private function save_language_menu_assignments(): void {
 		$locations   = get_registered_nav_menus();
 		$languages   = $this->get_enabled_languages();
-		$requested   = isset( $_POST['tmt_language_menus'] ) && is_array( $_POST['tmt_language_menus'] )
-			? wp_unslash( $_POST['tmt_language_menus'] )
+		$requested   = isset( $_POST['omniti_language_menus'] ) && is_array( $_POST['omniti_language_menus'] )
+			? wp_unslash( $_POST['omniti_language_menus'] )
 			: [];
 		$assignments = [];
 
@@ -462,16 +462,16 @@ trait TMT_Translation_Tools_Trait {
 				}
 			}
 		}
-		update_option( 'tmt_language_menus', $assignments );
+		update_option( 'omniti_language_menus', $assignments );
 	}
 
 	private function save_registered_string_translations(): void {
-		$strings = get_option( 'tmt_registered_strings', [] );
+		$strings = get_option( 'omniti_registered_strings', [] );
 		if ( ! is_array( $strings ) ) {
 			return;
 		}
-		$requested = isset( $_POST['tmt_string_translations'] ) && is_array( $_POST['tmt_string_translations'] )
-			? wp_unslash( $_POST['tmt_string_translations'] )
+		$requested = isset( $_POST['omniti_string_translations'] ) && is_array( $_POST['omniti_string_translations'] )
+			? wp_unslash( $_POST['omniti_string_translations'] )
 			: [];
 
 		foreach ( $strings as $string_id => &$entry ) {
@@ -495,7 +495,7 @@ trait TMT_Translation_Tools_Trait {
 			}
 		}
 		unset( $entry );
-		update_option( 'tmt_registered_strings', $strings );
+		update_option( 'omniti_registered_strings', $strings );
 	}
 
 	private function render_translation_queue(): void {
@@ -525,15 +525,15 @@ trait TMT_Translation_Tools_Trait {
 				'meta_query'     => [
 					'relation' => 'OR',
 					[
-						'key'   => '_tb_lang_code',
+						'key'   => '_omniti_lang_code',
 						'value' => $base,
 					],
 					[
-						'key'     => '_tb_lang_code',
+						'key'     => '_omniti_lang_code',
 						'compare' => 'NOT EXISTS',
 					],
 					[
-						'key'   => '_tb_lang_code',
+						'key'   => '_omniti_lang_code',
 						'value' => '',
 					],
 				],
@@ -632,11 +632,11 @@ trait TMT_Translation_Tools_Trait {
 		}
 		$url = add_query_arg(
 			[
-				'action'      => 'tmt_action',
-				'tmt_task'    => 'translate',
+				'action'      => 'omniti_action',
+				'omniti_task'    => 'translate',
 				'source_id'   => $source->ID,
 				'target_lang' => $language,
-				'_wpnonce'    => wp_create_nonce( 'tmt_action_nonce' ),
+				'_wpnonce'    => wp_create_nonce( 'omniti_action_nonce' ),
 			],
 			admin_url( 'admin.php' )
 		);
@@ -648,7 +648,7 @@ trait TMT_Translation_Tools_Trait {
 		$menus     = wp_get_nav_menus();
 		$languages = $this->get_enabled_languages();
 		$base      = $this->get_base_language();
-		$assignments = get_option( 'tmt_language_menus', [] );
+		$assignments = get_option( 'omniti_language_menus', [] );
 		$assignments = is_array( $assignments ) ? $assignments : [];
 		$assigned_locations = get_nav_menu_locations();
 		?>
@@ -658,8 +658,8 @@ trait TMT_Translation_Tools_Trait {
 			<?php return; ?>
 		<?php endif; ?>
 		<form method="post">
-			<?php wp_nonce_field( 'tmt_save_menus', 'tmt_tools_nonce' ); ?>
-			<input type="hidden" name="tmt_tools_action" value="menus" />
+			<?php wp_nonce_field( 'omniti_save_menus', 'omniti_tools_nonce' ); ?>
+			<input type="hidden" name="omniti_tools_action" value="menus" />
 			<table class="widefat striped" style="margin-top:16px;">
 				<thead><tr>
 					<th><?php esc_html_e( 'Theme location', 'omnitibet' ); ?></th>
@@ -673,7 +673,7 @@ trait TMT_Translation_Tools_Trait {
 								$selected_menu = absint( $assignments[ $location ][ $code ] ?? ( $code === $base ? ( $assigned_locations[ $location ] ?? 0 ) : 0 ) );
 								?>
 								<td>
-									<select name="tmt_language_menus[<?php echo esc_attr( $location ); ?>][<?php echo esc_attr( $code ); ?>]">
+									<select name="omniti_language_menus[<?php echo esc_attr( $location ); ?>][<?php echo esc_attr( $code ); ?>]">
 										<option value="0"><?php echo esc_html( $code === $base ? __( 'Use theme default', 'omnitibet' ) : __( 'Use base menu', 'omnitibet' ) ); ?></option>
 										<?php foreach ( $menus as $menu ) : ?>
 											<option value="<?php echo esc_attr( (string) $menu->term_id ); ?>" <?php selected( $selected_menu, (int) $menu->term_id ); ?>><?php echo esc_html( $menu->name ); ?></option>
@@ -691,19 +691,19 @@ trait TMT_Translation_Tools_Trait {
 	}
 
 	private function render_string_translation_settings(): void {
-		$strings   = get_option( 'tmt_registered_strings', [] );
+		$strings   = get_option( 'omniti_registered_strings', [] );
 		$strings   = is_array( $strings ) ? $strings : [];
 		$languages = $this->get_enabled_languages();
 		$base      = $this->get_base_language();
 		?>
-		<p><?php esc_html_e( 'Register stable string IDs with tmt_register_string(), then retrieve the active language value with tmt_translate_string().', 'omnitibet' ); ?></p>
+		<p><?php esc_html_e( 'Register stable string IDs with omniti_register_string(), then retrieve the active language value with omniti_translate_string().', 'omnitibet' ); ?></p>
 		<?php if ( empty( $strings ) ) : ?>
 			<p><?php esc_html_e( 'No strings have been registered yet.', 'omnitibet' ); ?></p>
 			<?php return; ?>
 		<?php endif; ?>
 		<form method="post">
-			<?php wp_nonce_field( 'tmt_save_strings', 'tmt_tools_nonce' ); ?>
-			<input type="hidden" name="tmt_tools_action" value="strings" />
+			<?php wp_nonce_field( 'omniti_save_strings', 'omniti_tools_nonce' ); ?>
+			<input type="hidden" name="omniti_tools_action" value="strings" />
 			<table class="widefat striped" style="margin-top:16px;">
 				<thead><tr>
 					<th><?php esc_html_e( 'String ID / domain', 'omnitibet' ); ?></th>
@@ -730,7 +730,7 @@ trait TMT_Translation_Tools_Trait {
 								}
 								$value = $entry['translations'][ $code ] ?? '';
 								?>
-								<td><textarea class="widefat" rows="2" name="tmt_string_translations[<?php echo esc_attr( $id ); ?>][<?php echo esc_attr( $code ); ?>]"><?php echo esc_textarea( is_string( $value ) ? $value : '' ); ?></textarea></td>
+								<td><textarea class="widefat" rows="2" name="omniti_string_translations[<?php echo esc_attr( $id ); ?>][<?php echo esc_attr( $code ); ?>]"><?php echo esc_textarea( is_string( $value ) ? $value : '' ); ?></textarea></td>
 							<?php endforeach; ?>
 						</tr>
 					<?php endforeach; ?>
@@ -762,8 +762,8 @@ trait TMT_Translation_Tools_Trait {
 			FROM {$wpdb->postmeta} AS group_meta
 			INNER JOIN {$wpdb->posts} AS content ON content.ID = group_meta.post_id
 			LEFT JOIN {$wpdb->postmeta} AS language_meta
-				ON language_meta.post_id = content.ID AND language_meta.meta_key = '_tb_lang_code'
-			WHERE group_meta.meta_key = '_tb_lang_group_id'
+				ON language_meta.post_id = content.ID AND language_meta.meta_key = '_omniti_lang_code'
+			WHERE group_meta.meta_key = '_omniti_lang_group_id'
 				AND content.post_type IN ({$placeholders})
 				AND content.post_status NOT IN ('trash', 'auto-draft')
 			ORDER BY group_meta.meta_value, content.ID",
@@ -814,9 +814,9 @@ trait TMT_Translation_Tools_Trait {
 				"SELECT content.ID, content.post_title, language_meta.meta_value AS language_code
 			FROM {$wpdb->posts} AS content
 			INNER JOIN {$wpdb->postmeta} AS language_meta
-				ON language_meta.post_id = content.ID AND language_meta.meta_key = '_tb_lang_code'
+				ON language_meta.post_id = content.ID AND language_meta.meta_key = '_omniti_lang_code'
 			LEFT JOIN {$wpdb->postmeta} AS group_meta
-				ON group_meta.post_id = content.ID AND group_meta.meta_key = '_tb_lang_group_id'
+				ON group_meta.post_id = content.ID AND group_meta.meta_key = '_omniti_lang_group_id'
 			WHERE content.post_type IN ({$placeholders})
 				AND content.post_status NOT IN ('trash', 'auto-draft')
 				AND language_meta.meta_value <> ''
